@@ -9,6 +9,34 @@
 }
 
 :root {
+    --theme-main-color: #E61300;
+    --theme-secondary-color: #FF4040;
+
+    --background-main-color: #262626;
+    --background-secondary-color: #1A1A1A;
+
+    --accent-main-color: #FF4040;
+    --accent-secondary-color: #E61300;
+
+    --text-color: #FFFEF2;
+}
+
+@media (prefers-color-scheme: light) {
+    :root {
+        --theme-main-color: #FFC800;
+        --theme-secondary-color: #F28D00;
+
+        --background-main-color: #FFFEF2;
+        --background-secondary-color: #FFF5D9;
+
+        --accent-main-color: #F28D00;
+        --accent-secondary-color: #FFC800;
+
+        --text-color: #262626;
+    }
+}
+
+.light-theme {
     --theme-main-color: #FFC800;
     --theme-secondary-color: #F28D00;
 

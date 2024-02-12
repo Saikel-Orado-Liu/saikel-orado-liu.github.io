@@ -24,10 +24,29 @@
 </header>
 <script>
     var mode = document.getElementById("view-mode");
+    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+        mode.src = "/assets/img/moon.svg";
+    } else {
+        mode.src = "/assets/img/sun.svg";
+    }
     mode.onclick = function() {
-        document.body.classList.toggle("dark-theme");
-        if (document.body.classList.contains("dark-theme")) mode.src = "/assets/img/sun.svg";
-        else mode.src = "/assets/img/moon.svg";
+        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
+            if(document.body.classList.contains("light-theme")) document.body.classList.toggle("light-theme");
+            document.body.classList.toggle("dark-theme");
+            if (document.body.classList.contains("dark-theme")) {
+                mode.src = "/assets/img/sun.svg";
+            } else {
+                mode.src = "/assets/img/moon.svg";
+            }
+        } else {
+            if(document.body.classList.contains("dark-theme")) document.body.classList.toggle("dark-theme");
+            document.body.classList.toggle("light-theme");
+            if (document.body.classList.contains("light-theme")) {
+                mode.src = "/assets/img/moon.svg";
+            } else {
+                mode.src = "/assets/img/sun.svg";
+            }
+        }
     }
 </script>
 </body>
