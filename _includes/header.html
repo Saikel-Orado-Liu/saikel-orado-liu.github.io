@@ -12,14 +12,23 @@
     <a class="title" href="#">Title</a>
     <nav>
         <ul class="nav_links">
-            {% for head in site.data.head %}
-            <li><a href="{{ head.link }}">{{ head.name }}</a></li>
+            {% for nav in site.data.navigation %}
+            <li><a href="{{ nav.link }}">{{ nav.name }}</a></li>
             {% endfor %}
         </ul>
     </nav>
     <a class="cta" href="#">
         <button>Button</button>
     </a>
+    <img src="/assets/img/moon.svg" id="view-mode" alt="light-mode">
 </header>
+<script>
+    var mode = document.getElementById("view-mode");
+    mode.onclick = function() {
+        document.body.classList.toggle("dark-theme");
+        if (document.body.classList.contains("dark-theme")) mode.src = "/assets/img/sun.svg";
+        else mode.src = "/assets/img/moon.svg";
+    }
+</script>
 </body>
 </html>

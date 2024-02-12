@@ -6,15 +6,38 @@
     box-sizing: border-box;
     margin: 0;
     padding: 0;
-    background-color: #24252A;
 }
 
-li, a, button {
-    font-family: "MiSans", sans-serif;
-    font-weight: 500;
-    font-size: 16px;
-    color: #EDF0F1;
-    text-decoration: none;
+:root {
+    --theme-main-color: #FFC800;
+    --theme-secondary-color: #F28D00;
+
+    --background-main-color: #FFFEF2;
+    --background-secondary-color: #FFF5D9;
+
+    --accent-main-color: #F28D00;
+    --accent-secondary-color: #FFC800;
+
+    --text-color: #262626;
+}
+
+.dark-theme {
+    --theme-main-color: #E61300;
+    --theme-secondary-color: #FF4040;
+
+    --background-main-color: #262626;
+    --background-secondary-color: #1A1A1A;
+
+    --accent-main-color: #FF4040;
+    --accent-secondary-color: #E61300;
+
+    --text-color: #FFFEF2;
+}
+
+#view-mode {
+    margin-left: 20px;
+    width: 30px;
+    cursor: pointer;
 }
 
 header {
@@ -22,6 +45,18 @@ header {
     justify-content: flex-end;
     align-items: center;
     padding: 30px 10%;
+}
+
+body {
+    background-color: var(--background-main-color);
+}
+
+li, a, button {
+    font-family: "MiSans", sans-serif;
+    font-weight: 800;
+    font-size: 16px;
+    color: var(--text-color);
+    text-decoration: none;
 }
 
 .title {
@@ -41,18 +76,14 @@ header {
     padding: 0px 20px;
 }
 
-.nav_links li a {
-    transition: all 0.3s ease 0s;
-}
-
 .nav_links li a:hover {
-    color: #0088A9
+    color: var(--theme-main-color);
 }
 
 button {
     margin-left: 20px;
     padding: 9px 25px;
-    background-color: rgba(0, 136, 169, 1);
+    background-color: var(--theme-main-color);
     border: none;
     border-radius: 50px;
     cursor: pointer;
@@ -60,5 +91,5 @@ button {
 }
 
 button:hover {
-    background-color: rgba(0, 136, 169, 0.8);
+    background-color: var(--accent-main-color);
 }
