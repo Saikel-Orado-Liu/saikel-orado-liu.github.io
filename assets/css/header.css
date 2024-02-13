@@ -62,8 +62,7 @@
     --text-color: #FFFEF2;
 }
 
-#view-mode {
-    margin-left: 20px;
+#theme {
     width: 30px;
     cursor: pointer;
 }
@@ -110,10 +109,11 @@ li, a, button {
 
 button {
     margin-left: 20px;
-    padding: 9px 25px;
+    margin-bottom: 5px;
+    padding: 7px 10px;
     background-color: var(--theme-main-color);
     border: none;
-    border-radius: 50px;
+    border-radius: 50%;
     cursor: pointer;
     transition: all 0.3s ease 0s;
 }

@@ -17,13 +17,10 @@
             {% endfor %}
         </ul>
     </nav>
-    <a class="cta" href="#">
-        <button>Button</button>
-    </a>
-    <img src="/assets/img/moon.svg" id="view-mode" alt="light-mode">
+    <button><img src="/assets/img/moon.svg" id="theme" alt="theme" style="margin-left: 1px; margin-top: 2px;"></button>
 </header>
 <script>
-    var mode = document.getElementById("view-mode");
+    var mode = document.getElementById("theme");
     if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
         mode.src = "/assets/img/moon.svg";
     } else {
