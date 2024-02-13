@@ -1,50 +1,26 @@
 <!doctype html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, user-scalable=no, initial-scale=1.0, maximum-scale=1.0, minimum-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Title</title>
-</head>
-<body>
+
 <header>
     <link rel="stylesheet" href="/assets/css/header.css">
     <a class="title" href="#">Title</a>
+    <div class="i18n_button">
+        <img src="/assets/img/i18n.svg" id="internationalization" alt="internationalization" style="margin-left: 1px; margin-top: 2px;">
+        <ul class="i18n_list">
+            {% for i18n in site.data.internationalization %}
+            <li>
+                <a class="langButton" data-lang="{{ i18n.code }}">{{ i18n.name }}</a>
+            </li>
+            {% endfor %}
+        </ul>
+    </div>
     <nav>
         <ul class="nav_links">
             {% for nav in site.data.navigation %}
-            <li><a href="{{ nav.link }}">{{ nav.name }}</a></li>
+            <li><a class="i18n" id="{{ nav.id }}" href="{{ nav.link }}">{{ nav.name }}</a></li>
             {% endfor %}
         </ul>
     </nav>
-    <button><img src="/assets/img/moon.svg" id="theme" alt="theme" style="margin-left: 1px; margin-top: 2px;"></button>
+    <button><img src="/assets/img/moon.svg" id="theme-style" alt="theme-style" style="margin-left: 1px; margin-top: 2px;"></button>
 </header>
-<script>
-    var mode = document.getElementById("theme");
-    if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-        mode.src = "/assets/img/moon.svg";
-    } else {
-        mode.src = "/assets/img/sun.svg";
-    }
-    mode.onclick = function() {
-        if (window.matchMedia && window.matchMedia('(prefers-color-scheme: light)').matches) {
-            if(document.body.classList.contains("light-theme")) document.body.classList.toggle("light-theme");
-            document.body.classList.toggle("dark-theme");
-            if (document.body.classList.contains("dark-theme")) {
-                mode.src = "/assets/img/sun.svg";
-            } else {
-                mode.src = "/assets/img/moon.svg";
-            }
-        } else {
-            if(document.body.classList.contains("dark-theme")) document.body.classList.toggle("dark-theme");
-            document.body.classList.toggle("light-theme");
-            if (document.body.classList.contains("light-theme")) {
-                mode.src = "/assets/img/moon.svg";
-            } else {
-                mode.src = "/assets/img/sun.svg";
-            }
-        }
-    }
-</script>
-</body>
-</html>
+<script src="/assets/js/theme-style.js"></script>
+<script src="/assets/js/internationalization.js"></script>

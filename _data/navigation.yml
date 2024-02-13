@@ -1,8 +1,11 @@
 - name: "Home"
+  id: home
   link: https://github.com/Saikel-Orado-Liu
 
 - name: "Sources"
+  id: sources
   link: https://github.com/Saikel-Orado-Liu
 
 - name: "About"
+  id: about
   link: https://github.com/Saikel-Orado-Liu

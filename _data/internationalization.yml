@@ -1,0 +1,8 @@
+- name: "English"
+  code: en-US
+
+- name: "中文"
+  code: zh-CN
+
+- name: "日本語"
+  code: ja-JP
