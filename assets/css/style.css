@@ -1,0 +1,79 @@
+:root {
+	--dark-theme-main-color: #FF1500;
+	--dark-theme-secondary-color: #FF8080;
+
+	--dark-background-main-color: #262626;
+	--dark-background-secondary-color: #595959;
+
+	--dark-accent-main-color: #FF8080;
+	--dark-accent-secondary-color: #FF1500;
+
+	--dark-text-color: #FFFEF2;
+}
+
+:root {
+	--light-theme-main-color: #FFC800;
+	--light-theme-secondary-color: #F28D00;
+
+	--light-background-main-color: #FFFEF2;
+	--light-background-secondary-color: #FFFBCC;
+
+	--light-accent-main-color: #F28D00;
+	--light-accent-secondary-color: #FFC800;
+
+	--light-text-color: #262626;
+}
+
+:root {
+	--theme-main-color: var(--dark-theme-main-color);
+	--theme-secondary-color: var(--dark-theme-secondary-color);
+
+	--background-main-color: var(--dark-background-main-color);
+	--background-secondary-color: var(--dark-background-secondary-color);
+
+	--accent-main-color: var(--dark-accent-main-color);
+	--accent-secondary-color: var(--dark-accent-secondary-color);
+
+	--text-color: var(--dark-text-color);
+}
+
+@media (prefers-color-scheme: light) {
+	:root {
+		--theme-main-color: var(--light-theme-main-color);
+		--theme-secondary-color: var(--light-theme-secondary-color);
+
+		--background-main-color: var(--light-background-main-color);
+		--background-secondary-color: var(--light-background-secondary-color);
+
+		--accent-main-color: var(--light-accent-main-color);
+		--accent-secondary-color: var(--light-accent-secondary-color);
+
+		--text-color: var(--light-text-color);
+	}
+}
+
+.dark-style {
+	--theme-main-color: var(--dark-theme-main-color);
+	--theme-secondary-color: var(--dark-theme-secondary-color);
+
+	--background-main-color: var(--dark-background-main-color);
+	--background-secondary-color: var(--dark-background-secondary-color);
+
+	--accent-main-color: var(--dark-accent-main-color);
+	--accent-secondary-color: var(--dark-accent-secondary-color);
+
+	--text-color: var(--dark-text-color);
+}
+
+.light-style {
+	--theme-main-color: var(--light-theme-main-color);
+	--theme-secondary-color: var(--light-theme-secondary-color);
+
+	--background-main-color: var(--light-background-main-color);
+	--background-secondary-color: var(--light-background-secondary-color);
+
+	--accent-main-color: var(--light-accent-main-color);
+	--accent-secondary-color: var(--light-accent-secondary-color);
+
+	--text-color: var(--light-text-color);
+}

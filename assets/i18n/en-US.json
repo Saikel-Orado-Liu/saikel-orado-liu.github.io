@@ -1,5 +1,8 @@
 {
-  "home": "Home",
-  "sources": "Sources",
-  "about": "About"
+	"title": "Title",
+	"home": "Home",
+	"sources": "Sources",
+	"about": "About",
+	"dark-style": "Dark",
+	"light-style": "Light"
 }

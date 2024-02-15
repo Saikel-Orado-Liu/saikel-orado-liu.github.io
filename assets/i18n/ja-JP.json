@@ -1,5 +1,8 @@
 {
+  "title": "タイトル",
   "home": "ホーム",
   "sources": "ソース",
-  "about": "について"
+  "about": "について",
+  "dark-style": "ダーク",
+  "light-style": "明るい"
 }
