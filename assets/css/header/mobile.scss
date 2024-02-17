@@ -1,0 +1,124 @@
+---
+---
+
+@import "/assets/css/base.css";
+
+@media screen and (max-width: 640px) {
+	:root {
+		padding-top: 3vw;
+		padding-left: 3vw;
+		padding-right: 2vw;
+		box-sizing: border-box;
+	}
+
+	* {
+		-webkit-user-select: none;
+	}
+
+	body {
+		background-color: var(--background-main-color);
+	}
+
+	.logo {
+		width: 2rem;
+		border-radius: 50%;
+		cursor: pointer;
+	}
+
+	.title {
+		text-decoration: none;
+		color: var(--text-color);
+		font-weight: bolder;
+		font-size: 1.5rem;
+		margin-left: 0.5rem;
+	}
+
+	.navbar {
+		display: flex;
+		flex-direction: column;
+		align-items: left;
+		> .main,
+		> .widget {
+			display: flex;
+		}
+		> .widget {
+			order: 1;
+			justify-content: flex-end;
+			margin-left: auto;
+			margin-top: -2.25rem;
+			> div {
+				display: flex;
+				width: auto;
+				min-width: 2rem;
+				height: 2rem;
+				margin-left: 0.5rem;
+				border-radius: 1rem;
+				transition: all 0.2s;
+				cursor: pointer;
+				> i {
+					font-size: 1.5rem;
+					margin-top: calc((2rem - 1.5rem) / 2 + 1px);
+					margin-left: calc((2rem - 1.5rem) / 2);
+					color: var(--theme-main-color);
+				}
+				> div {
+					vertical-align: top;
+					color: var(--text-color);
+					display: none;
+					margin: auto;
+					> p {
+						width: calc(2 * 100%);
+						margin-right: 1.5rem;
+						margin-top: 0.25rem;
+					}
+					> ul {
+						text-align: center;
+						margin-top: -0rem;
+						margin-left: -2rem;
+						margin-right: 2rem;
+						list-style: none;
+						display: none;
+						> li {
+							color: var(--text-color);
+							line-height: 2rem;
+							&:hover {
+								background-color: var(--background-secondary-color);
+							}
+						}
+					}
+				}
+				&:hover {
+					background: var(--background-secondary-color);
+					> i {
+						margin-right: 1rem;
+					}
+					> div {
+						display: flex;
+						> ul {
+							display: block;
+						}
+					}
+				}
+			}
+		}
+		> nav {
+			order: 2;
+			width: max-content;
+			> ul > li {
+				width: max-content;
+				text-align: center;
+				list-style: none;
+				margin-left: -2rem;
+				> a {
+					text-decoration: none;
+					color: var(--theme-main-color);
+					font-weight: bold;
+					font-size: 1rem;
+					&:hover {
+						color: var(--accent-main-color);
+					}
+				}
+			}
+		}
+	}
+}

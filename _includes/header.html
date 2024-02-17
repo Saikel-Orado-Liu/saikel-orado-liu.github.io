@@ -1,8 +1,10 @@
 <header>
-    <link rel="stylesheet" href="{{'/assets/css/header.css' | absolute_url}}">
+    <link rel="stylesheet" href="{{ '/assets/css/header/style.css' | absolute_url }}">
     <div class="navbar">
-        <a href="/"><img class="logo" src="https://avatars.githubusercontent.com/u/88531138" alt="logo"></a>
-        <a class="i18n title" id="title" href="/">{{ site.title | escape }}</a>
+        <div class="main">
+            <a href="/"><img class="logo" src={{ site.logo }} alt="logo"></a>
+            <a class="i18n title" id="title" href="/">{{ site.title | escape }}</a>
+        </div>
         <nav>
             <ul>
                 {% for nav in site.data.navigation %}
@@ -10,18 +12,20 @@
                 {% endfor %}
             </ul>
         </nav>
-        <div class="nav-item" id="style">
-            <div class="nav-img"><img id="style-img" src="/assets/img/moon.svg" alt="style"></div>
-            <div class="nav-text"><p class="i18n" id="style-text">style</p></div>
-        </div>
-        <div class="nav-item">
-            <div class="nav-img"><img src="/assets/img/i18n.svg" alt="i18n"></div>
-            <div class="nav-text">
-                <ul>
-                    {% for i18n in site.data.i18n %}
-                    <li><a class="langButton" data-lang="{{ i18n.code }}">{{ i18n.name }}</a></li>
-                    {% endfor %}
-                </ul>
+        <div class="widget">
+            <div id="style">
+                <i class='bx bx-moon' id="style-img"></i>
+                <div><p class="i18n" id="style-text">style</p></div>
+            </div>
+            <div>
+                <i class='bx bx-globe'></i>
+                <div>
+                    <ul>
+                        {% for i18n in site.data.i18n %}
+                        <li><a class="langButton" data-lang="{{ i18n.code }}">{{ i18n.name }}</a></li>
+                        {% endfor %}
+                    </ul>
+                </div>
             </div>
         </div>
     </div>
