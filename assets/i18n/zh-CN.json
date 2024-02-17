@@ -1,8 +1,8 @@
 {
-  "title": "标题",
-  "home": "主页",
-  "sources": "源码",
-  "about": "关于",
-  "dark-style": "黑暗",
-  "light-style": "明亮"
+	"title": "标题",
+	"home": "主页",
+	"sources": "源码",
+	"about": "关于",
+	"dark-style": "暗黑风格",
+	"light-style": "明亮风格"
 }
