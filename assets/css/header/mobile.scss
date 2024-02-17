@@ -66,10 +66,11 @@
 					color: var(--text-color);
 					display: none;
 					margin: auto;
+					height: 2rem;
 					> p {
 						width: calc(2 * 100%);
 						margin-right: 1.5rem;
-						margin-top: calc(0.25rem + 1px);
+						margin-top: calc(0.25rem + 2px);
 					}
 					> ul {
 						text-align: center;
