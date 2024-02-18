@@ -63,18 +63,18 @@
 					color: var(--theme-main-color);
 				}
 				> div {
-					vertical-align: top;
 					color: var(--text-color);
 					display: none;
+					margin: auto;
 					> span {
-						margin-right: 1.5rem;
-						align-self: center;
+						padding-left: calc(2rem * 1.1);
+						padding-right: 2rem;
 					}
 					> ul {
 						text-align: center;
 						margin-top: -0rem;
-						margin-left: -2rem;
-						margin-right: 2rem;
+						padding-left: calc(2rem * 1.1);
+						padding-right: 2rem;
 						list-style: none;
 						display: none;
 						> li {
@@ -89,7 +89,7 @@
 				&:hover {
 					background: var(--background-secondary-color);
 					> i {
-						margin-right: 1rem;
+						display: none;
 					}
 					> div {
 						display: flex;
