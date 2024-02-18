@@ -1,70 +1,80 @@
-document.addEventListener("DOMContentLoaded", function() {
-	var userLang = getUserLanguage();
-	// 显示默认提示
-	updateUI(null);
-	fetchInternationalization(userLang).then(function(data) {
-		internationalizationData = data;
-		updateUI(internationalizationData);
-		enableLanguageButtons();
-	}).catch(function(error) {
-		console.error('Error loading internationalization data:', error);
-		// 显示错误消息给用户
-		showErrorToUser();
-		// 仍然启用语言按钮，以便用户可以重新尝试加载
-		enableLanguageButtons();
-	});
+document.addEventListener("DOMContentLoaded", () => {
+	const userLang = getUserLanguage();
+	updateUI(userLang, null);
+	fetchInternationalization(userLang)
+		.then(data => updateUI(userLang ,data))
+		.then(enableLanguageButtons)
+		.catch(handleError);
 });
 
 function getUserLanguage() {
-	var userLang = localStorage.getItem("userLang");
-	if (!userLang) {
-		userLang = navigator.language || navigator.userLanguage;
-		localStorage.setItem("userLang", userLang);
-	}
+	let userLang = localStorage.getItem("userLang") || navigator.language || navigator.userLanguage;
+	localStorage.setItem("userLang", userLang);
 	return userLang;
 }
 
 async function fetchInternationalization(language) {
-	const response = await fetch('/assets/i18n/' + language + '.json');
+	const response = await fetch(`/assets/i18n/${language}.json`);
 	if (!response.ok) throw new Error('Failed to fetch internationalization data');
-	const data = await response.json();
-	// 提前加载用户选择的语言的本地化数据到内存中
-	internationalizationData = data;
-	return data;
+	return response.json();
 }
 
-function updateUI(internationalizationData) {
-	var i18nTexts = document.querySelectorAll(".i18n");
+function updateUI(lang, data) {
+	updateListOrder(lang);
+	const i18nTexts = document.querySelectorAll(".i18n");
 	i18nTexts.forEach(text => {
-		var id = text.getAttribute("id");
-		var element = document.getElementById(id);
-		element.style.display = "none"; // 隐藏问候语
-
-		if (internationalizationData) {
-			element.textContent = internationalizationData[id];
-			element.style.display = "block"; // 显示问候语
+		const id = text.getAttribute("id");
+		const element = document.getElementById(id);
+		element.style.display = "none";
+		if (data) {
+			element.textContent = data[id];
+			element.style.display = "block";
 		}
+	});
+}
+
+function updateListOrder(lang) {
+	var list = document.getElementById('langList');
+	var listItems = Array.from(document.querySelectorAll('#langList li'));
+	listItems.forEach(item => {
+		var button = item.querySelector('a');
+		if (button.getAttribute("data-lang") === lang) {
+			var index = listItems.indexOf(item);
+			listItems.splice(index, 1);
+			listItems.unshift(item);
+		}
+	});
+	// 重新排序剩余的元素
+	var firstItem = listItems.shift();
+	listItems.sort((a, b) => {
+		var langA = a.querySelector('a').getAttribute("data-lang");
+		var langB = b.querySelector('a').getAttribute("data-lang");
+		return langA.localeCompare(langB);
+	});
+	listItems.unshift(firstItem);
+	list.innerHTML = '';
+	listItems.forEach(item => list.appendChild(item));
+}
+
+function handleError(error) {
+	console.error('Error loading internationalization data:', error);
+	showErrorToUser();
+	enableLanguageButtons();
+}
+
+function enableLanguageButtons() {
+	const languageButtons = document.querySelectorAll(".langButton");
+	languageButtons.forEach(button => {
+		button.addEventListener("click", () => {
+			const userLang = button.getAttribute("data-lang");
+			localStorage.setItem("userLang", userLang);
+			fetchInternationalization(userLang)
+				.then(data => updateUI(userLang ,data))
+				.catch(handleError);
+		});
 	});
 }
 
 function showErrorToUser() {
 	// 在页面上显示错误消息
-}
-
-function enableLanguageButtons() {
-	var languageButtons = document.querySelectorAll(".langButton");
-	languageButtons.forEach(function(button) {
-		button.addEventListener("click", function() {
-			var userLang = button.getAttribute("data-lang");
-			localStorage.setItem("userLang", userLang);
-			fetchInternationalization(userLang).then(function(data) {
-				internationalizationData = data;
-				updateUI(internationalizationData);
-			}).catch(function(error) {
-				console.error('Error loading internationalization data:', error);
-				// 显示错误消息给用户
-				showErrorToUser();
-			});
-		});
-	});
 }
