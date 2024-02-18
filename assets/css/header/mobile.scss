@@ -65,11 +65,9 @@
 					vertical-align: top;
 					color: var(--text-color);
 					display: none;
-					margin: auto;
-					> p {
-						width: calc(2 * 100%);
+					> span {
 						margin-right: 1.5rem;
-						margin-top: calc(0.25rem + 2px);
+						align-self: center;
 					}
 					> ul {
 						text-align: center;
@@ -104,11 +102,16 @@
 		> nav {
 			order: 2;
 			width: max-content;
+			position: absolute;
+			top: 50vh;
+			left: 3vw;
+           	transform: translateY(-50%);
 			> ul > li {
 				width: max-content;
 				text-align: center;
 				list-style: none;
 				margin-left: -2rem;
+				margin-top: 1rem;
 				> a {
 					text-decoration: none;
 					color: var(--theme-main-color);
