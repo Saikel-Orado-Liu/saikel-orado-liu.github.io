@@ -1,2 +1,6 @@
 @import "/assets/css/font.css";
 @import "/assets/css/style.css";
+
+:root {
+	--header-z-index: 999;
+}
