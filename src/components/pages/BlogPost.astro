@@ -1,0 +1,41 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogLayout from '../../layouts/BlogLayout.astro';
+import { useTranslations } from '../../i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../../i18n';
+
+interface Props { locale: Locale; slug: string; }
+const { locale, slug } = Astro.props;
+const t = useTranslations(locale);
+
+const posts = await getCollection('blog', ({ data }) => data.locale === locale && !data.draft);
+const post = posts.find(p => p.id === slug);
+
+if (!post) {
+  return <div class="container-narrow empty-state"><i class="bx bx-error"></i><p>Post not found</p></div>;
+}
+
+const { Content } = await render(post);
+---
+
+<BlogLayout
+  title={post.data.title}
+  description={post.data.excerpt}
+  locale={locale}
+  date={post.data.date}
+  tags={post.data.tags}
+  categories={post.data.categories}
+>
+  <div class="blog-back-link mb-8">
+    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="inline-flex items-center gap-1 text-sm">
+      <i class="bx bx-left-arrow-alt"></i> {t('blog-back')}
+    </a>
+  </div>
+  <Content />
+</BlogLayout>
+
+<style>
+.blog-back-link a { color: var(--md-sys-color-on-surface-variant); }
+.blog-back-link a:hover { color: var(--clr-secondary-accent); }
+</style>

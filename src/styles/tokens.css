@@ -1,0 +1,249 @@
+/* ===== M3 Color Tokens (Dark Mode - Default) ===== */
+:root {
+  /* ===== 10 User-Defined Base Colors ===== */
+  /* 根层级 */
+  --clr-base-bg:           #141414;
+  --clr-aux-bg:            #242424;
+  --clr-primary-accent:    #FF1500;
+  --clr-primary-text:      #F5F5F5;
+  /* 一次层级 */
+  --clr-primary-bg:        #262626;
+  --clr-secondary-accent:  #FF6B6B;
+  /* 二次层级 */
+  --clr-secondary-bg:      #333333;
+  --clr-secondary-text:    #ADADAD;
+  /* 特殊色 */
+  --clr-error:             #00BFA5;
+  --clr-warning:           #FFC800;
+
+  /* ===== M3 Derived Tokens (from 10 base colors via color-mix / var) ===== */
+  /* Primary */
+  --md-sys-color-primary:               var(--clr-primary-accent);
+  --md-sys-color-on-primary:             var(--clr-primary-text);
+  --md-sys-color-primary-container:      color-mix(in srgb, var(--clr-primary-accent) 20%, var(--clr-primary-bg));
+  --md-sys-color-on-primary-container:   var(--clr-primary-text);
+  /* Secondary */
+  --md-sys-color-secondary:             var(--clr-secondary-accent);
+  --md-sys-color-on-secondary:           var(--clr-base-bg);
+  --md-sys-color-secondary-container:    color-mix(in srgb, var(--clr-secondary-accent) 20%, var(--clr-primary-bg));
+  --md-sys-color-on-secondary-container: var(--clr-primary-text);
+  /* Warning (was Tertiary) */
+  --md-sys-color-tertiary:              var(--clr-warning);
+  --md-sys-color-on-tertiary:            var(--clr-base-bg);
+  --md-sys-color-tertiary-container:     color-mix(in srgb, var(--clr-warning) 20%, var(--clr-primary-bg));
+  --md-sys-color-on-tertiary-container:  var(--clr-primary-text);
+  /* Error */
+  --md-sys-color-error:                 var(--clr-error);
+  --md-sys-color-on-error:              var(--clr-base-bg);
+  --md-sys-color-error-container:        color-mix(in srgb, var(--clr-error) 20%, var(--clr-primary-bg));
+  --md-sys-color-on-error-container:     var(--clr-primary-text);
+  /* Surface & Background */
+  --md-sys-color-surface:               var(--clr-primary-bg);
+  --md-sys-color-on-surface:             var(--clr-primary-text);
+  --md-sys-color-surface-variant:        var(--clr-aux-bg);
+  --md-sys-color-on-surface-variant:     var(--clr-secondary-text);
+  --md-sys-color-surface-dim:            var(--clr-base-bg);
+  --md-sys-color-surface-bright:         color-mix(in srgb, var(--clr-primary-bg) 85%, var(--clr-primary-text));
+  --md-sys-color-background:            var(--clr-base-bg);
+  --md-sys-color-on-background:          var(--clr-primary-text);
+  /* Outline */
+  --md-sys-color-outline:               color-mix(in srgb, var(--clr-secondary-text) 50%, transparent);
+  --md-sys-color-outline-variant:        color-mix(in srgb, var(--clr-secondary-text) 20%, transparent);
+  /* Misc */
+  --md-sys-color-shadow:                #000000;
+  --md-sys-color-surface-tint:          var(--clr-primary-accent);
+  --md-sys-color-inverse-surface:        var(--clr-primary-text);
+  --md-sys-color-inverse-on-surface:     var(--clr-base-bg);
+  --md-sys-color-inverse-primary:        var(--clr-secondary-accent);
+
+  /* ===== Legacy theme vars (mapped to semantic tokens) ===== */
+  --theme-main-color: var(--clr-primary-accent);
+  --theme-secondary-color: var(--clr-primary-bg);
+  --background-main-color: var(--clr-base-bg);
+  --background-secondary-color: var(--clr-primary-bg);
+  --accent-main-color: var(--clr-primary-accent);
+  --accent-secondary-color: var(--clr-secondary-accent);
+  --text-color: var(--clr-primary-text);
+
+  /* ===== Shape Scale (Simplified: 3 levels) ===== */
+  --shape-sm: 8px;     /* 小型元素：标签、代码、输入框 */
+  --shape-md: 12px;    /* 中型元素：卡片、按钮、区块 */
+  --shape-lg: 24px;    /* 大型元素：圆形按钮边框 */
+  --shape-full: 9999px; /* 全圆：头像、胶囊标签、悬浮按钮 */
+
+  /* ===== Shadows (Simplified: 3 levels) ===== */
+  --shadow-near:
+    0 2px 4px rgba(0, 0, 0, 0.5);
+  --shadow-far:
+    0 12px 28px rgba(0, 0, 0, 0.5),
+    0 4px 12px rgba(0, 0, 0, 0.3);
+  --shadow-embed:
+    inset 0 1px 3px rgba(0, 0, 0, 0.4);
+
+  /* ===== Acrylic / Mica Surface ===== */
+  --acrylic-bg: color-mix(in srgb, var(--clr-primary-bg) 88%, transparent);
+  --acrylic-blur: 6px;
+  --acrylic-border: color-mix(in srgb, var(--clr-primary-text) 8%, transparent);
+
+  /* ===== Frosted Acrylic Plate (Card 磨砂亚克力板) ===== */
+  --frosted-opacity: 0.72;         /* 板材不透明度 */
+  --frosted-blur: 24px;            /* 磨砂模糊半径 */
+  --frosted-saturate: 1.1;         /* 色彩饱和度增强（亚克力特性） */
+  --frosted-noise-opacity: 0.25;   /* 磨砂噪点强度 */
+  --frosted-plate-thickness: 3px;  /* 板边厚度 */
+
+  /* ===== Reflection Overlay (skeuomorphic shine) ===== */
+  --reflection-top:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.05) 0%,
+      rgba(255, 255, 255, 0.01) 35%,
+      transparent 50%
+    );
+  --reflection-bottom:
+    linear-gradient(
+      180deg,
+      transparent 50%,
+      rgba(0, 0, 0, 0.04) 100%
+    );
+
+  /* ===== Abstract Skeuomorphism — Edge Highlights ===== */
+  --edge-highlight: inset 0 1px 0 color-mix(in srgb, var(--clr-primary-text) 8%, transparent);
+  --edge-shadow:    inset 0 -1px 0 rgba(0, 0, 0, 0.12);
+
+  /* ===== Groove / Slide Track ===== */
+  --groove-bg: color-mix(in srgb, var(--clr-base-bg) 60%, var(--clr-primary-bg));
+  --groove-inset: inset 0 1px 3px rgba(0, 0, 0, 0.25);
+
+  /* ===== Spacing ===== */
+  --space-xs: 4px;
+  --space-sm: 8px;
+  --space-md: 16px;
+  --space-lg: 24px;
+  --space-xl: 32px;
+  --space-2xl: 48px;
+  --space-3xl: 64px;
+  --space-4xl: 96px;
+
+  /* ===== Typography ===== */
+  --font-sans: 'MiSansLatin', 'MiSans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  --font-size-xs: 0.75rem;
+  --font-size-sm: 0.875rem;
+  --font-size-base: 1rem;
+  --font-size-lg: 1.125rem;
+  --font-size-xl: 1.25rem;
+  --font-size-2xl: 1.5rem;
+  --font-size-3xl: 2rem;
+  --font-size-4xl: 2.5rem;
+  --font-size-5xl: 3rem;
+  --font-weight-light: 300;
+  --font-weight-regular: 330;
+  --font-weight-medium: 380;
+  --font-weight-bold: 630;
+  --line-height-tight: 1.25;
+  --line-height-normal: 1.6;
+  --line-height-relaxed: 1.75;
+
+  /* ===== Z-index ===== */
+  --z-header: 100;
+  --z-overlay: 200;
+  --z-modal: 300;
+
+  /* ===== Layout ===== */
+  --content-max-width: 1152px;
+  --header-max-width: 1280px;
+  --content-narrow: 720px;
+  --header-height: 3.5rem;
+
+  /* ===== Heading Text Shadow ===== */
+  --heading-shadow: 1px 1px 0 rgba(255, 255, 255, 0.30);
+}
+
+/* ===== Light Mode ===== */
+@media (prefers-color-scheme: light) {
+  :root {
+    /* ===== 10 User-Defined Base Colors (Light) ===== */
+    /* 根层级 */
+    --clr-base-bg:           #FAFAFA;
+    --clr-aux-bg:            #EDE4D6;
+    --clr-primary-accent:    #E89800;
+    --clr-primary-text:      color-mix(in srgb, #1a1a1a, var(--clr-primary-accent) 15%);
+    /* 一次层级 */
+    --clr-primary-bg:        #FFFFFF;
+    --clr-secondary-accent:  #FFD54F;
+    /* 二次层级 */
+    --clr-secondary-bg:      #E8E8E8;
+    --clr-secondary-text:    color-mix(in srgb, var(--clr-primary-accent), var(--clr-primary-text) 40%);
+    /* 特殊色 */
+    --clr-error:             #BA1A1A;
+    --clr-warning:           #F28D00;
+
+    --shadow-near:
+      0 2px 4px rgba(0, 0, 0, 0.06);
+    --shadow-far:
+      0 12px 28px rgba(0, 0, 0, 0.1),
+      0 4px 12px rgba(0, 0, 0, 0.06);
+    --shadow-embed:
+      inset 0 1px 3px rgba(0, 0, 0, 0.06);
+
+    /* ===== Light mode reflection ===== */
+    --reflection-top:
+      linear-gradient(
+        180deg,
+        rgba(255, 255, 255, 0.5) 0%,
+        rgba(255, 255, 255, 0.15) 35%,
+        transparent 50%
+      );
+
+    /* ===== Light mode groove (lower opacity) ===== */
+    --groove-inset: inset 0 1px 3px rgba(0, 0, 0, 0.10);
+
+    --heading-shadow: 1px 1px 0 rgba(0, 0, 0, 0.30);
+  }
+}
+
+/* ===== Manual theme overrides ===== */
+:root.light-style {
+  /* ===== 10 User-Defined Base Colors (Light) ===== */
+  /* 根层级 */
+  --clr-base-bg:           #FAFAFA;
+  --clr-aux-bg:            #EDE4D6;
+  --clr-primary-accent:    #E89800;
+  --clr-primary-text:      color-mix(in srgb, #1a1a1a, var(--clr-primary-accent) 15%);
+  /* 一次层级 */
+  --clr-primary-bg:        #FFFFFF;
+  --clr-secondary-accent:  #FFD54F;
+  /* 二次层级 */
+  --clr-secondary-bg:      #E8E8E8;
+  --clr-secondary-text:    color-mix(in srgb, var(--clr-primary-accent), var(--clr-primary-text) 40%);
+  /* 特殊色 */
+  --clr-error:             #BA1A1A;
+  --clr-warning:           #F28D00;
+
+  --shadow-near:
+    0 2px 4px rgba(0, 0, 0, 0.06);
+  --shadow-far:
+    0 12px 28px rgba(0, 0, 0, 0.1),
+    0 4px 12px rgba(0, 0, 0, 0.06);
+  --shadow-embed:
+    inset 0 1px 3px rgba(0, 0, 0, 0.06);
+
+  /* ===== Light mode reflection ===== */
+  --reflection-top:
+    linear-gradient(
+      180deg,
+      rgba(255, 255, 255, 0.5) 0%,
+      rgba(255, 255, 255, 0.15) 35%,
+      transparent 50%
+    );
+
+  /* ===== Light mode groove (lower opacity) ===== */
+  --groove-inset: inset 0 1px 3px rgba(0, 0, 0, 0.10);
+
+  --heading-shadow: 1px 1px 0 rgba(0, 0, 0, 0.30);
+}
+
+:root.dark-style {
+  /* Reset to dark defaults — all values inherited from :root */
+}

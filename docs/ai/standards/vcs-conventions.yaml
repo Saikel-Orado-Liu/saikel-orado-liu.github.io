@@ -1,0 +1,349 @@
+# VCS 规范规则集 — 版本控制约定
+# 源文档: docs/human/版本控制规范.md (GGS-UE5-VCS-001 V1.1)
+# 本土化适配: saikel-orado-liu.github.io (Astro 6.4 + TypeScript 5.8 静态站点)
+# 适配日期: 2026-06-02
+# 适配说明: 移除 UE5/Diversion 特有内容, 简化分支模型, 适配项目模块范围
+
+meta:
+  source: "docs/human/版本控制规范.md"
+  source_id: "GGS-UE5-VCS-001"
+  source_version: "V1.1"
+  adapted_for: "saikel-orado-liu.github.io"
+  adaptation_date: "2026-06-02"
+
+# ===== 版本控制工具 =====
+vcs:
+  type: git
+  auto_mark: "[AI]"
+  note: "AI 标记由 commit-agent 自动预置, 开发者编写消息时不应包含 [AI] 前缀"
+
+# ===== 约定式提交规范 =====
+commit_message:
+  structure: "{ai_mark}<类型>(<范围>): <描述>"
+  template_examples:
+    - "[AI] 功能(blog): 添加文章标签筛选功能"
+    - "[AI] 修复: 修复导航栏在移动端折叠异常"
+    - "[AI] 重构(projects): 重构项目展示卡片组件"
+    - "[AI] 文档: 更新贡献指南"
+    - "[AI] 杂项: 更新 .gitignore 规则"
+    - "[AI] 功能(ai)!: 重构 AI 模块数据结构"
+
+  parts:
+    - name: ai_mark
+      required: false
+      value: "[AI]"
+      description: "AI 辅助生成或自动上传时使用, 由 commit-agent 自动预置"
+    - name: type
+      required: true
+      description: "变更类型标识, 使用双字中文"
+    - name: scope
+      required: false
+      format: "kebab-case 英文"
+      description: "变更影响的功能模块, 用圆括号包围"
+    - name: description
+      required: true
+      max_length: 72
+      language: "zh-cn"
+      description: "对变更的简短总结, 紧跟冒号和空格之后"
+    - name: body
+      required: false
+      description: "额外上下文信息, 描述后空一行开始, 解释变更动机和影响"
+    - name: footer
+      required: false
+      format: "【令牌】值"
+      description: "每行一条脚注, 正文结束后空一行开始"
+
+  # 提交类型枚举
+  types:
+    - id: 功能
+      english: feat
+      semver: MINOR
+      description: "新增功能或模块"
+    - id: 修复
+      english: fix
+      semver: PATCH
+      description: "修复 Bug"
+    - id: 重构
+      english: refactor
+      semver: null
+      description: "重构代码（不改变功能逻辑）"
+    - id: 性能
+      english: perf
+      semver: null
+      description: "性能优化"
+    - id: 文档
+      english: docs
+      semver: null
+      description: "文档变更"
+    - id: 构建
+      english: build
+      semver: null
+      description: "构建系统或依赖变更（如修改 astro.config.mjs、添加 npm 包）"
+    - id: 杂项
+      english: chore
+      semver: null
+      description: "非业务性代码修改（如 .gitignore、项目配置文件）"
+    - id: 样式
+      english: style
+      semver: null
+      description: "代码格式变更（缩进、命名风格等, 不影响逻辑）"
+    - id: 测试
+      english: test
+      semver: null
+      description: "测试变更"
+    - id: 集成
+      english: ci
+      semver: null
+      description: "CI/CD 流程变更"
+    - id: 回退
+      english: revert
+      semver: null
+      description: "回退之前的提交"
+
+  # 范围枚举 (scope)
+  scopes:
+    - name: blog
+      description: "博客文章模块"
+    - name: projects
+      description: "项目展示模块"
+    - name: ue5-plugins
+      description: "UE5 插件模块"
+    - name: game
+      description: "游戏开发模块"
+    - name: ai
+      description: "AI 相关模块"
+    - name: build
+      description: "构建/编译配置"
+    - name: config
+      description: "项目配置文件"
+    - name: docs
+      description: "文档"
+    - name: i18n
+      description: "国际化"
+    - name: deps
+      description: "依赖管理"
+
+  # 描述字段规则
+  description_rules:
+    - "使用中文编写, 清晰描述变更内容"
+    - "长度控制在 72 字符以内"
+    - "使用祈使语气（如「添加」而非「添加了」）"
+    - "不以句号结尾"
+    - "首字符无需大写"
+
+  # 脚注令牌
+  footer_tokens:
+    - token: 引用
+      usage: "引用的 Issue 或 PR 编号"
+      example: "【引用】#123"
+    - token: 审查者
+      usage: "代码审查者"
+      example: "【审查者】张三"
+    - token: 共同作者
+      usage: "共同作者"
+      example: "【共同作者】李四"
+    - token: 破坏性变更
+      usage: "破坏性变更说明"
+      example: "【破坏性变更】数据结构变更, 旧版本将无法兼容"
+
+  # 破坏性变更标记
+  breaking_change:
+    requirement: "破坏性变更必须在提交信息中标记"
+    markers:
+      - method: 脚注标记
+        syntax: "【破坏性变更】描述"
+        description: "在脚注中添加描述"
+      - method: 类型前缀标记
+        syntax: "类型!:"
+        description: "在类型后、冒号前添加 !"
+      - method: 类型前缀加范围标记
+        syntax: "类型(范围)!:"
+        description: "在类型和范围后添加 !"
+
+# ===== 语义化版本规范 =====
+semver:
+  format: "主版本号.次版本号.修订号 (X.Y.Z)"
+  rules:
+    - change: MAJOR
+      triggers: ["破坏性变更"]
+      description: "不兼容的架构或数据变更, 如核心内容集合 schema 变更"
+      version_change: "1.2.3 → 2.0.0"
+    - change: MINOR
+      triggers: ["功能"]
+      description: "新功能、新内容模块"
+      version_change: "1.2.3 → 1.3.0"
+    - change: PATCH
+      triggers: ["修复"]
+      description: "Bug 修复、小幅优化"
+      version_change: "1.2.3 → 1.2.4"
+
+  initial_development:
+    start_version: "0.1.0"
+    rule: "主版本号为 0 时处于初始开发阶段, 破坏性变更无需递增主版本号"
+    note: "每次发行递增次版本号, 直至 1.0.0 首次正式发布"
+
+  pre_release:
+    format: "<版本号核心>-<标识符>"
+    identifiers:
+      - name: alpha
+        description: "内部测试版本, 功能尚未完整"
+      - name: beta
+        description: "外部测试版本, 功能基本完整"
+      - name: rc
+        description: "发布候选版本, 仅修复关键 Bug"
+    ordering: "0.9.0 < 1.0.0-alpha < 1.0.0-alpha.1 < 1.0.0-beta < 1.0.0-rc.1 < 1.0.0"
+
+  build_metadata:
+    format: "<版本号>+<元数据标识符>"
+    examples:
+      - "1.0.0+20260602"
+      - "1.0.0+sha.abc1234"
+    note: "不影响版本优先层级"
+
+  version_number_rules:
+    - "版本号严格采用 X.Y.Z 格式, X/Y/Z 均为非负整数"
+    - "禁止前导补零"
+    - "版本发行后禁止修改, 任何修改必须以新版本发布"
+    - "递增某位版本号时其后的所有版本号归零"
+
+# ===== 分支管理 =====
+branch_model:
+  branches:
+    - name: main
+      type: permanent
+      description: "发布分支, 始终保持可发布状态"
+      protection: "禁止直接推送, 仅通过合并请求进入"
+      merge_from: ["dev"]
+      lifecycle: "永久"
+      rules:
+        - "禁止直接在 main 上提交"
+        - "合并到 main 前必须通过完整回归测试 (astro check && astro build)"
+        - "每次合并到 main 必须打上版本标签 (如 v1.0.0)"
+        - "main 上的每次合并视为一次正式发布"
+
+    - name: dev
+      type: permanent
+      description: "日常开发主线"
+      protection: "禁止直接推送, 通过合并请求进入"
+      merge_from: ["feature/*"]
+      merge_to: ["main"]
+      lifecycle: "永久"
+      rules:
+        - "dev 必须始终能编译通过 (astro check && astro build)"
+        - "功能分支合并到 dev 前需经过代码审查"
+        - "当 dev 达到稳定状态时合并到 main 并打版本标签"
+        - "大型功能应在独立分支开发, 完成后合并回 dev"
+
+    - name: "feature/<功能名>"
+      type: temporary
+      description: "功能开发分支（可选）。单次提交可完成的小功能直接在 dev 上开发"
+      base: dev
+      merge_to: ["dev"]
+      lifecycle: "功能完成后删除"
+      rules:
+        - "从 dev 创建, 完成后合并回 dev"
+        - "定期从 dev 拉取最新变更, 避免合并冲突积累"
+        - "合并前必须经过代码审查"
+        - "合并后删除功能分支, 保持仓库整洁"
+        - "可选: 单次提交可完成的小功能直接在 dev 上开发"
+
+  naming_rules:
+    - "全部使用小写字母"
+    - "单词之间用连字符 - 分隔"
+    - "名称简洁且具有描述性"
+    - "不使用数字编号作为主要标识"
+    - "不在分支名中使用特殊字符"
+
+  workflow:
+    standard_feature:
+      steps:
+        - "从 dev 创建 feature/<功能名> 分支"
+        - "在功能分支上开发和提交"
+        - "定期从 dev 合并最新变更"
+        - "功能完成后创建合并请求到 dev"
+        - "代码审查通过后合并"
+        - "删除功能分支"
+
+    release:
+      steps:
+        - "dev 达到稳定状态"
+        - "合并 dev 到 main"
+        - "在 main 上打版本标签 (如 v1.0.0)"
+        - "生成 CHANGELOG"
+        - "构建发布包 (astro build)"
+
+# ===== 合并规范 =====
+merge_rules:
+  - from: "feature/*"
+    to: dev
+    method: "合并请求 + 代码审查"
+    note: "必须通过代码审查才能合并"
+  - from: dev
+    to: main
+    method: "合并请求 + 完整测试"
+    note: "必须通过 astro check && astro build"
+  - from: dev
+    to: "feature/*"
+    method: "直接合并"
+    note: "保持功能分支与主开发线同步"
+
+# ===== 冲突处理 =====
+conflict_resolution:
+  file_categories:
+    - type: text
+      description: "源代码和配置文件"
+      examples: [".ts", ".astro", ".js", ".mjs", ".json", ".css", ".md", ".yaml", ".yml"]
+      resolution: "手动逐冲突区域合并。理解双方意图后选择保留、舍弃或组合"
+
+    - type: generated
+      description: "自动生成文件"
+      examples: ["package-lock.json"]
+      resolution: "重新生成（重新运行 npm install）"
+
+  resolution_steps:
+    - "认清冲突范围: git status 列出所有冲突文件"
+    - "区分文件类型: 文本文件手动合并, 生成文件重新生成"
+    - "理解双方变更: 查看冲突双方的提交历史, 理解修改意图"
+    - "执行合并: 逐冲突区域选择保留、舍弃或组合"
+    - "验证合并结果: 确认 astro check && astro build 通过"
+    - "完成合并提交: 提交信息中注明解决了哪些冲突"
+
+  prevention:
+    - "功能分支每天从 dev 拉取最新变更, 保持分叉时间不超过 1 天"
+    - "每个提交只做一件事, 减少单次合并复杂度"
+    - "修改共享文件前在团队中沟通声明"
+    - "将大型内容拆分为子模块, 减少多人同时编辑同一文件的概率"
+
+# ===== 提交频率 =====
+commit_frequency:
+  - scenario: "功能开发"
+    frequency: "每完成一个逻辑单元提交一次"
+  - scenario: "Bug 修复"
+    frequency: "每修复一个 Bug 提交一次"
+  - scenario: "配置/文档变更"
+    frequency: "按模块分批提交"
+  - scenario: "重构"
+    frequency: "每完成一个重构步骤提交一次"
+  - scenario: "内容编辑"
+    frequency: "每完成一个区域的修改提交一次"
+
+# ===== 提交检查清单 =====
+checklist:
+  - "代码通过编译 (astro check && astro build 无错误)"
+  - "无明显的运行时错误"
+  - "符合项目代码风格指南 (.claude/rules/coding-standards.md)"
+  - "提交信息符合本规范的格式要求"
+  - "不包含敏感信息 (密钥、密码、个人身份信息等)"
+  - "不包含不应提交的临时文件和生成文件"
+  - "如果包含破坏性变更, 已正确标记"
+
+# ===== 最佳实践 =====
+best_practices:
+  - "提交前先同步最新版本: 减少合并冲突的可能性"
+  - "提交粒度适中: 每次提交应是一个逻辑上独立的变更单元"
+  - "使用约定式提交格式: 统一提交信息格式, 便于自动化处理"
+  - "复杂变更使用正文: 描述中无法说清的内容在正文中补充"
+  - "破坏性变更必须标记: 使用 ! 前缀或 【破坏性变更】脚注"
+  - "敏感文件不提交到版本控制: 密钥、证书、个人配置等应使用 .gitignore 排除"
+  - "提交后验证: 运行 astro check && astro build 确认不引入回归问题"
+  - "写有意义的描述: 避免「修复了一些问题」「更新代码」等模糊描述"

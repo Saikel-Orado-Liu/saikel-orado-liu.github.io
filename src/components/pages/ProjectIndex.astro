@@ -1,0 +1,45 @@
+---
+import { useTranslations } from '../../i18n';
+import { getLocalizedProjects } from '../../utils/content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../../i18n';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const projects = await getLocalizedProjects(locale);
+---
+
+<div class="container-narrow">
+  <section class="section">
+    <h1 class="section-title">{t('projects-title')}</h1>
+    <p class="section-subtitle">{t('projects-description')}</p>
+    {projects.length > 0 ? (
+      <div class="flex flex-col gap-6">
+        {projects.map(p => (
+          <a href={getRelativeLocaleUrl(locale, `/projects/${p.id}/`)} class="card project-card no-underline">
+            <h3 class="project-card-title">{p.data.title}</h3>
+            <p class="project-card-desc">{p.data.excerpt ?? ''}</p>
+            {p.data.tags && (
+              <div class="flex gap-2 flex-wrap mb-4">
+                {p.data.tags.map((tag: string) => <span class="tag"><span>{tag}</span></span>)}
+              </div>
+            )}
+            {p.data.github && (
+              <a href={p.data.github} class="btn btn-outline" target="_blank" rel="noopener"><span>GitHub</span></a>
+            )}
+          </a>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state"><i class="bx bx-code-alt"></i><p>{t('projects-empty')}</p></div>
+    )}
+  </section>
+</div>
+
+<style>
+.project-card { color: inherit; }
+.project-card:hover .project-card-title { color: var(--clr-secondary-accent); }
+.project-card-title { font-size: var(--font-size-xl); margin-bottom: var(--space-xs); }
+.project-card-desc { font-size: var(--font-size-sm); color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--space-md); margin-top: 0; }
+</style>

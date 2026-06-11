@@ -1,0 +1,157 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { supportedLocales, toOgLocale, stripLocalePrefix, getLocaleDir, locales } from '../i18n';
+import type { Locale } from '../i18n';
+import Header from '../components/layout/Header.astro';
+import Footer from '../components/layout/Footer.astro';
+import '../styles/global.css';
+import '../styles/tokens.css';
+import '../styles/base.css';
+import '../styles/components.css';
+import '../styles/header.css';
+import '../styles/ui-spec.css';
+
+export interface Props {
+  title?: string;
+  description?: string;
+  ogImage?: string;
+  locale?: string;
+}
+
+const {
+  title = 'GameGeek-Saikel',
+  description = '个人主页 — 博客、项目、UE5 插件、游戏开发与 AI 开发',
+  ogImage = 'https://avatars.githubusercontent.com/u/88531138',
+  locale = 'zh-cn',
+} = Astro.props;
+
+const currentLocale = (locale || Astro.currentLocale || 'zh-cn') as Locale;
+const barePath = stripLocalePrefix(Astro.url.pathname);
+---
+
+<!doctype html>
+<html lang={currentLocale} dir={getLocaleDir(currentLocale)} data-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="light dark" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+
+    <title>{title}</title>
+    <meta name="description" content={description} />
+
+    <!-- Open Graph -->
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:image" content={ogImage} />
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content={currentLocale === 'zh-cn' ? '游戏极客-Saikel' : 'GameGeek-Saikel'} />
+    <meta property="og:locale" content={toOgLocale(currentLocale)} />
+
+    <!-- Alternate locales -->
+    <link rel="canonical" href={new URL(barePath, Astro.site).href} />
+    {supportedLocales.map(loc => (
+      <link rel="alternate" hreflang={loc} href={new URL(getRelativeLocaleUrl(loc, barePath), Astro.site).href} />
+    ))}
+    <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
+
+    <!-- Favicon -->
+    <link rel="shortcut icon" href="https://avatars.githubusercontent.com/u/88531138" type="image/x-icon" />
+
+    <!-- RSS -->
+    {locales.map(loc => (
+      <link rel="alternate" type="application/rss+xml" title={`Blog RSS (${loc})`} href={loc === 'zh-cn' ? '/blog/rss.xml' : `/${loc}/blog/rss.xml`} />
+    ))}
+  </head>
+  <body>
+    <!-- Layer 2: 希尔伯特曲线分形纹理 -->
+    <div class="bg-hilbert" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="hilbert-pattern" width="280" height="280" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <path id="hilbert-path" fill="none" stroke="#242424" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.55" vector-effect="non-scaling-stroke" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#hilbert-pattern)" />
+      </svg>
+    </div>
+
+    <!-- Gosper 曲线代码块背景 path 定义 + 图片纸张噪点滤镜 -->
+    <svg width="0" height="0" aria-hidden="true" class="absolute">
+      <defs>
+        <path id="gosper-curve" fill="none" stroke="#242424" stroke-width="7"
+              stroke-linecap="round" stroke-linejoin="round" opacity="0.55"
+              vector-effect="non-scaling-stroke" />
+      </defs>
+    </svg>
+
+    <Header />
+    <main class="page-content">
+      <slot />
+    </main>
+    <Footer />
+  </body>
+</html>
+
+<script>
+  import { initTheme } from '../scripts/theme';
+  import { initHilbert } from '../scripts/hilbert';
+  import { initCodeBg } from '../scripts/code-bg';
+  import { initNavSlider, initLangSlider } from '../scripts/nav-slider';
+
+  // 浏览器语言自动跳转：首次访问检测语言写入 localStorage，
+  // 后续无 locale 前缀的页面据此跳转。用户手动切换语言时更新。
+  (function() {
+    const SUPPORTED = ['zh-cn','en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'];
+    const path = window.location.pathname;
+    const STORAGE_KEY = 'user-locale';
+
+    // 从当前 URL 提取 locale
+    function localeFromPath(p: string): string | null {
+      for (const l of SUPPORTED) {
+        if (p.startsWith('/' + l + '/') || p === '/' + l) return l;
+      }
+      return null;
+    }
+
+    const currentLocale = localeFromPath(path);
+
+    // 1. 有 locale 前缀的页面：更新 localStorage 记录当前语言偏好
+    if (currentLocale) {
+      localStorage.setItem(STORAGE_KEY, currentLocale);
+      return;
+    }
+
+    // 2. 无 locale 前缀的默认页：根据 localStorage 或浏览器语言跳转
+    let preferred = localStorage.getItem(STORAGE_KEY);
+    if (!preferred) {
+      // 首次访问，从浏览器语言推断
+      const navLang = (navigator.language || '').toLowerCase();
+      preferred = SUPPORTED.includes(navLang) ? navLang : null;
+      if (!preferred) preferred = SUPPORTED.find(s => s.startsWith(navLang.split('-')[0])) ?? null;
+      if (preferred && preferred !== 'zh-cn') {
+        localStorage.setItem(STORAGE_KEY, preferred);
+      }
+    }
+
+    if (preferred && preferred !== 'zh-cn') {
+      const dest = path === '/' ? '/' + preferred + '/' : '/' + preferred + path;
+      window.location.replace(dest);
+    }
+    // zh-cn 用户不跳转，留在默认页
+  })();
+
+  function init() {
+    initTheme();
+    initHilbert();
+    initCodeBg();
+    initNavSlider();
+    initLangSlider();
+  }
+
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>

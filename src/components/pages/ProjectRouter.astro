@@ -1,0 +1,20 @@
+---
+import type { Locale } from '../../i18n';
+import ProjectDetail from './ProjectDetail.astro';
+import ProjectDoc from './ProjectDoc.astro';
+
+interface Props { slug: string; locale: Locale; }
+const { slug, locale } = Astro.props;
+
+// slug 格式：
+//   'texturge'                         → 项目概览页
+//   'texturge/01.getting-started/01.overview'  → 子文档页
+const isDoc = slug.includes('/');
+const projectSlug = isDoc ? slug.split('/')[0] : slug;
+const docId = isDoc ? slug : undefined;
+---
+{isDoc ? (
+  <ProjectDoc slug={projectSlug} docId={docId!} locale={locale} />
+) : (
+  <ProjectDetail slug={slug} locale={locale} />
+)}

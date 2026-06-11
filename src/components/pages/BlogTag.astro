@@ -1,0 +1,38 @@
+---
+import PostCard from '../blog/PostCard.astro';
+import { useTranslations } from '../../i18n';
+import { getPostsByTag } from '../../utils/content';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../../i18n';
+
+interface Props { locale: Locale; tag: string; }
+const { locale, tag } = Astro.props;
+const t = useTranslations(locale);
+const posts = await getPostsByTag(locale, tag);
+---
+
+<div class="container-narrow">
+  <section class="section">
+    <h1 class="section-title">{t('blog-tags')}: #{tag}</h1>
+    <p class="section-subtitle">{posts.length} {locale === 'zh-cn' ? '篇文章' : locale === 'ja-jp' ? '記事' : 'posts'}</p>
+    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="blog-back-link inline-flex items-center gap-1 text-sm mb-8">
+      <i class="bx bx-left-arrow-alt"></i> {t('blog-back')}
+    </a>
+    {posts.length > 0 ? (
+      <div class="flex flex-col gap-6">
+        {posts.map(post => (
+          <PostCard title={post.data.title} slug={post.id} date={post.data.date}
+            excerpt={post.data.excerpt} tags={post.data.tags}
+            categories={post.data.categories} locale={locale} />
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state"><i class="bx bx-news"></i><p>{t('blog-empty')}</p></div>
+    )}
+  </section>
+</div>
+
+<style>
+.blog-back-link { color: var(--md-sys-color-on-surface-variant); }
+.blog-back-link:hover { color: var(--clr-secondary-accent); }
+</style>

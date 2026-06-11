@@ -1,0 +1,35 @@
+---
+import { useTranslations } from '../../i18n';
+import type { Locale } from '../../i18n';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<div class="container-narrow">
+  <section class="section">
+    <h1 class="section-title">{t('about-title')}</h1>
+    <div class="about-card card flex items-center gap-8 max-[640px]:flex-col max-[640px]:text-center">
+      <img src="https://avatars.githubusercontent.com/u/88531138" alt="Avatar" class="about-avatar" width="96" height="96" />
+      <div class="about-intro">
+        <h2>Saikel Orado Liu</h2>
+        <p class="about-handle">{locale === 'zh-cn' ? '游戏极客-Saikel' : 'GameGeek-Saikel'}</p>
+      </div>
+    </div>
+    <div class="about-content card" style="margin-top: var(--space-xl)">
+      <p>{locale === 'zh-cn' ? '我是一名热爱技术的开发者，专注于游戏开发、虚幻引擎 5 插件开发以及人工智能领域的探索。' : locale === 'ja-jp' ? 'ゲーム開発、アンリアルエンジン5のプラグイン開発、AI探求に情熱を注ぐ開発者です。' : "I'm a passionate developer focused on game development, Unreal Engine 5 plugin development, and AI exploration."}</p>
+      <div class="about-links flex gap-4 mt-6">
+        <a href="https://github.com/Saikel-Orado-Liu" class="btn btn-outline" target="_blank" rel="noopener">
+          <i class="bx bxl-github"></i> <span>GitHub</span>
+        </a>
+      </div>
+    </div>
+  </section>
+</div>
+
+<style>
+.about-avatar { width: 96px; height: 96px; border-radius: var(--shape-full); box-shadow: var(--shadow-far); flex-shrink: 0; }
+.about-intro h2 { margin-bottom: var(--space-xs); }
+.about-intro p { color: var(--md-sys-color-on-surface-variant); margin: 0; }
+</style>

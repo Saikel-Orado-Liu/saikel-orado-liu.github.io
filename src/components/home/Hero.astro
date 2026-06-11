@@ -1,0 +1,51 @@
+---
+import { useTranslations } from '../../i18n';
+import type { Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const prefix = locale === 'zh-cn' ? '' : `/${locale}`;
+---
+
+<section class="hero flex items-center justify-center text-center min-h-[60vh] py-24 px-6">
+  <div class="hero-content flex flex-col items-center gap-4">
+    <div class="hero-avatar-wrapper mb-4">
+      <img
+        class="hero-avatar"
+        src="https://avatars.githubusercontent.com/u/88531138"
+        alt="GameGeek-Saikel"
+        width="128"
+        height="128"
+      />
+    </div>
+    <h1 class="heading-xl m-0">{t('hero-greeting')}</h1>
+    <p class="hero-subtitle text-xl max-w-[480px] leading-relaxed mb-6">{t('hero-subtitle')}</p>
+    <div class="hero-actions flex gap-4 flex-wrap justify-center">
+      <a href={`${prefix}/about/`} class="btn btn-primary"><span>{t('hero-cta')}</span></a>
+      <a href={`${prefix}/projects/`} class="btn btn-outline"><span>{t('hero-view-projects')}</span></a>
+    </div>
+  </div>
+</section>
+
+<style>
+.hero-avatar {
+  width: 128px;
+  height: 128px;
+  border-radius: var(--shape-full);
+  box-shadow: var(--shadow-far);
+  border: 3px solid var(--md-sys-color-outline-variant);
+  transition: box-shadow var(--duration-medium) var(--ease-standard),
+              transform var(--duration-medium) var(--ease-standard);
+}
+.hero-avatar:hover {
+  box-shadow: var(--shadow-far), 0 0 0 8px rgba(255, 128, 128, 0.12);
+  transform: scale(1.05);
+}
+.hero-subtitle {
+  color: var(--md-sys-color-on-surface-variant);
+}
+</style>

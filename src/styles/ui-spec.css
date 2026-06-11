@@ -1,0 +1,2842 @@
+/* ===================================================================
+   ui-spec.css — /spec/ 设计规范预览页专属样式
+   覆盖 components.css / header.css 中的部分组件定义，
+   实现 M3 + 抽象拟物混合设计的完整视觉表现。
+   =================================================================== */
+
+/* ================================================================
+   §9 根画布背景
+   ================================================================ */
+
+/* Layer 2: 希尔伯特曲线分形纹理 */
+.bg-hilbert {
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  }
+.bg-hilbert svg {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* Layer 3: 砂纸噪点 — 覆盖 base.css 的 body::before */
+body::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='s' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.09 0.09 0.09 0 0.04 0.09 0.09 0.09 0 0.04 0.09 0.09 0.09 0 0.04 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23s)'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  opacity: 0.18;
+}
+
+body {
+  position: relative;
+  overflow-x: hidden;
+  padding-top: var(--space-md);
+  padding-bottom: calc(var(--space-md) + var(--space-xs));
+}
+
+/* ================================================================
+   §8.1 Card — 磨砂亚克力板（全量覆盖 components.css）
+   ================================================================ */
+
+.card {
+  position: relative;
+  background: var(--clr-primary-bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-radius: var(--shape-md);
+  padding: var(--space-xl);
+  isolation: isolate;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-right: none;
+  border-bottom: none;
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+}
+.card > * {
+  position: relative;
+  z-index: 3;
+}
+.card::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nd)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 1;
+}
+.card::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ================================================================
+   §8.8 Navbar — 居中亚克力板（覆盖 header.css 毛玻璃方案）
+   ================================================================ */
+
+:root .navbar {
+  /* 跟随页面滚动 */
+  position: relative;
+  max-width: var(--header-max-width);
+  width: calc(100% - var(--space-lg) * 2);
+  margin: 0 auto;
+
+  /* Card 同款圆角 */
+  border-radius: var(--shape-md);
+  min-height: 4rem;
+
+  /* Card 同款亚克力板材质 */
+  isolation: isolate;
+  background: var(--clr-primary-bg);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-right: none;
+  border-bottom: none;
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+}
+
+:root .navbar::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nd)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+:root .navbar::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+:root .navbar > .navbar-inner {
+  position: relative;
+  z-index: 3;
+}
+
+/* ================================================================
+   §8.8.1 页头排版 — 全局加大一码
+   ================================================================ */
+
+:root .navbar .navbar-title {
+  font-size: var(--font-size-xl);
+}
+:root .navbar .navbar-nav a {
+  font-size: var(--font-size-base);
+}
+
+/* 导航选项卡容器 — Card Tag 同款内嵌凹槽样式 */
+:root .navbar .navbar-nav ul {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  list-style: none;
+  gap: 2px;
+  padding: 3px;
+  border-radius: var(--shape-full);
+  background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    inset 4px 6px 0 0 rgba(0, 0, 0, 0.45),
+    inset -2px -3px 8px color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+}
+/* 与 .card .tag 保持一致：取消左上反射渐变 + 亮色左上厚度统一 */
+.card .tag::after {
+  display: none;
+}
+:root.light-style .card .tag {
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    inset 2px 3px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+    inset -3px -4px 6px rgba(255, 255, 255, 0.80);
+}
+:root .navbar .navbar-nav ul::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nu' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nu)' opacity='0.50'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  filter: contrast(5.0);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+:root .navbar .navbar-nav a {
+  position: relative;
+  z-index: 3;
+  display: inline-flex;
+  align-items: center;
+  padding: 0.4rem 0.875rem;
+  border-radius: var(--shape-full);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  box-shadow: none;
+  transform: translate(2px, 2px);
+  transition:
+    color 0.2s ease,
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   §8.8.2 凹槽滑动指示器 — 物理块在凹槽中滑动
+   刚性亚克力板，文字与滑块同步 translateY 抬起
+   ═══════════════════════════════════════════════════════════════════ */
+.nav-slider {
+  position: absolute;
+  top: 3px;
+  height: calc(100% - 6px);
+  border-radius: var(--shape-full);
+  z-index: 2; /* 低于所有文字 (z:3)，仅高于凹槽噪点 (z:1) */
+  pointer-events: none;
+  isolation: isolate;
+  overflow: hidden; /* 裁剪噪点伪元素；box-shadow 不受 overflow 裁剪 */
+  /* 滑块受凹槽边界约束，取消 overshoot，干净滑入 */
+  transition:
+    left 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    width 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+.nav-slider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nvs' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nvs)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+.nav-slider::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 20%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 高光叠加层 — opacity 过渡（可靠） */
+.nav-slider-highlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+}
+:root.light-style .nav-slider-highlight {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.5) 0%, transparent 55%);
+}
+
+/* 抬起态 */
+.nav-slider.lifted {
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 55%, #FFFFFF 45%),
+    0 3px 8px 1px rgba(0, 0, 0, 0.30),
+    inset 0 3px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 50%, #000000 50%);
+}
+
+/* slider 启用时移除 active 的静态背景与抬起（由 slider + nav-lift 接管） */
+:root .navbar .navbar-nav ul.has-slider a.active {
+  background: transparent;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  box-shadow: none;
+  margin: 0;
+}
+:root .navbar .navbar-nav ul.has-slider a.active::before,
+:root .navbar .navbar-nav ul.has-slider a.active::after {
+  display: none;
+}
+
+/* ═══════════════════════════════════════════════════════════════════
+   语言下拉栏垂直滑块 — 与导航滑块同款材质，垂直滑动（top/height）
+   ═══════════════════════════════════════════════════════════════════ */
+.lang-slider {
+  position: absolute;
+  left: 4px;
+  width: calc(100% - 8px);
+  border-radius: var(--shape-lg);
+  z-index: 2;
+  pointer-events: none;
+  isolation: isolate;
+  overflow: hidden;
+  transition:
+    top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
+    height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
+    transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
+    box-shadow 0.4s ease,
+    border-color 0.4s ease;
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    1px 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    1px 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 1px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+.lang-slider::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='lgs' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lgs)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+.lang-slider::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 20%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 高光叠加层 */
+.lang-slider-highlight {
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  pointer-events: none;
+  z-index: 3;
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+}
+
+/* 抬起态 — 水平左凸 */
+.lang-slider.lifted {
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  box-shadow:
+    1px 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 55%, #FFFFFF 45%),
+    1px 3px 8px 1px rgba(0, 0, 0, 0.30),
+    inset 1px 3px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 50%, #000000 50%);
+}
+
+/* slider 接管时移除原生 active 样式（不含 transition——由文字 class 各自控制） */
+:root .navbar .lang-switcher .lang-dropdown ul.has-lang-slider a.active {
+  background: transparent;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  box-shadow: none;
+  margin: 0;
+}
+:root .navbar .lang-switcher .lang-dropdown ul.has-lang-slider a.active::before,
+:root .navbar .lang-switcher .lang-dropdown ul.has-lang-slider a.active::after {
+  display: none;
+}
+
+/* ── 文字抬起 ── */
+:root .navbar .lang-switcher .lang-dropdown a.lang-lift {
+  transform: translate(-1px, -2px);
+  color: var(--clr-primary-text);
+  z-index: 22;
+  isolation: isolate;
+  transition: transform 0.2s 0.15s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.15s ease;
+}
+:root .navbar .lang-switcher .lang-dropdown a.lang-hover-lift {
+  transform: translate(-1px, -5px);
+  transition: transform 0.2s 0.05s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.05s ease;
+}
+:root .navbar .lang-switcher .lang-dropdown a.lang-hover-lift.instant-hover {
+  transform: translate(-3px, -6px);
+  transition: transform 0.2s 0.05s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.05s ease;
+}
+:root .navbar .lang-switcher .lang-dropdown a.lang-hover-lift.instant-return {
+  transform: translate(-3px, -6px);
+  transition: transform 0.2s 0.15s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.15s ease;
+}
+:root .navbar .lang-switcher .lang-dropdown a.lang-pressed {
+  transform: translate(1px, 0);
+  transition: transform 0.08s ease, color 0.08s ease;
+}
+:root .navbar .lang-switcher .lang-dropdown a.lang-pressed.instant-press {
+  transform: translate(1px, 0px);
+  transition: transform 0.08s ease, color 0.08s ease;
+}
+:root .navbar .lang-switcher .lang-dropdown a.lang-dim {
+  color: var(--md-sys-color-on-surface-variant);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    color 0.2s ease;
+}
+
+/* ── 标签抬起（滑块到达后再浮起，0.35s delay）── */
+:root .navbar .navbar-nav a.nav-lift {
+  transform: translate(1px, -1px);
+  color: var(--clr-primary-text);
+  z-index: 22;
+  isolation: isolate;
+  transition: transform 0.2s 0.35s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.15s ease;
+}
+/* ── hover 进一步抬升（滑块到位后，0.35s delay）── */
+:root .navbar .navbar-nav a.nav-hover-lift {
+  transform: translate(2px, -3px);
+  transition: transform 0.2s 0.15s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.15s ease;
+}
+/* hover lift — instant 参数（滑块已在目标）*/
+:root .navbar .navbar-nav a.nav-hover-lift.instant-hover {
+  transform: translate(1px, -5px);
+  transition: transform 0.2s 0.05s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.05s ease;
+}
+/* hover lift — instant-return 参数（从其他标签回到 active）*/
+:root .navbar .navbar-nav a.nav-hover-lift.instant-return {
+  transform: translate(1px, -5px);
+  transition: transform 0.2s 0.15s cubic-bezier(0.34, 1.3, 0.64, 1),
+              color 0.2s 0.15s ease;
+}
+/* 按下：文字沉入凹槽 */
+:root .navbar .navbar-nav a.nav-pressed {
+  transform: translate(2px, 2px);
+  transition: transform 0.08s ease, color 0.08s ease;
+}
+/* 按下 — instant 模式（滑块已在目标）*/
+:root .navbar .navbar-nav a.nav-pressed.instant-press {
+  transform: translate(1px, 1px);
+  transition: transform 0.08s ease, color 0.08s ease;
+}
+/* hover 态辅助 */
+:root .navbar .navbar-nav a.nav-hover {
+  color: var(--clr-primary-text);
+}
+/* active 标签在滑块滑走后文字恢复暗色（特异度高于 .active） */
+:root .navbar .navbar-nav a.active.nav-dim {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* 亮色 — 抬起/文字颜色 */
+:root.light-style .navbar .navbar-nav a.nav-lift {
+  color: #F5F5F5;
+}
+:root.light-style .navbar .navbar-nav a.nav-hover {
+  color: #F5F5F5;
+}
+:root.light-style .navbar .navbar-nav a.active.nav-dim {
+  color: var(--md-sys-color-on-surface-variant);
+}
+:root .navbar .navbar-nav a.active {
+  position: relative;
+  z-index: 20;
+  isolation: isolate;
+  margin: -5px 0 0 0;
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  color: var(--clr-primary-text);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+:root .navbar .navbar-nav a.active > * {
+  position: relative;
+  z-index: 3;
+}
+:root .navbar .navbar-nav a.active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nwa' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nwa)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+:root .navbar .navbar-nav a.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 20%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 亮色 — 导航选项卡 Card Tag 内嵌凹槽 */
+:root.light-style .navbar .navbar-nav ul {
+  position: relative;
+  isolation: isolate;
+  background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-right: 1px solid rgba(255, 255, 255, 1.00);
+  border-bottom: 1px solid rgba(255, 255, 255, 1.00);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+    inset -4px -6px 8px rgba(255, 255, 255, 0.80);
+}
+:root.light-style .navbar .navbar-nav ul::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nul' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nul)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  opacity: 1;
+  filter: none;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+:root.light-style .navbar .navbar-nav a.active {
+  position: relative;
+  z-index: 20;
+  isolation: isolate;
+  margin: -5px 0 0 0;
+  background: var(--clr-primary-accent);
+  color: #F5F5F5;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .navbar-nav a.active > * {
+  position: relative;
+  z-index: 3;
+}
+:root.light-style .navbar .navbar-nav a.active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nwal' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nwal)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  filter: none;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+:root.light-style .navbar .navbar-nav a.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 亮色 — 凹槽滑动指示器 */
+:root.light-style .nav-slider {
+  background: var(--clr-primary-accent);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .nav-slider::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nvsl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nvsl)'/%3E%3C/svg%3E");
+  filter: none;
+  mix-blend-mode: normal;
+}
+:root.light-style .nav-slider::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+}
+:root.light-style .nav-slider.lifted {
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+    0 3px 8px 1px rgba(0, 0, 0, 0.10),
+    inset 0 3px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 65%, #000000 35%);
+}
+/* 亮色 — slider 接管时禁用 active 静态背景与抬起 */
+:root.light-style .navbar-nav ul.has-slider a.active {
+  background: transparent;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  box-shadow: none;
+  margin: 0;
+}
+:root.light-style .navbar-nav ul.has-slider a.active::before,
+:root.light-style .navbar-nav ul.has-slider a.active::after {
+  display: none;
+}
+
+/* 亮色 — 语言下拉栏垂直滑块 */
+:root.light-style .lang-slider {
+  background: var(--clr-primary-accent);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    1px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+    1px 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 1px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .lang-slider::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='lgsl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lgsl)'/%3E%3C/svg%3E");
+}
+:root.light-style .lang-slider::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+}
+:root.light-style .lang-slider-highlight {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.5) 0%, transparent 55%);
+}
+:root.light-style .lang-slider.lifted {
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  box-shadow:
+    1px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+    1px 3px 8px 1px rgba(0, 0, 0, 0.10),
+    inset 1px 3px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 65%, #000000 35%);
+}
+:root.light-style .lang-switcher .lang-dropdown ul.has-lang-slider a.active {
+  background: transparent;
+  border-top-color: transparent;
+  border-left-color: transparent;
+  box-shadow: none;
+  margin: 0;
+}
+:root.light-style .lang-switcher .lang-dropdown ul.has-lang-slider a.active::before,
+:root.light-style .lang-switcher .lang-dropdown ul.has-lang-slider a.active::after {
+  display: none;
+}
+
+/* ================================================================
+   §8.8.1 主题切换 & 语言触发按钮 — 继承 Tag-Accent 强调色亚克力板样式
+   ================================================================ */
+
+:root .navbar .theme-toggle {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: var(--shape-md);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--clr-primary-text);
+  cursor: pointer;
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    2px 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+:root .navbar .theme-toggle:hover {
+  transform: translate(-2px, -2px);
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-accent) 55%, #FFFFFF 45%),
+    3px 5px 8px 0 rgba(0, 0, 0, 0.50),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+:root .navbar .lang-trigger {
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 2.25rem;
+  height: 2.25rem;
+  border: none;
+  border-radius: var(--shape-md);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--clr-primary-text);
+  cursor: pointer;
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    2px 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+:root .navbar .lang-trigger:hover {
+  transform: translate(-2px, -2px);
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 65%, #FFFFFF 35%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-accent) 55%, #FFFFFF 45%),
+    3px 5px 8px 0 rgba(0, 0, 0, 0.50),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+:root .navbar .theme-toggle > *,
+:root .navbar .lang-trigger > * {
+  position: relative;
+  z-index: 3;
+}
+:root .navbar .theme-toggle::before,
+:root .navbar .lang-trigger::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nw' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nw)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+:root .navbar .theme-toggle::after,
+:root .navbar .lang-trigger::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+:root .navbar .theme-toggle:hover::after,
+:root .navbar .lang-trigger:hover::after {
+  opacity: 1;
+}
+:root .navbar .theme-toggle:active::after,
+:root .navbar .lang-trigger:active::after {
+  opacity: 0.4;
+  transition: opacity 0.06s ease;
+}
+:root .navbar .theme-toggle:active,
+:root .navbar .lang-trigger:active {
+  transform: translateY(0);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+}
+
+/* 亮色 */
+:root.light-style .navbar .theme-toggle {
+  background: var(--clr-primary-accent);
+  color: #F5F5F5;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    2px 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .lang-trigger {
+  background: var(--clr-primary-accent);
+  color: #F5F5F5;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    2px 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .theme-toggle:hover {
+  transform: translate(-2px, -2px);
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+    3px 5px 8px 0 rgba(0, 0, 0, 0.20),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .lang-trigger:hover {
+  transform: translate(-2px, -2px);
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+    3px 5px 8px 0 rgba(0, 0, 0, 0.20),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .theme-toggle::before,
+:root.light-style .navbar .lang-trigger::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nwl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nwl)'/%3E%3C/svg%3E");
+}
+:root.light-style .navbar .theme-toggle::after,
+:root.light-style .navbar .lang-trigger::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+:root.light-style .navbar .theme-toggle:hover::after,
+:root.light-style .navbar .lang-trigger:hover::after {
+  opacity: 1;
+}
+:root.light-style .navbar .theme-toggle:active,
+:root.light-style .navbar .lang-trigger:active {
+  transform: translateY(0);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+}
+:root.light-style .navbar .theme-toggle:active::after,
+:root.light-style .navbar .lang-trigger:active::after {
+  opacity: 0.4;
+  transition: opacity 0.06s ease;
+}
+/* 去掉 .widget-item 在语言按钮上的残留样式（边框/背景/内边距） */
+:root .navbar .lang-switcher {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+
+:root .navbar .lang-switcher .lang-dropdown {
+  position: absolute;
+  top: calc(100% + var(--space-lg));
+  right: -30px;
+  margin-top: 0;
+  z-index: calc(var(--z-header) + 1);
+  isolation: isolate;
+  border-radius: var(--shape-md);
+  background: var(--clr-primary-bg);
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+  list-style: none;
+  padding: 8px;
+  min-width: 132px;
+}
+:root .navbar .lang-switcher .lang-dropdown::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nd)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 1;
+}
+:root .navbar .lang-switcher .lang-dropdown::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+:root .navbar .lang-dropdown li {
+  position: relative;
+  z-index: 3;
+}
+:root .navbar .lang-dropdown a {
+  display: block;
+  text-align: center;
+  padding: 0.5rem 0.75rem;
+  border-radius: var(--shape-full);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    color 0.2s ease;
+}
+:root .navbar .lang-dropdown a.active {
+  position: relative;
+  z-index: 20;
+  isolation: isolate;
+  overflow: hidden;
+  margin: -5px 0 0 0;
+  font-weight: var(--font-weight-bold);
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  color: var(--clr-primary-text);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    0 5px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 0 5px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+:root .navbar .lang-dropdown a.active > * {
+  position: relative;
+  z-index: 3;
+}
+:root .navbar .lang-dropdown a.active::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='lda' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lda)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+:root .navbar .lang-dropdown a.active::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 20%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 内层 ul：页头 Tab 同款内嵌凹槽样式 */
+:root .navbar .lang-switcher .lang-dropdown ul {
+  position: relative;
+  z-index: 3;
+  isolation: isolate;
+  list-style: none;
+  margin: 0;
+  padding: var(--space-xs);
+  border-radius: var(--shape-lg);
+  background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    inset 4px 6px 0 0 rgba(0, 0, 0, 0.45),
+    inset -2px -3px 8px color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+}
+:root .navbar .lang-switcher .lang-dropdown ul::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='lug' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lug)' opacity='0.50'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  filter: contrast(5.0);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ================================================================
+   亮色模式
+   ================================================================ */
+:root.light-style .navbar .theme-toggle {
+  background: var(--clr-primary-accent);
+  color: #F5F5F5;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    2px 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .theme-toggle:hover {
+  transform: translate(-2px, -2px);
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+    3px 5px 8px 0 rgba(0, 0, 0, 0.20),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .theme-toggle::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nwl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nwl)'/%3E%3C/svg%3E");
+}
+:root.light-style .navbar .theme-toggle::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+:root.light-style .navbar .theme-toggle:hover::after {
+  opacity: 1;
+}
+:root.light-style .navbar .theme-toggle:active {
+  transform: translateY(0);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+}
+:root.light-style .navbar .theme-toggle:active::after {
+  opacity: 0.4;
+  transition: opacity 0.06s ease;
+}
+:root.light-style .navbar .lang-switcher {
+  padding: 0;
+  background: none;
+  box-shadow: none;
+  border: none;
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='nl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nl)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  opacity: 1;
+  filter: none;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, transparent 45%);
+}
+:root.light-style .navbar .lang-dropdown a {
+  color: var(--md-sys-color-on-surface-variant);
+}
+:root.light-style .navbar .navbar-nav a {
+  color: var(--md-sys-color-on-surface-variant);
+}
+:root.light-style .navbar .lang-dropdown a.active {
+  position: relative;
+  z-index: 20;
+  isolation: isolate;
+  overflow: hidden;
+  margin: -5px 0 0 0;
+  background: var(--clr-primary-accent);
+  color: #F5F5F5;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    0 5px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 0 5px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .navbar .lang-dropdown a.active::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='ldal' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ldal)'/%3E%3C/svg%3E");
+}
+:root.light-style .navbar .lang-dropdown a.active::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown a.lang-lift,
+:root.light-style .navbar .lang-switcher .lang-dropdown a.lang-hover-lift {
+  color: #F5F5F5;
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown a.lang-dim {
+  color: var(--md-sys-color-on-surface-variant);
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown ul {
+  background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-right: 1px solid rgba(255, 255, 255, 0.15);
+  border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+    inset -4px -6px 8px rgba(255, 255, 255, 0.10);
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown ul::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='lugl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lugl)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+:root.light-style .navbar .lang-switcher .lang-dropdown ul::after {
+  display: none;
+}
+
+/* ================================================================
+   §8.12 Footer — 居中亚克力板（覆盖 Footer.astro scoped style）
+   ================================================================ */
+
+:root footer.footer,
+footer.footer {
+  position: relative;
+  isolation: isolate;
+
+  /* 页脚内边距 — 底部 padding 留空，背景铺满 */
+  padding: var(--space-3xl) 0 var(--space-4xl);
+
+  /* 居中定宽 + 左右留间距透出背景 */
+  max-width: var(--header-max-width);
+  width: calc(100% - var(--space-lg) * 2);
+  margin: var(--space-4xl) auto 0;
+
+  /* Card 同款圆角 */
+  border-radius: var(--shape-md);
+
+  /* Card 同款亚克力板材质 */
+  background: var(--clr-primary-bg);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-right: none;
+  border-bottom: none;
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+}
+
+:root footer.footer::before,
+footer.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nd)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+:root footer.footer::after,
+footer.footer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+:root footer.footer > .footer-inner,
+footer.footer > .footer-inner {
+  position: relative;
+  z-index: 3;
+}
+
+/* ================================================================
+   §8.3 Button
+   ================================================================ */
+
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: var(--space-xs);
+  position: relative;
+  border-radius: var(--shape-full);
+  overflow: hidden;
+  isolation: isolate;
+  padding: 0.7rem 1.4rem 0.55rem 1.6rem;
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-medium);
+  line-height: 1.4;
+  text-decoration: none;
+  border: none;
+  cursor: pointer;
+}
+.btn > * {
+  position: relative;
+  z-index: 3;
+}
+
+/* btn-primary 暗色 */
+.btn-primary {
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  color: var(--clr-primary-text);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    6px 10px 2px 0 rgba(0, 0, 0, 0.30),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+.btn-primary::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='bp' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bp)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+.btn-primary::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* Hover 抬起 */
+.btn-primary:hover {
+  transform: translate(-4px, -4px);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 55%, #FFFFFF 45%),
+    8px 12px 8px 0 rgba(0, 0, 0, 0.40),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+.btn-primary:hover::after {
+  opacity: 1;
+}
+.btn-primary:active::after {
+  opacity: 0.4;
+  transition: opacity 0.06s ease;
+}
+
+/* Active 按下 */
+  /* Active 按下 */
+.btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    3px 6px 2px 0 rgba(0, 0, 0, 0.80),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+}
+
+/* btn-outline 暗色 — 与 Card 相同材质 */
+.btn-outline {
+  background: var(--clr-primary-bg);
+  color: var(--clr-primary-text);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-right: none;
+  border-bottom: none;
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    6px 10px 2px 0 rgba(0, 0, 0, 0.30),
+    inset 2px 4px 2px 0 rgba(0, 0, 0, 0.15);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+.btn-outline::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='bo' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bo)' opacity='0.50'/%3E%3C/svg%3E");
+  background-size: 60px 60px;
+  filter: contrast(5.0);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+.btn-outline::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 20%, transparent) 0%, transparent 45%);
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.btn-outline:hover::after {
+  opacity: 0.5;
+}
+.btn-outline:active::after {
+  opacity: 0.05;
+  transition: opacity 0.06s ease;
+}
+
+/* Hover 抬起 */
+.btn-outline:hover {
+  transform: translate(-4px, -4px);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 25%, transparent),
+    8px 12px 8px 0 rgba(0, 0, 0, 0.40),
+    inset 2px 4px 2px 0 rgba(0, 0, 0, 0.10);
+}
+
+/* Active 按下 */
+.btn-outline:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    3px 6px 2px 0 rgba(0, 0, 0, 0.80),
+    inset 2px 4px 2px 0 rgba(0, 0, 0, 0.15);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+}
+
+/* ================================================================
+   亮色模式
+   ================================================================ */
+
+:root.light-style body::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='sl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sl)'/%3E%3C/svg%3E");
+  opacity: 0.35;
+}
+
+:root.light-style .bg-hilbert svg path {
+  stroke: var(--clr-aux-bg);
+  opacity: 0.6;
+}
+
+/* 亮色 Card */
+:root.light-style .card {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  backdrop-filter: none;
+  -webkit-backdrop-filter: none;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-right: none;
+  border-bottom: none;
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style .card::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='nl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nl)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  opacity: 1;
+  filter: none;
+  mix-blend-mode: normal;
+}
+:root.light-style .card::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+}
+
+/* 亮色 btn-primary */
+:root.light-style .btn-primary {
+  background: var(--clr-primary-accent);
+  color: #F5F5F5;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    6px 10px 2px 0 rgba(0, 0, 0, 0.12),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+:root.light-style .btn-primary::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='bpl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bpl)'/%3E%3C/svg%3E");
+}
+:root.light-style .btn-primary::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
+  opacity: 0.5;
+  transition: opacity 0.4s ease;
+}
+:root.light-style .btn-primary:hover {
+  transform: translate(-4px, -4px);
+  border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+    8px 12px 8px 0 rgba(0, 0, 0, 0.18),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .btn-primary:hover::after {
+  opacity: 1;
+}
+:root.light-style .btn-primary:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    3px 6px 2px 0 rgba(0, 0, 0, 0.33),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+}
+:root.light-style .btn-primary:active::after {
+  opacity: 0.4;
+  transition: opacity 0.06s ease;
+}
+
+/* 亮色 btn-outline */
+:root.light-style .btn-outline {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  color: var(--alert-color, var(--clr-primary-accent));
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    6px 10px 2px 0 rgba(0, 0, 0, 0.10),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  transition:
+    transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+    box-shadow 0.2s ease;
+}
+:root.light-style .btn-outline::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='bol' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bol)'/%3E%3C/svg%3E");
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+:root.light-style .btn-outline::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 45%);
+  opacity: 0.15;
+  transition: opacity 0.3s ease;
+}
+:root.light-style .btn-outline:hover::after {
+  opacity: 0.5;
+}
+:root.light-style .btn-outline:active::after {
+  opacity: 0.05;
+  transition: opacity 0.06s ease;
+}
+:root.light-style .btn-outline:hover {
+  transform: translate(-4px, -4px);
+  border-top-color: color-mix(in srgb, var(--clr-primary-bg) 70%, var(--clr-primary-accent) 30%);
+  border-left-color: color-mix(in srgb, var(--clr-primary-bg) 70%, var(--clr-primary-accent) 30%);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    8px 12px 8px 0 rgba(0, 0, 0, 0.15),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%);
+}
+:root.light-style .btn-outline:active {
+  transform: translate(2px, 2px);
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    3px 6px 2px 0 rgba(0, 0, 0, 0.33),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%);
+  transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+}
+
+/* 亮色 Card 风格 blockquote */
+:root.light-style blockquote {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style blockquote::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='bql' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bql)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+:root.light-style blockquote::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.50) 0%, transparent 45%);
+}
+:root.light-style .markdown-alert {
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  background:
+    linear-gradient(to right, var(--alert-color, var(--clr-primary-accent)) 8px, color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%) 8px);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 12px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 0 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style .markdown-alert::before {
+  -webkit-mask-image: linear-gradient(to right, transparent 8px, black 8px);
+  mask-image: linear-gradient(to right, transparent 8px, black 8px);
+}
+:root.light-style .markdown-alert::after {
+  background:
+    linear-gradient(to right, var(--alert-color, var(--clr-primary-accent)) 8px, transparent 8px),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+}
+/* ================================================================
+   §8.8 / §8.12 — 亮色模式 Navbar & Footer
+   ================================================================ */
+
+:root.light-style .navbar {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style .navbar::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='nvl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nvl)'/%3E%3C/svg%3E");
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+  background-size: 200px 200px;
+}
+:root.light-style .navbar::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+}
+
+:root.light-style footer.footer,
+:root.light-style .footer {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style footer.footer::before,
+:root.light-style .footer::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='fvl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fvl)'/%3E%3C/svg%3E");
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+  background-size: 200px 200px;
+}
+:root.light-style footer.footer::after,
+:root.light-style .footer::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+}
+
+/* 系统亮色偏好 — 与 :root.light-style 等价 */
+@media (prefers-color-scheme: light) {
+  :root body::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='sl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sl)'/%3E%3C/svg%3E");
+    opacity: 0.35;
+  }
+  :root .bg-hilbert svg path {
+    stroke: var(--clr-aux-bg);
+    opacity: 0.6;
+  }
+  :root .card {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-right: none;
+    border-bottom: none;
+    box-shadow:
+      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+      inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  }
+  :root .card::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='nl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nl)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 1;
+    filter: none;
+    mix-blend-mode: normal;
+  }
+  :root .card::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+  }
+  :root .btn-primary {
+    background: var(--clr-primary-accent);
+    color: #F5F5F5;
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    box-shadow:
+      2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+      6px 10px 2px 0 rgba(0, 0, 0, 0.12),
+      inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+    transition:
+      transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+      box-shadow 0.2s ease;
+  }
+  :root .btn-primary::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='bpl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bpl)'/%3E%3C/svg%3E");
+  }
+  :root .btn-primary::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+  }
+  :root .btn-primary:hover {
+    transform: translate(-4px, -4px);
+    border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+    border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+    box-shadow:
+      2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+      8px 12px 8px 0 rgba(0, 0, 0, 0.18),
+      inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  }
+  :root .btn-primary:hover::after {
+    opacity: 1;
+  }
+  :root .btn-primary:active {
+    transform: translate(2px, 2px);
+    box-shadow:
+      2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+      3px 6px 2px 0 rgba(0, 0, 0, 0.33),
+      inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+    transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+  }
+  :root .btn-primary:active::after {
+    opacity: 0.4;
+    transition: opacity 0.06s ease;
+  }
+  :root .btn-outline {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    color: var(--alert-color, var(--clr-primary-accent));
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    box-shadow:
+      2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      6px 10px 2px 0 rgba(0, 0, 0, 0.10),
+      inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+    transition:
+      transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
+      box-shadow 0.2s ease;
+  }
+  :root .btn-outline::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='bol' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bol)'/%3E%3C/svg%3E");
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+  :root .btn-outline::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 45%);
+    opacity: 0.15;
+    transition: opacity 0.3s ease;
+  }
+  :root .btn-outline:hover::after {
+    opacity: 0.5;
+  }
+  :root .btn-outline:active::after {
+    opacity: 0.05;
+    transition: opacity 0.06s ease;
+  }
+  :root .btn-outline:hover {
+    transform: translate(-4px, -4px);
+    border-top-color: color-mix(in srgb, var(--clr-primary-bg) 70%, var(--clr-primary-accent) 30%);
+    border-left-color: color-mix(in srgb, var(--clr-primary-bg) 70%, var(--clr-primary-accent) 30%);
+    box-shadow:
+      2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      8px 12px 8px 0 rgba(0, 0, 0, 0.15),
+      inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%);
+  }
+  :root .btn-outline:active {
+    transform: translate(2px, 2px);
+    box-shadow:
+      2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      3px 6px 2px 0 rgba(0, 0, 0, 0.33),
+      inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%);
+    transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+  }
+  :root .navbar {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    backdrop-filter: none;
+    -webkit-backdrop-filter: none;
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-bottom: none;
+    border-right: none;
+    box-shadow:
+      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+      inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  }
+  :root .navbar::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='nvm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nvm)'/%3E%3C/svg%3E");
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+    background-size: 200px 200px;
+  }
+  :root .navbar::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+  }
+  :root footer.footer,
+  :root .footer {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-right: none;
+    border-bottom: none;
+    box-shadow:
+      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+      inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  }
+  :root footer.footer::before,
+  :root .footer::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='fvm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fvm)'/%3E%3C/svg%3E");
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+    background-size: 200px 200px;
+  }
+  :root footer.footer::after,
+  :root .footer::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+  }
+  :root .navbar .theme-toggle {
+    background: var(--clr-primary-accent);
+    color: #F5F5F5;
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    box-shadow:
+      1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+      2px 3px 4px 0 rgba(0, 0, 0, 0.33),
+      inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  }
+  :root .navbar .theme-toggle:hover {
+    transform: translate(-2px, -2px);
+    box-shadow:
+      1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+      3px 5px 8px 0 rgba(0, 0, 0, 0.20),
+      inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  }
+  :root .navbar .theme-toggle::before,
+  :root .navbar .lang-trigger::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nwm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nwm)'/%3E%3C/svg%3E");
+  }
+  :root .navbar .theme-toggle::after,
+  :root .navbar .lang-trigger::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
+    opacity: 0.5;
+    transition: opacity 0.4s ease;
+  }
+  :root .navbar .theme-toggle:hover::after,
+  :root .navbar .lang-trigger:hover::after {
+    opacity: 1;
+  }
+  :root .navbar .theme-toggle:active,
+  :root .navbar .lang-trigger:active {
+    transform: translateY(0);
+    transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
+  }
+  :root .navbar .theme-toggle:active::after,
+  :root .navbar .lang-trigger:active::after {
+    opacity: 0.4;
+    transition: opacity 0.06s ease;
+  }
+  :root .navbar .lang-switcher .lang-dropdown {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-right: none;
+    border-bottom: none;
+    box-shadow:
+      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+      inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  }
+  :root .navbar .lang-switcher .lang-dropdown::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='nm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nm)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 1;
+    filter: none;
+    mix-blend-mode: normal;
+  }
+  :root .navbar .lang-switcher .lang-dropdown::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.08) 0%, transparent 45%);
+  }
+  :root .navbar .navbar-nav ul {
+    position: relative;
+    isolation: isolate;
+        background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-right: 1px solid rgba(255, 255, 255, 1.00);
+    border-bottom: 1px solid rgba(255, 255, 255, 1.00);
+    box-shadow:
+      2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+      inset -4px -6px 8px rgba(255, 255, 255, 0.80);
+  }
+  :root .navbar .navbar-nav ul::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='num' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23num)'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+    opacity: 1;
+    filter: none;
+    mix-blend-mode: normal;
+    pointer-events: none;
+    z-index: 1;
+  }
+  :root .navbar .navbar-nav a.active {
+    position: relative;
+    z-index: 20;
+    isolation: isolate;
+    margin: -5px 0 0 0;
+    padding: calc(0.25rem + 5px) calc(0.6rem + 5px);
+    background: var(--clr-primary-accent);
+    color: #F5F5F5;
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    box-shadow:
+      0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+      0 3px 4px 0 rgba(0, 0, 0, 0.33),
+      inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  }
+  :root .navbar .navbar-nav a.active > * {
+    position: relative;
+    z-index: 3;
+  }
+  :root .navbar .navbar-nav a.active::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nwam' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nwam)'/%3E%3C/svg%3E");
+    background-size: 70px 70px;
+    opacity: 1;
+    filter: none;
+    mix-blend-mode: normal;
+    pointer-events: none;
+    z-index: 1;
+  }
+  :root .navbar .navbar-nav a.active::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 2;
+  }
+
+  /* 系统亮色 — 凹槽滑动指示器 */
+  :root .nav-slider {
+    background: var(--clr-primary-accent);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    box-shadow:
+      0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+      0 3px 4px 0 rgba(0, 0, 0, 0.33),
+      inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  }
+  :root .nav-slider-highlight {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.5) 0%, transparent 55%);
+  }
+  :root .nav-slider::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='nvsm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nvsm)'/%3E%3C/svg%3E");
+    filter: none;
+    mix-blend-mode: normal;
+  }
+  :root .nav-slider::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+  }
+  :root .nav-slider.lifted {
+    border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+    border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+    box-shadow:
+      0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+      0 3px 8px 1px rgba(0, 0, 0, 0.10),
+      inset 0 3px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 65%, #000000 35%);
+  }
+  /* 系统亮色 — slider 接管时禁用 active 静态背景与抬起 */
+  :root .navbar .navbar-nav ul.has-slider a.active {
+    background: transparent;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    box-shadow: none;
+    margin: 0;
+  }
+  :root .navbar .navbar-nav ul.has-slider a.active::before,
+  :root .navbar .navbar-nav ul.has-slider a.active::after {
+    display: none;
+  }
+
+  /* 系统亮色 — 语言下拉栏垂直滑块 */
+  :root .lang-slider {
+    background: var(--clr-primary-accent);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    box-shadow:
+        1px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+        1px 3px 4px 0 rgba(0, 0, 0, 0.33),
+        inset 1px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  }
+  :root .lang-slider::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='lgsm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lgsm)'/%3E%3C/svg%3E");
+  }
+  :root .lang-slider::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+  }
+  :root .lang-slider-highlight {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.5) 0%, transparent 55%);
+  }
+  :root .lang-slider.lifted {
+    border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+    border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
+    box-shadow:
+        1px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
+        1px 3px 8px 1px rgba(0, 0, 0, 0.10),
+        inset 1px 3px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 65%, #000000 35%);
+  }
+  :root .lang-switcher .lang-dropdown ul.has-lang-slider a.active {
+    background: transparent;
+    border-top-color: transparent;
+    border-left-color: transparent;
+    box-shadow: none;
+    margin: 0;
+  }
+  :root .lang-switcher .lang-dropdown ul.has-lang-slider a.active::before,
+  :root .lang-switcher .lang-dropdown ul.has-lang-slider a.active::after {
+    display: none;
+  }
+
+  /* 系统亮色 — 抬起/文字颜色 */
+  :root .navbar .navbar-nav a.nav-lift {
+    color: #F5F5F5;
+  }
+  :root .navbar .navbar-nav a.nav-hover {
+    color: #F5F5F5;
+  }
+  :root .navbar .navbar-nav a.active.nav-dim {
+    color: var(--md-sys-color-on-surface-variant);
+  }
+
+  :root .navbar .lang-switcher .lang-dropdown ul {
+    background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-right: 1px solid rgba(255, 255, 255, 0.15);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.15);
+    box-shadow:
+      2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+      inset -4px -6px 8px rgba(255, 255, 255, 0.10);
+  }
+  :root .navbar .lang-switcher .lang-dropdown ul::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='lugm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23lugm)'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+  :root .navbar .lang-switcher .lang-dropdown ul::after {
+    display: none;
+  }
+  :root .navbar .lang-dropdown a.active {
+    position: relative;
+    z-index: 20;
+    isolation: isolate;
+    overflow: hidden;
+    margin: -5px 0 0 0;
+    background: var(--clr-primary-accent);
+    color: #F5F5F5;
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    box-shadow:
+      0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+      0 3px 4px 0 rgba(0, 0, 0, 0.33),
+      inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+  }
+  :root .navbar .lang-dropdown a.active::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='ldam' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ldam)'/%3E%3C/svg%3E");
+  }
+  :root .navbar .lang-dropdown a.active::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+  }
+  :root .navbar .lang-switcher .lang-dropdown a.lang-lift,
+  :root .navbar .lang-switcher .lang-dropdown a.lang-hover-lift {
+    color: #F5F5F5;
+  }
+  :root .navbar .lang-switcher .lang-dropdown a.lang-dim {
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  :root .navbar .lang-dropdown a {
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  :root .navbar .navbar-nav a {
+    color: var(--md-sys-color-on-surface-variant);
+  }
+  :root blockquote {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    box-shadow:
+      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+      inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  }
+  :root blockquote::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='bqm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bqm)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+  }
+  :root blockquote::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.50) 0%, transparent 45%);
+  }
+  :root .markdown-alert {
+    border: none;
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    background:
+      linear-gradient(to right, var(--alert-color, var(--clr-primary-accent)) 8px, color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%) 8px);
+    box-shadow:
+      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      10px 12px 6px 1px rgba(0, 0, 0, 0.10),
+      inset 0 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  }
+  :root .markdown-alert::before {
+    -webkit-mask-image: linear-gradient(to right, transparent 8px, black 8px);
+    mask-image: linear-gradient(to right, transparent 8px, black 8px);
+  }
+  :root .markdown-alert::after {
+    background:
+      linear-gradient(to right, var(--alert-color, var(--clr-primary-accent)) 8px, transparent 8px),
+      linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+  }
+  :root .markdown-alert code {
+    position: relative;
+    top: -2px;
+    left: -1px;
+    background-color: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='caclm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.28' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23caclm)'/%3E%3C/svg%3E");
+    background-size: 150px 150px;
+    background-blend-mode: normal;
+    color: var(--alert-color, var(--clr-primary-accent));
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-right: 1px solid rgba(255, 255, 255, 1.00);
+    border-bottom: 1px solid rgba(255, 255, 255, 1.00);
+    box-shadow:
+      2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      inset 2px 3px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+      inset -3px -4px 6px rgba(255, 255, 255, 0.80);
+  }
+}
+
+/* 页头不再 fixed，取消 components.css 中 page-content 的偏移补偿 */
+.page-content {
+  padding-top: var(--space-xl);
+}
+
+/* ================================================================
+   .tag 基础类 — 原项目仅有 .tag-accent，补充普通标签样式
+   ================================================================ */
+
+/* ================================================================
+   页面布局
+   ================================================================ */
+
+.notice-banner {
+  background: var(--md-sys-color-primary-container);
+  color: var(--md-sys-color-on-primary-container);
+  text-align: center;
+  padding: var(--space-sm) var(--space-lg);
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  line-height: var(--line-height-normal);
+}
+.notice-banner i {
+  margin-right: var(--space-xs);
+  vertical-align: middle;
+}
+
+blockquote {
+  position: relative;
+  isolation: isolate;
+  overflow: hidden;
+  border: none;
+  border-radius: var(--shape-md);
+  padding: var(--space-md) var(--space-lg);
+  margin: var(--space-lg) 0;
+  background: var(--clr-primary-bg);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+  color: var(--md-sys-color-on-surface-variant);
+}
+blockquote > * {
+  position: relative;
+  z-index: 3;
+}
+blockquote::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='bq' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23bq)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 1;
+}
+blockquote::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* ================================================================
+   GitHub 风格 Alert 提示块（remark-github-blockquote-alert）
+   左侧彩色竖条 + 彩色标题 + Icon，基底复用 Card 材质
+   ================================================================ */
+.markdown-alert {
+  border: none;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  background:
+    linear-gradient(to right, var(--alert-color, var(--clr-primary-accent)) 8px, var(--clr-primary-bg) 8px);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 12px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 0 5px 3px 0 rgba(0, 0, 0, 0.15);
+}
+.markdown-alert > *:last-child {
+  margin-bottom: 0;
+}
+.markdown-alert-note {
+  --alert-color: #2196F3;
+}
+.markdown-alert-tip {
+  --alert-color: #4CAF50;
+}
+.markdown-alert-important {
+  --alert-color: #AB47BC;
+}
+.markdown-alert-warning {
+  --alert-color: #FF9800;
+}
+.markdown-alert-caution {
+  --alert-color: var(--clr-error);
+}
+.markdown-alert-title {
+  display: flex;
+  align-items: center;
+  gap: var(--space-xs);
+  margin-bottom: var(--space-sm);
+  font-size: var(--font-size-base);
+  font-weight: var(--font-weight-bold);
+  color: var(--alert-color, var(--clr-primary-accent));
+}
+.markdown-alert-title i {
+  flex-shrink: 0;
+  font-size: 1.25rem;
+}
+.markdown-alert code,
+.article-content td code,
+blockquote:not(.markdown-alert) code {
+  font-size: 0.9em;
+  padding: 0.15em 0.5em;
+  border-radius: var(--shape-sm);
+  position: relative;
+  top: -2px;
+  left: -1px;
+  background-color: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='cac' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.28' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23cac)' opacity='0.50'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  background-blend-mode: overlay;
+  color: var(--alert-color, var(--clr-primary-accent));
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    inset 2px 3px 0 0 rgba(0, 0, 0, 0.45),
+    inset -1px -2px 6px color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+}
+
+/* 表格内嵌代码块微调：比 alert code 稍大，向右下偏移 */
+.article-content td code {
+  font-size: 1em;
+  top: 0;
+  left: 1px;
+  color: var(--md-sys-color-primary);
+  white-space: normal;
+  word-break: normal;
+  overflow-wrap: normal;
+}
+
+:root.light-style .markdown-alert code,
+:root.light-style .article-content table td code,
+:root.light-style blockquote:not(.markdown-alert) code {
+  position: relative;
+  top: -2px;
+  left: -1px;
+  background-color: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='cacl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.28' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23cacl)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  background-blend-mode: normal;
+  color: var(--alert-color, var(--clr-primary-accent));
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-right: 1px solid rgba(255, 255, 255, 1.00);
+  border-bottom: 1px solid rgba(255, 255, 255, 1.00);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    inset 2px 3px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 1.0) 60%),
+    inset -3px -4px 6px rgba(255, 255, 255, 0.80);
+}
+
+/* 表格内嵌代码块微调：向右下偏移 */
+:root.light-style .article-content table td code {
+  top: 0;
+  left: 1px;
+}
+
+.hero {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 60vh;
+  text-align: center;
+  padding: var(--space-4xl) 0 var(--space-2xl);
+}
+.hero-actions {
+  display: flex;
+  gap: var(--space-md);
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.section {
+  padding: var(--space-4xl) 0;
+}
+.section-title {
+  margin-bottom: var(--space-lg);
+}
+.section-subtitle {
+  margin-bottom: var(--space-lg);
+}
+
+.article-card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-xs);
+}
+.article-date {
+  margin-bottom: var(--space-sm);
+}
+.card-footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: auto;
+  padding-top: var(--space-sm);
+}
+
+/* Card 右下角跳转链接 */
+.card > a:last-of-type:not(.card-ribbon) {
+  align-self: flex-end;
+  margin-top: auto;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-medium);
+  color: var(--md-sys-color-primary);
+  text-decoration: none;
+  white-space: nowrap;
+}
+
+.article-meta {
+  display: flex;
+  align-items: center;
+  gap: var(--space-md);
+  font-size: var(--font-size-sm);
+  color: var(--md-sys-color-on-surface-variant);
+  margin-bottom: var(--space-lg);
+}
+.article-figure {
+  margin: var(--space-xl) 0;
+  text-align: center;
+}
+.article-figure img {
+  max-width: 100%;
+  height: auto;
+  border-radius: var(--shape-md);
+  background-image:
+    linear-gradient(155deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.035) 15%, rgba(255,255,255,0.018) 35%, rgba(255,255,255,0.006) 60%, transparent 85%);
+  background-color: var(--clr-primary-bg);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.20),
+    0 8px 24px rgba(0,0,0,0.15),
+    0 16px 48px rgba(0,0,0,0.08);
+}
+
+/* 图片柔光 — 亮色 */
+:root.light-style .article-figure img {
+  background-image:
+    linear-gradient(155deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 15%, rgba(255,255,255,0.22) 35%, rgba(255,255,255,0.08) 60%, transparent 85%);
+}
+.article-figure figcaption {
+  margin-top: var(--space-sm);
+  font-size: var(--font-size-sm);
+  color: var(--md-sys-color-on-surface-variant);
+}
+/* 备用占位符：图片加载失败时显示 */
+.article-figure.img-error {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  min-height: 200px;
+  background: var(--md-sys-color-surface-variant);
+  border-radius: var(--shape-md);
+  color: var(--md-sys-color-on-surface-variant);
+  border: 1px dashed var(--md-sys-color-outline);
+}
+.article-figure.img-error img { display: none; }
+
+.image-placeholder {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  min-height: 240px;
+  background: var(--md-sys-color-surface-variant);
+  border-radius: var(--shape-md);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: var(--font-size-sm);
+  gap: var(--space-md);
+  margin: var(--space-xl) 0;
+  border: 1px dashed var(--md-sys-color-outline);
+}
+.image-placeholder i {
+  font-size: 3rem;
+  opacity: 0.5;
+}
+.tags-row {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-sm);
+  margin-top: var(--space-lg);
+}
+
+/* ================================================================
+   代码块背景 — 纸张浮动效果：薄、哑光、左上打光、柔和阴影
+   ================================================================ */
+
+/* 暗色纸张 — 漫反射：光源155°入射，余弦衰减，大范围渐变 */
+.shiki,
+.astro-code {
+  background-color: var(--clr-base-bg) !important;
+  background-image:
+    linear-gradient(155deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.035) 15%, rgba(255,255,255,0.018) 35%, rgba(255,255,255,0.006) 60%, transparent 85%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='pnd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.09 0.09 0.09 0 0.04 0.09 0.09 0.09 0 0.04 0.09 0.09 0.09 0 0.04 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnd)' opacity='0.18'/%3E%3C/svg%3E");
+  background-size: auto, 100px 100px;
+  border: none;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.20),
+    0 8px 24px rgba(0,0,0,0.15),
+    0 16px 48px rgba(0,0,0,0.08);
+}
+
+/* 次表面散射：径向柔光从左上扩散，z-1 不遮挡 Gosper(z-0) */
+.shiki::after,
+.astro-code::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: -1;
+  pointer-events: none;
+  border-radius: inherit;
+  background: radial-gradient(ellipse 130% 90% at 28% 22%, rgba(255,255,255,0.018) 0%, transparent 70%);
+}
+
+:root.light-style .shiki::after,
+:root.light-style .astro-code::after {
+  background: radial-gradient(ellipse 130% 90% at 28% 22%, rgba(255,255,255,0.4) 0%, transparent 70%);
+}
+
+/* Gosper 曲线 SVG 覆盖层 */
+.code-bg-gosper {
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+  border-radius: inherit;
+}
+
+/* 确保代码文字在所有背景层之上 */
+.shiki pre,
+.shiki code,
+.shiki span,
+.astro-code pre,
+.astro-code code,
+.astro-code span {
+  position: relative;
+  z-index: 5;
+}
+
+/* 亮色手动 — 暖白纸张漫反射 */
+:root.light-style .shiki,
+:root.light-style .astro-code {
+  background-color: var(--clr-base-bg) !important;
+  background-image:
+    linear-gradient(155deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 15%, rgba(255,255,255,0.22) 35%, rgba(255,255,255,0.08) 60%, transparent 85%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='pnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnl)' opacity='0.35'/%3E%3C/svg%3E");
+  border: none;
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.05),
+    0 8px 24px rgba(0,0,0,0.04),
+    0 16px 48px rgba(0,0,0,0.02);
+}
+
+/* ================================================================
+   文本链接
+   ================================================================ */
+a {
+  color: var(--clr-primary-accent);
+  text-decoration: none;
+  transition: color 150ms;
+}
+a:not(.btn):hover {
+  color: var(--clr-error);
+}
+
+/* 文章正文中的链接后附加 link-external SVG 图标 */
+.article-content a::after {
+  content: "";
+  display: inline-block;
+  width: 0.85em;
+  height: 0.85em;
+  margin-left: 3px;
+  vertical-align: middle;
+  position: relative;
+  top: -0.05em;
+  background: currentColor;
+  -webkit-mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13 3l3.293 3.293-7 7 1.414 1.414 7-7L21 11V3z'/%3E%3Cpath d='M19 19H5V5h7l-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5l-2-2v7z'/%3E%3C/svg%3E") center/contain no-repeat;
+  mask: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M13 3l3.293 3.293-7 7 1.414 1.414 7-7L21 11V3z'/%3E%3Cpath d='M19 19H5V5h7l-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-5l-2-2v7z'/%3E%3C/svg%3E") center/contain no-repeat;
+  opacity: 0.5;
+  transition: opacity 150ms;
+}
+.article-content a:hover::after {
+  opacity: 1;
+}
+
+/* ================================================================
+   响应式
+   ================================================================ */
+
+@media (prefers-color-scheme: light) {
+  .article-figure img {
+    background-image:
+      linear-gradient(155deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 15%, rgba(255,255,255,0.22) 35%, rgba(255,255,255,0.08) 60%, transparent 85%);
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.05),
+      0 8px 24px rgba(0,0,0,0.04),
+      0 16px 48px rgba(0,0,0,0.02);
+  }
+  .shiki,
+  .astro-code {
+    background-color: var(--clr-base-bg) !important;
+    background-image:
+      linear-gradient(155deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 15%, rgba(255,255,255,0.22) 35%, rgba(255,255,255,0.08) 60%, transparent 85%),
+      url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='pnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnl)' opacity='0.35'/%3E%3C/svg%3E");
+    border: none;
+    box-shadow:
+      0 2px 8px rgba(0,0,0,0.05),
+      0 8px 24px rgba(0,0,0,0.04),
+      0 16px 48px rgba(0,0,0,0.02);
+  }
+  .shiki::after,
+  .astro-code::after {
+    background: radial-gradient(ellipse 130% 90% at 28% 22%, rgba(255,255,255,0.4) 0%, transparent 70%);
+  }
+}
+
+
+@media (max-width: 640px) {
+  .hero .heading-xl {
+    font-size: var(--font-size-4xl);
+  }
+  .notice-banner {
+    font-size: var(--font-size-xs);
+    padding: var(--space-xs) var(--space-md);
+  }
+  .image-placeholder {
+    min-height: 160px;
+  }
+  .article-figure { margin: var(--space-lg) 0; }
+}
+
+/* ================================================================
+   文章正文 — 表格（Card 同款亚克力板材质）
+   ================================================================ */
+.article-content table {
+  width: 100%;
+  margin: var(--space-lg) 0;
+  font-size: var(--font-size-sm);
+  line-height: var(--line-height-normal);
+  border-collapse: separate;
+  border-spacing: 0;
+  position: relative;
+  isolation: isolate;
+  background: var(--clr-primary-bg);
+  backdrop-filter: none;
+  border-radius: var(--shape-md);
+  overflow: hidden;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+}
+.article-content table th,
+.article-content table td {
+  position: relative;
+  z-index: 3;
+}
+.article-content table::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='tb' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23tb)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 1;
+}
+.article-content table::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+.article-content th,
+.article-content td {
+  padding: var(--space-sm) var(--space-md);
+  border-bottom: 1px solid var(--md-sys-color-outline-variant);
+  text-align: left;
+  vertical-align: top;
+  word-wrap: break-word;
+  overflow-wrap: break-word;
+}
+.article-content td {
+  font-weight: var(--font-weight-medium);
+}
+.article-content th {
+  text-align: center;
+  font-weight: var(--font-weight-bold);
+  font-size: var(--font-size-base);
+  padding-top: calc(var(--space-sm) + 2px);
+  color: var(--md-sys-color-on-primary);
+  white-space: normal;
+  border-bottom-width: 2px;
+  background-color: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='ths' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ths)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  background-blend-mode: normal;
+}
+.article-content tbody tr:last-child td {
+  border-bottom: none;
+}
+
+/* ===== Alert 提示块 Icon ===== */
+.markdown-alert-title svg {
+  flex-shrink: 0;
+  width: 1.25rem;
+  height: 1.25rem;
+  fill: currentColor;
+}
+
+/* ================================================================
+   普通引用块 — 主强调色左侧竖条 + Card 材质
+   ================================================================ */
+blockquote:not(.markdown-alert) {
+  background: linear-gradient(to right, var(--md-sys-color-primary) 8px, var(--clr-primary-bg) 8px);
+}
+blockquote:not(.markdown-alert) > *:last-child {
+  margin-bottom: 0;
+}
+blockquote:not(.markdown-alert)::before,
+blockquote:not(.markdown-alert)::after {
+  -webkit-mask-image: linear-gradient(to right, transparent 8px, black 8px);
+  mask-image: linear-gradient(to right, transparent 8px, black 8px);
+}
+
+/* ================================================================
+   文章正文 — 图片纸张效果
+   ================================================================ */
+.article-content img {
+  display: block;
+  max-width: 100%;
+  height: auto;
+  margin: 0 auto;
+  border-radius: var(--shape-md);
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.20),
+    0 8px 24px rgba(0,0,0,0.15),
+    0 16px 48px rgba(0,0,0,0.08);
+}
+.article-content p:has(> img:only-child) {
+  position: relative;
+  display: inline-block;
+  width: auto;
+  max-width: 100%;
+  margin: var(--space-xl) auto;
+  text-align: center;
+  line-height: 0;
+  background: var(--clr-base-bg);
+  border-radius: var(--shape-md);
+}
+.article-content p:has(> img:only-child)::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: var(--shape-md);
+  background-image:
+    linear-gradient(155deg, rgba(255,255,255,0.045) 0%, rgba(255,255,255,0.035) 15%, rgba(255,255,255,0.018) 35%, rgba(255,255,255,0.006) 60%, transparent 85%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='pnd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.09 0.09 0.09 0 0.04 0.09 0.09 0.09 0 0.04 0.09 0.09 0.09 0 0.04 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnd)' opacity='0.09'/%3E%3C/svg%3E");
+  background-size: auto, 100px 100px;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* ================================================================
+   亮色模式覆盖
+   ================================================================ */
+
+/* ── 普通引用块 — 与 Alert 同款亮色暖黄基底 ── */
+:root.light-style blockquote:not(.markdown-alert) {
+  background: linear-gradient(to right, var(--md-sys-color-primary) 8px, color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%) 8px);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 12px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 0 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style blockquote:not(.markdown-alert)::before {
+  -webkit-mask-image: linear-gradient(to right, transparent 8px, black 8px);
+  mask-image: linear-gradient(to right, transparent 8px, black 8px);
+}
+:root.light-style blockquote:not(.markdown-alert)::after {
+  -webkit-mask-image: none;
+  mask-image: none;
+  background:
+    linear-gradient(to right, var(--md-sys-color-primary) 8px, transparent 8px),
+    linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+}
+
+/* ── 表格噪点 / 高光 / 阴影 — 亮色 Card 同款 ── */
+:root.light-style .article-content table::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='tnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23tnl)'/%3E%3C/svg%3E");
+  background-size: 200px 200px;
+  filter: none;
+  opacity: 1;
+  mix-blend-mode: normal;
+}
+:root.light-style .article-content table::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.50) 0%, transparent 45%);
+}
+:root.light-style .article-content table {
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+
+/* ── 表格表头 / 单元格 — 亮色 ── */
+:root.light-style .article-content table th {
+  background-color: var(--clr-primary-accent);
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='thl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23thl)'/%3E%3C/svg%3E");
+  color: #FFFFFF;
+}
+:root.light-style .article-content td {
+  color: var(--md-sys-color-on-surface-variant);
+}
+
+/* ── 图片覆盖层 / 阴影 — 亮色 ── */
+:root.light-style .article-content p:has(> img:only-child)::after {
+  background-image:
+    linear-gradient(155deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 15%, rgba(255,255,255,0.22) 35%, rgba(255,255,255,0.08) 60%, transparent 85%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='pnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnl)' opacity='0.35'/%3E%3C/svg%3E");
+  background-size: auto, 100px 100px;
+}
+:root.light-style .article-content img {
+  box-shadow:
+    0 2px 8px rgba(0,0,0,0.05),
+    0 8px 24px rgba(0,0,0,0.04),
+    0 16px 48px rgba(0,0,0,0.02);
+}
+
+/* ================================================================
+   Card Ribbon — 折叠丝带
+   ================================================================ */
+.card:has(.card-ribbon) {
+  overflow: visible !important;
+  padding-bottom: calc(var(--space-xl) + 4px) !important;
+}
+.grid.grid-cols-2 .card:has(.card-ribbon) {
+  padding-bottom: var(--space-xl) !important;
+}
+
+.card > a.card-ribbon {
+  --f: 10px;
+  --c: -4.5px;
+  --d: calc(var(--f) + var(--c));
+  --r: 14px;
+  --y: 8px;
+  position: absolute;
+  inset: auto calc(-1 * var(--f)) var(--y) auto;
+  display: inline-flex;
+  align-items: center;
+  gap: 4px;
+  padding: 4px 8px calc(4px + var(--d)) calc(12px + var(--r));
+  align-self: auto;
+  margin-top: 0;
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  border-top-right-radius: var(--shape-sm);
+  text-decoration: none;
+  white-space: nowrap;
+  color: #FFFFFF;
+  clip-path: polygon(0 0, 100% 0, 100% calc(100% - var(--d)), calc(100% - var(--d)) 100%, calc(100% - var(--d)) calc(100% - var(--d)), 0 calc(100% - var(--d)), var(--r) calc(50% - var(--f) / 2));
+  background: var(--md-sys-color-primary);
+  transform-origin: left bottom;
+  box-shadow: 0 calc(-1 * var(--d)) 0 inset rgba(0, 0, 0, 0.30);
+  z-index: 10;
+  transition: padding-left 0.2s ease, transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1), box-shadow 0.2s ease;
+}
+.card > a.card-ribbon:visited,
+.card > a.card-ribbon:focus { color: #FFFFFF; }
+.card > a.card-ribbon:hover { padding-left: 44px; }
+.card-ribbon:hover > span { transform: translateX(-18px); transition: transform 0.2s ease; }
+.card-ribbon:hover + .card-ribbon-shadow { padding-left: 42px; }
+.card > a.card-ribbon:active {
+  padding-left: 62px;
+  transform: rotate(-4deg);
+  transition: padding-left 0.15s ease, transform 0.15s cubic-bezier(0.34, 1.3, 0.64, 1);
+}
+.card-ribbon:active > span { transform: translateX(-36px); transition: transform 0.15s ease; }
+.card-ribbon:active + .card-ribbon-shadow {
+  padding-left: 60px;
+  transform: translate(2px, 4px) rotate(-4deg);
+  transition: padding-left 0.15s ease, transform 0.15s ease;
+}
+.card-ribbon::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  background: linear-gradient(160deg, rgba(255,255,255,0.36) 0%, rgba(255,255,255,0.16) 25%, rgba(255,255,255,0.04) 50%, transparent 70%),
+    linear-gradient(to bottom, transparent calc(100% - var(--d) - 1px), color-mix(in srgb, var(--md-sys-color-primary), #000000 22%) calc(100% - var(--d) - 1px), color-mix(in srgb, var(--md-sys-color-primary), #000000 22%) calc(100% - var(--d)), transparent calc(100% - var(--d)));
+  pointer-events: none;
+  z-index: 1;
+}
+.card-ribbon::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  border-top: 1px solid rgba(255,255,255,0.16);
+  border-left: 1px solid rgba(255,255,255,0.08);
+  pointer-events: none;
+  z-index: 2;
+}
+.card-ribbon > * { position: relative; z-index: 3; }
+.card-ribbon > span { transition: transform 0.2s ease; }
+
+.card-ribbon-shadow {
+  --f: 10px;
+  --d: 6px;
+  --r: 14px;
+  position: absolute;
+  inset: auto calc(-1 * var(--f)) 14px auto;
+  padding: 2px 6px calc(var(--d)) calc(10px + var(--r));
+  font-size: var(--font-size-sm);
+  font-weight: var(--font-weight-bold);
+  white-space: nowrap;
+  color: transparent;
+  transition: padding-left 0.2s ease, filter 0.2s ease, opacity 0.2s ease;
+  background: linear-gradient(135deg, transparent 18px, rgba(0,0,0,0.42) 24px);
+  filter: blur(1.5px);
+  border-top-right-radius: var(--shape-sm);
+  transform: translate(2px, 4px);
+  z-index: 5;
+  pointer-events: none;
+  transform-origin: left bottom;
+}
+:root.light-style .card-ribbon-shadow {
+  background: linear-gradient(135deg, transparent 18px, rgba(0,0,0,0.18) 24px);
+}
+
+.card-ribbon--disabled { background: var(--md-sys-color-on-surface-variant); pointer-events: none; }

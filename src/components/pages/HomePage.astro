@@ -1,0 +1,11 @@
+---
+import Hero from '../home/Hero.astro';
+import QuickLinks from '../home/QuickLinks.astro';
+import type { Locale } from '../../i18n';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+---
+
+<Hero locale={locale} />
+<QuickLinks locale={locale} />

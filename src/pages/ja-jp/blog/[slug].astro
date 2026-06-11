@@ -1,0 +1,31 @@
+---
+import { getCollection, render } from 'astro:content';
+import BlogLayout from '../../../layouts/BlogLayout.astro';
+import { useTranslations } from '../../../i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../../../i18n';
+
+const locale = (Astro.currentLocale || 'ja-jp') as Locale;
+const t = useTranslations(locale);
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', ({ data }) => data.locale === 'ja-jp');
+  return posts.map(post => ({ params: { slug: post.id }, props: { post } }));
+}
+
+const { post } = Astro.props;
+const { Content } = await render(post);
+---
+
+<BlogLayout title={post.data.title} description={post.data.excerpt} locale={locale} date={post.data.date} tags={post.data.tags} categories={post.data.categories}>
+  <div class="blog-back-link">
+    <a href={getRelativeLocaleUrl(locale, '/blog/')}><i class="bx bx-left-arrow-alt"></i> {t('blog-back')}</a>
+  </div>
+  <Content />
+</BlogLayout>
+
+<style>
+.blog-back-link { margin-bottom: var(--space-xl); }
+.blog-back-link a { font-size: var(--font-size-sm); color: var(--md-sys-color-on-surface-variant); display: inline-flex; align-items: center; gap: var(--space-xs); }
+.blog-back-link a:hover { color: var(--md-sys-color-primary); }
+</style>

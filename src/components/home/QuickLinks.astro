@@ -1,0 +1,49 @@
+---
+import { useTranslations } from '../../i18n';
+import type { Locale } from '../../i18n';
+
+interface Props { locale: Locale; }
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const prefix = locale === 'zh-cn' ? '' : `/${locale}`;
+---
+
+<section class="section">
+  <div class="container">
+    <h2 class="heading-lg section-title">{t('home-modules-title')}</h2>
+    <p class="section-subtitle body-sm">{t('home-modules-desc')}</p>
+
+    <div class="grid grid-cols-3 gap-8 max-[1007px]:grid-cols-2 max-[640px]:grid-cols-1">
+      <article class="card card-layout flex flex-col gap-0">
+        <div class="card-header-row flex items-center gap-2">
+          <i class="bx bx-pencil text-[1.75rem] text-primary card-icon-embed"></i>
+          <h4 class="heading-md">{t('module-blog-title')}</h4>
+        </div>
+        <p class="card-body card-body-featured body-sm">{t('module-blog-desc')}</p>
+        <a href={`${prefix}/blog/`} class="card-ribbon"><span>{t('module-blog-cta')}</span></a>
+        <div class="card-ribbon-shadow" aria-hidden="true">{t('module-blog-cta')}</div>
+      </article>
+
+      <article class="card card-layout flex flex-col gap-0">
+        <div class="card-header-row flex items-center gap-2">
+          <i class="bx bx-code-alt text-[1.75rem] text-primary card-icon-embed"></i>
+          <h4 class="heading-md">{t('module-tools-title')}</h4>
+        </div>
+        <p class="card-body card-body-featured body-sm">{t('module-tools-desc')}</p>
+        <a href={`${prefix}/projects/`} class="card-ribbon"><span>{t('module-tools-cta')}</span></a>
+        <div class="card-ribbon-shadow" aria-hidden="true">{t('module-tools-cta')}</div>
+      </article>
+
+      <article class="card card-layout flex flex-col gap-0">
+        <div class="card-header-row flex items-center gap-2">
+          <i class="bx bxs-chip text-[1.75rem] text-primary card-icon-embed"></i>
+          <h4 class="heading-md">{t('module-games-title')}</h4>
+        </div>
+        <p class="card-body card-body-featured body-sm">{t('module-games-desc')}</p>
+        <a href="#" class="card-ribbon"><span>{t('module-coming-soon')}</span></a>
+        <div class="card-ribbon-shadow" aria-hidden="true">{t('module-coming-soon')}</div>
+      </article>
+    </div>
+  </div>
+</section>
+

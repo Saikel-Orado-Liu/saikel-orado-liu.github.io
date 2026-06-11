@@ -1,0 +1,314 @@
+---
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import { useTranslations } from '../../i18n';
+import type { Locale } from '../../i18n';
+
+const locale = (Astro.currentLocale || 'zh-cn') as Locale;
+const t = useTranslations(locale);
+
+const footerLinks: { key: string; path: string }[] = [
+  { key: 'nav-home', path: '/' },
+  { key: 'nav-articles', path: '/blog/' },
+  { key: 'nav-tools', path: '/projects/' },
+  { key: 'nav-about', path: '/about/' },
+];
+
+interface SocialLink {
+  label: string;
+  iconClass?: string;
+  svgPath?: string;
+  svgViewBox?: string;
+  href: string;
+}
+
+const socialLinks: SocialLink[] = [
+  { label: 'GitHub', iconClass: 'bxl-github', href: 'https://github.com/Saikel-Orado-Liu' },
+  {
+    label: 'X (Twitter)',
+    svgPath: 'M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z',
+    href: 'https://x.com/GameGeek_Saikel',
+  },
+  { label: 'Reddit', iconClass: 'bxl-reddit', href: 'https://www.reddit.com/user/GameGeek-Saikel/' },
+  { label: 'Patreon', iconClass: 'bxl-patreon', href: 'https://www.patreon.com/c/GameGeek_Saikel' },
+  { label: 'YouTube', iconClass: 'bxl-youtube', href: 'https://www.youtube.com/@gamegeek-saikel' },
+  { label: '抖音',
+    svgPath: 'M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.09 1.75 4.17 1.12 1.11 2.7 1.62 4.24 1.79v4.03c-1.44-.05-2.89-.35-4.2-.97-.57-.26-1.1-.59-1.62-.93-.01 2.92.01 5.84-.02 8.75-.08 1.4-.54 2.79-1.35 3.94-1.31 1.92-3.58 3.17-5.91 3.21-1.43.08-2.86-.31-4.08-1.03-2.02-1.19-3.44-3.37-3.65-5.71-.02-.5-.03-1-.01-1.49.18-1.9 1.12-3.72 2.58-4.96 1.66-1.44 3.98-2.13 6.15-1.72.02 1.48-.04 2.96-.04 4.44-.99-.32-2.15-.23-3.02.37-.63.41-1.11 1.04-1.36 1.75-.21.51-.15 1.07-.14 1.61.24 1.64 1.82 3.02 3.5 2.87 1.12-.01 2.19-.66 2.77-1.61.19-.33.4-.67.41-1.06.1-1.79.06-3.57.07-5.36.01-4.03-.01-8.05.02-12.07z',
+    href: 'https://v.douyin.com/cFIbrpc-V0g' },
+  { label: 'Bilibili',
+    svgPath: 'M4.977 3.561a1.31 1.31 0 111.818-1.884l2.828 2.728c.08.078.149.163.205.254h4.277a1.32 1.32 0 01.205-.254l2.828-2.728a1.31 1.31 0 011.818 1.884L17.82 4.66h.848A5.333 5.333 0 0124 9.992v7.34a5.333 5.333 0 01-5.333 5.334H5.333A5.333 5.333 0 010 17.333V9.992a5.333 5.333 0 015.333-5.333h.781L4.977 3.56zm.356 3.67a2.667 2.667 0 00-2.666 2.667v7.529a2.667 2.667 0 002.666 2.666h13.334a2.667 2.667 0 002.666-2.666v-7.53a2.667 2.667 0 00-2.666-2.666H5.333zm1.334 5.192a1.333 1.333 0 112.666 0v1.192a1.333 1.333 0 11-2.666 0v-1.192zM16 11.09c-.736 0-1.333.597-1.333 1.333v1.192a1.333 1.333 0 102.666 0v-1.192c0-.736-.597-1.333-1.333-1.333z',
+    href: 'https://space.bilibili.com/2094747388' },
+];
+---
+
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-left">
+      <div class="footer-left-top">
+        <div class="footer-brand">
+          <span>{locale === 'zh-cn' ? '游戏极客-Saikel' : 'GameGeek-Saikel'}</span>
+        </div>
+        <p class="footer-desc">{t('site-description')}</p>
+      </div>
+      <nav class="footer-nav" aria-label="Footer navigation">
+        {footerLinks.map(link => (
+          <a href={getRelativeLocaleUrl(locale, link.path)} class="footer-link">{t(link.key)}</a>
+        ))}
+      </nav>
+    </div>
+
+    <div class="footer-right">
+      <div class="footer-socials">
+        <div class="footer-socials-group">
+          {socialLinks.slice(0, 4).map(s => (
+            <a href={s.href} target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label={s.label}>
+              {s.iconClass
+                ? <i class={`bx ${s.iconClass}`}></i>
+                : <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="social-svg" fill="currentColor" fill-rule="evenodd"><path d={s.svgPath} clip-rule="evenodd" /></svg>
+              }
+            </a>
+          ))}
+        </div>
+        <span class="footer-socials-divider" aria-hidden="true"></span>
+        <div class="footer-socials-group">
+          {socialLinks.slice(4).map(s => (
+            <a href={s.href} target="_blank" rel="noopener noreferrer" class="footer-social-link" aria-label={s.label}>
+              {s.iconClass
+                ? <i class={`bx ${s.iconClass}`}></i>
+                : <svg role="img" viewBox="0 0 24 24" xmlns="http://www.w3.org/2000/svg" class="social-svg" fill="currentColor" fill-rule="evenodd"><path d={s.svgPath} clip-rule="evenodd" /></svg>
+              }
+            </a>
+          ))}
+        </div>
+      </div>
+      <p class="footer-copyright">&copy; {new Date().getFullYear()} GameGeek-Saikel</p>
+    </div>
+  </div>
+</footer>
+
+<style is:global>
+/* ===== Footer — 卡片材质 + Readwise 双栏布局 ===== */
+footer.footer {
+  position: relative;
+  isolation: isolate;
+  max-width: var(--header-max-width);
+  width: calc(100% - var(--space-lg) * 2);
+  margin: var(--space-4xl) auto 0;
+  border-radius: var(--shape-md);
+  padding: var(--space-2xl) !important;
+  background: var(--clr-primary-bg);
+  backdrop-filter: none;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-right: none;
+  border-bottom: none;
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+}
+
+/* SVG 噪点 */
+footer.footer::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 1;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nd)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+}
+
+/* 漫反射高光 */
+footer.footer::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 2;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+}
+
+.footer-inner {
+  position: relative;
+  z-index: 3;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2xl);
+  max-width: var(--content-max-width);
+  margin: 0 auto;
+}
+
+@media (min-width: 768px) {
+  .footer-inner {
+    flex-direction: row;
+    justify-content: space-between;
+    align-items: stretch;
+    gap: 0;
+  }
+}
+
+/* Left column — 自然宽度，随文本自动延展 */
+.footer-left {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-lg);
+}
+
+@media (min-width: 768px) {
+  .footer-left {
+    flex-shrink: 0;
+  }
+}
+
+.footer-left-top {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-md);
+}
+
+.footer-brand {
+  display: flex;
+  align-items: center;
+  gap: var(--space-sm);
+  font-size: var(--font-size-3xl);
+  font-weight: var(--font-weight-bold);
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: 1;
+}
+
+.footer-desc {
+  font-size: var(--font-size-md);
+  color: var(--md-sys-color-on-surface-variant);
+  line-height: var(--line-height-normal);
+  margin: 0;
+}
+
+.footer-nav {
+  display: flex;
+  flex-wrap: wrap;
+  gap: var(--space-lg);
+}
+
+.footer-link {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.footer-link:hover {
+  color: var(--clr-secondary-accent) !important;
+}
+:root.light-style .footer-link:hover {
+  color: var(--md-sys-color-primary) !important;
+}
+
+/* Right column — 上下顶满 */
+.footer-right {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (min-width: 768px) {
+  .footer-right {
+    align-items: flex-end;
+  }
+}
+
+.footer-socials {
+  display: flex;
+  align-items: center;
+  gap: 0;
+}
+
+.footer-socials-group {
+  display: flex;
+  gap: var(--space-lg);
+}
+
+.footer-socials-divider {
+  display: block;
+  width: 2px;
+  height: 2rem;
+  background: var(--md-sys-color-outline-variant);
+  margin: 0 var(--space-md);
+}
+
+.footer-social-link {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  border-radius: var(--shape-full);
+  color: var(--md-sys-color-on-surface-variant);
+  font-size: 2.5rem;
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.footer-social-link .social-svg {
+  width: 2.25rem;
+  height: 2.25rem;
+}
+
+.footer-social-link:hover {
+  color: var(--clr-secondary-accent) !important;
+}
+:root.light-style .footer-social-link:hover {
+  color: var(--md-sys-color-primary) !important;
+}
+
+.footer-copyright {
+  font-size: var(--font-size-md);
+  font-weight: var(--font-weight-bold);
+  color: var(--md-sys-color-on-surface-variant);
+  margin: 0;
+}
+
+/* 亮色模式 */
+:root.light-style footer.footer {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+:root.light-style footer.footer::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='fvl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fvl)'/%3E%3C/svg%3E");
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+  background-size: 200px 200px;
+}
+:root.light-style footer.footer::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+}
+
+@media (prefers-color-scheme: light) {
+  footer.footer {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    box-shadow:
+      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+      10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+      inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+  }
+  footer.footer::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='fvm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fvm)'/%3E%3C/svg%3E");
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+    background-size: 200px 200px;
+  }
+  footer.footer::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+  }
+}
+</style>

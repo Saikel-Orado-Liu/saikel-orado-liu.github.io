@@ -1,0 +1,149 @@
+---
+import BaseLayout from '../../layouts/BaseLayout.astro';
+
+import { Content as ArticleContent } from './_demo-article.md';
+---
+
+<BaseLayout title="UI 设计规范预览 — GameGeek-Saikel">
+  <!-- §9.3.2 Layer 2: 希尔伯特曲线 -->
+  <div class="bg-hilbert" aria-hidden="true">
+    <svg xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <pattern id="hilbert-pattern" width="280" height="280" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+          <path id="hilbert-path" fill="none" stroke="#242424" stroke-width="7" stroke-linecap="round" stroke-linejoin="round" opacity="0.55" vector-effect="non-scaling-stroke" />
+        </pattern>
+      </defs>
+      <rect width="100%" height="100%" fill="url(#hilbert-pattern)" />
+    </svg>
+  </div>
+
+  <!-- Gosper 曲线代码块背景 path 定义（JS 注入晶格时引用） -->
+  <svg width="0" height="0" aria-hidden="true" class="absolute">
+    <defs>
+      <path id="gosper-curve" fill="none" stroke="#242424" stroke-width="7"
+            stroke-linecap="round" stroke-linejoin="round" opacity="0.55"
+            vector-effect="non-scaling-stroke" />
+    </defs>
+  </svg>
+
+  <div class="notice-banner">
+    <i class="bx bxs-info-circle"></i>
+    UI 设计规范预览页 &#183; 完整表现
+  </div>
+
+  <!-- Hero -->
+  <section class="section" aria-label="Hero">
+    <div class="hero">
+      <h1 class="heading-xl mb-2">你好，我是 Saikel</h1>
+      <p class="body-sm text-lg mb-6">开发者 &#183; 游戏设计师 &#183; AI 探索者</p>
+      <div class="hero-actions">
+        <a href="#" class="btn btn-primary"><span>了解更多</span></a>
+        <a href="#" class="btn btn-outline"><span>查看项目</span></a>
+      </div>
+    </div>
+  </section>
+
+  <!-- 特色模块 -->
+  <section class="section" aria-label="特色模块">
+    <div class="container">
+      <h2 class="heading-lg section-title">探索模块</h2>
+      <p class="section-subtitle body-sm">从技术文章到虚幻引擎插件，这里是创造力的汇聚地</p>
+
+      <div class="grid grid-cols-3 gap-8 max-[1007px]:grid-cols-2 max-[640px]:grid-cols-1">
+        <article class="card card-layout flex flex-col gap-0">
+          <div class="card-header-row flex items-center gap-2">
+            <i class="bx bx-pencil text-[1.75rem] text-primary card-icon-embed"></i>
+            <h4 class="heading-md">文章</h4>
+          </div>
+          <p class="card-body card-body-featured body-sm">技术文章与随想，涵盖前端开发、游戏设计、AI 应用等领域的深度内容。</p>
+          <a href="#" class="card-ribbon"><span>浏览文章</span></a>
+          <div class="card-ribbon-shadow" aria-hidden="true">浏览文章</div>
+        </article>
+
+        <article class="card card-layout flex flex-col gap-0">
+          <div class="card-header-row flex items-center gap-2">
+            <i class="bx bx-code-alt text-[1.75rem] text-primary card-icon-embed"></i>
+            <h4 class="heading-md">插件和工具</h4>
+          </div>
+          <p class="card-body card-body-featured body-sm">开源项目、UE5 插件与实用工具集合。</p>
+          <a href="#" class="card-ribbon"><span>浏览工具</span></a>
+          <div class="card-ribbon-shadow" aria-hidden="true">浏览工具</div>
+        </article>
+
+        <article class="card card-layout flex flex-col gap-0">
+          <div class="card-header-row flex items-center gap-2">
+            <i class="bx bxs-chip text-[1.75rem] text-primary card-icon-embed"></i>
+            <h4 class="heading-md">游戏与模组</h4>
+          </div>
+          <p class="card-body card-body-featured body-sm">游戏设计与开发指南与攻略，内容即将推出。</p>
+          <a href="#" class="card-ribbon"><span>即将推出</span></a>
+          <div class="card-ribbon-shadow" aria-hidden="true">即将推出</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 最新文章 -->
+  <section class="section" aria-label="最新文章">
+    <div class="container">
+      <h2 class="heading-lg section-title">最新文章</h2>
+      <p class="section-subtitle body-sm">技术文章与开发心得</p>
+
+      <div class="grid grid-cols-2 gap-8 max-[640px]:grid-cols-1">
+        <article class="card card-layout flex flex-col gap-0">
+          <h5 class="heading-md">使用 Astro 构建现代化静态站点</h5>
+          <p class="article-date body-sm mb-2"><time datetime="2026-05-20">2026 年 5 月 20 日</time></p>
+          <p class="card-body body-sm">Astro 作为新一代静态站点生成器，以其创新的 Island 架构和零 JS 默认输出策略，为内容驱动型网站提供了全新的构建体验。</p>
+          <div class="card-footer flex gap-2 flex-wrap items-center self-start pb-0.5">
+            <span class="tag"><span>Astro</span></span>
+            <span class="tag-accent"><span>前端</span></span>
+          </div>
+          <a href="#" class="card-ribbon"><span>阅读全文</span></a>
+          <div class="card-ribbon-shadow" aria-hidden="true">阅读全文</div>
+        </article>
+
+        <article class="card card-layout flex flex-col gap-0">
+          <h5 class="heading-md">M3 与拟物设计的融合实践</h5>
+          <p class="article-date body-sm mb-2"><time datetime="2026-05-14">2026 年 5 月 14 日</time></p>
+          <p class="card-body body-sm">如何将 Material Design 3 的色彩体系和形状规范与 Skeuomorphic 拟物风格的阴影、毛玻璃和高光效果相结合。</p>
+          <div class="card-footer flex gap-2 flex-wrap items-center self-start pb-0.5">
+            <span class="tag"><span>设计</span></span>
+            <span class="tag"><span>CSS</span></span>
+            <span class="tag-accent"><span>UI/UX</span></span>
+          </div>
+          <a href="#" class="card-ribbon"><span>阅读全文</span></a>
+          <div class="card-ribbon-shadow" aria-hidden="true">阅读全文</div>
+        </article>
+      </div>
+    </div>
+  </section>
+
+  <!-- 文章正文 Demo（从 MD 文件渲染） -->
+  <section class="section" aria-label="文章正文展示">
+    <div class="container-narrow">
+      <div class="article-content">
+        <ArticleContent />
+      </div>
+    </div>
+  </section>
+</BaseLayout>
+
+<script>
+  import { initHilbert } from '../../scripts/hilbert';
+  import { initCodeBg } from '../../scripts/code-bg';
+  import { initNavSlider, initLangSlider } from '../../scripts/nav-slider';
+
+  function init() {
+    initHilbert();
+    initCodeBg();
+    initNavSlider();
+    initLangSlider();
+}
+
+  // type="module" 已保证 DOM 就绪，直接执行
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', init);
+  } else {
+    init();
+  }
+</script>

@@ -1,0 +1,55 @@
+---
+import { useTranslations } from '../../i18n';
+import { getRelativeLocaleUrl } from 'astro:i18n';
+import type { Locale } from '../../i18n';
+
+interface Props {
+  locale: Locale;
+  module: 'ue5' | 'game' | 'ai';
+  icon: string;
+  contentFn?: string;
+  plugins?: any[];
+}
+const { locale, module: mod, icon, plugins } = Astro.props;
+const t = useTranslations(locale);
+const titleKey = `${mod}-title` as string;
+const descKey = `${mod}-description` as string;
+const emptyKey = `${mod}-empty` as string;
+const isReady = mod === 'ue5';
+---
+
+<div class="container-narrow">
+  <section class="section">
+    <h1 class="section-title">{t(titleKey)}</h1>
+    <p class="section-subtitle">{t(descKey)}</p>
+    {isReady && plugins && plugins.length > 0 ? (
+      <div class="grid grid-cols-2 gap-8 max-[640px]:grid-cols-1">
+        {plugins.map(p => (
+          <a href={getRelativeLocaleUrl(locale, `/ue5/plugins/${p.id}/`)} class="card plugin-card flex flex-col gap-2 no-underline">
+            <h3 class="plugin-card-title text-xl">{p.data.title}</h3>
+            {p.data.version && <span class="tag-accent"><span>v{p.data.version}</span></span>}
+          </a>
+        ))}
+      </div>
+    ) : plugins && plugins.length > 0 ? (
+      <div class="grid grid-cols-2 gap-8 max-[640px]:grid-cols-1">
+        {plugins.map(p => (
+          <div class="card plugin-card flex flex-col gap-2">
+            <h3 class="plugin-card-title text-xl">{p.data.title}</h3>
+          </div>
+        ))}
+      </div>
+    ) : (
+      <div class="empty-state">
+        <i class={`bx ${icon}`}></i>
+        <p>{t(emptyKey)}</p>
+        {!isReady && <span class="badge badge-coming-soon" style="margin-top: var(--space-md)">{t('module-coming-soon')}</span>}
+      </div>
+    )}
+  </section>
+</div>
+
+<style>
+.plugin-card { color: inherit; }
+.plugin-card:hover .plugin-card-title { color: var(--clr-secondary-accent); }
+</style>

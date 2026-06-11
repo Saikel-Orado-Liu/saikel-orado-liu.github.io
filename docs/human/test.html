@@ -1,0 +1,237 @@
+<!DOCTYPE html>
+<html lang="zh-cn">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="color-scheme" content="light dark">
+<title>Gosper Curve — 戈斯珀曲线无缝平铺背景</title>
+<style>
+  *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+  html, body { width: 100%; height: 100%; }
+
+  body {
+    background: #0d0d0d;
+    color: #e0e0e0;
+    font-family: system-ui, -apple-system, sans-serif;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+  }
+
+  .bg-gosper {
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    pointer-events: none;
+  }
+  .bg-gosper svg {
+    width: 100%;
+    height: 100%;
+    display: block;
+  }
+
+  .content {
+    position: relative;
+    z-index: 1;
+    text-align: center;
+    padding: 2rem;
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 3.5rem);
+    font-weight: 300;
+    letter-spacing: 0.12em;
+    margin-bottom: 0.5rem;
+    text-shadow: 0 0 60px rgba(0,0,0,0.9);
+  }
+  p {
+    font-size: 1rem;
+    opacity: 0.55;
+    letter-spacing: 0.06em;
+  }
+
+  @media (prefers-color-scheme: light) {
+    body { background: #f5f5f5; color: #1a1a1a; }
+    h1 { text-shadow: 0 0 60px rgba(255,255,255,0.8); }
+    .bg-gosper svg path { stroke: #1a1a1a; opacity: 0.5; }
+  }
+</style>
+</head>
+<body>
+  <div class="bg-gosper" aria-hidden="true">
+    <svg id="gosper-svg" xmlns="http://www.w3.org/2000/svg">
+      <defs>
+        <!-- 单条戈斯珀曲线（含首尾延伸） -->
+        <path id="gosper-curve" fill="none" stroke="#3a3a3a"
+              stroke-width="5" stroke-linecap="round" stroke-linejoin="round"
+              opacity="0.5" vector-effect="non-scaling-stroke"/>
+      </defs>
+      <g id="gosper-grid"></g>
+    </svg>
+  </div>
+
+  <div class="content">
+    <h1>GOSPER CURVE</h1>
+    <p>戈斯珀曲线 · 可无限平铺 · 缩放无缝</p>
+  </div>
+
+  <script>
+    (function initGosper() {
+      const LEVEL = 3; // 7^3 = 343 段
+
+      /* ===========================================================
+         1. L-system → 坐标点
+         =========================================================== */
+      function expand(s) {
+        let r = '';
+        for (let i = 0; i < s.length; i++) {
+          if (s[i] === 'A') r += 'A-B--B+A++AA+B-';
+          else if (s[i] === 'B') r += '+A-BB--B-A++A+B';
+          else r += s[i];
+        }
+        return r;
+      }
+      let str = 'A';
+      for (let i = 0; i < LEVEL; i++) str = expand(str);
+
+      const S3 = Math.sqrt(3);
+      const DIR = [
+        { dx:  1, dy:  0       },
+        { dx:  0.5, dy:  S3 / 2 },
+        { dx: -0.5, dy:  S3 / 2 },
+        { dx: -1, dy:  0       },
+        { dx: -0.5, dy: -S3 / 2 },
+        { dx:  0.5, dy: -S3 / 2 },
+      ];
+
+      const pts = [{ x: 0, y: 0 }];
+      let x = 0, y = 0, dir = 0;
+      for (let i = 0; i < str.length; i++) {
+        const c = str[i];
+        if (c === 'A' || c === 'B') {
+          x += DIR[dir].dx; y += DIR[dir].dy; pts.push({ x, y });
+        } else if (c === '+') { dir = (dir + 5) % 6; }
+        else if (c === '-')  { dir = (dir + 1) % 6; }
+      }
+
+      /* ===========================================================
+         2. 平铺向量 & 缩放
+         =========================================================== */
+      const vx = pts[pts.length - 1].x - pts[0].x; // V = end - start
+      const vy = pts[pts.length - 1].y - pts[0].y;
+      const VL = Math.hypot(vx, vy);
+
+      // V60 = V 逆时针旋转 60°
+      const cos60 = 0.5, sin60 = S3 / 2;
+      const v60x = vx * cos60 - vy * sin60;
+      const v60y = vx * sin60 + vy * cos60;
+
+      // 包围盒
+      let minX = Infinity, maxX = -Infinity, minY = Infinity, maxY = -Infinity;
+      for (const p of pts) { minX = Math.min(minX, p.x); maxX = Math.max(maxX, p.x); minY = Math.min(minY, p.y); maxY = Math.max(maxY, p.y); }
+
+      /* ===========================================================
+         3. 缩放 & 路径数据
+         =========================================================== */
+      const SCALE = 15; // 曲线单位 → px
+      const EXTEND = 0; // 延伸长度 (px)
+
+      const s = (p) => ({ x: (p.x - minX) * SCALE, y: (p.y - minY) * SCALE });
+      const scaled = pts.map(s);
+
+      // 首尾方向
+      const f = scaled[0], f2 = scaled[1];
+      const l = scaled[scaled.length - 1], lp = scaled[scaled.length - 2];
+      const sdx = f2.x - f.x, sdy = f2.y - f.y; const sL = Math.hypot(sdx, sdy);
+      const edx = l.x - lp.x, edy = l.y - lp.y; const eL = Math.hypot(edx, edy);
+
+      // 首尾延伸点
+      const x0 = f.x - (sdx / sL) * EXTEND, y0 = f.y - (sdy / sL) * EXTEND;
+      const xe = l.x + (edx / eL) * EXTEND, ye = l.y + (edy / eL) * EXTEND;
+
+      // 构建 path d
+      let d = `M${x0.toFixed(3)},${y0.toFixed(3)}`;
+      for (const p of scaled) d += `L${p.x.toFixed(3)},${p.y.toFixed(3)}`;
+      d += `L${xe.toFixed(3)},${ye.toFixed(3)}`;
+
+      // 设置基础 path
+      document.getElementById('gosper-curve').setAttribute('d', d);
+
+      // 平铺向量 (px)
+      const TVx = vx * SCALE, TVy = vy * SCALE;       // T1 = V
+      const T60x = v60x * SCALE, T60y = v60y * SCALE; // T2 = V60
+
+      /* ===========================================================
+         4. 六边形晶格平铺 — 在视图内放置所有副本
+         每个晶格位置 translate(i*T1 + j*T2)
+         曲线在晶格位置 (i,j) 的 end 恰好在 (i+1,j) 的 start
+         首尾延伸重叠 → 视觉无缝
+         =========================================================== */
+      function renderLattice() {
+        const svg = document.getElementById('gosper-svg');
+        const grid = document.getElementById('gosper-grid');
+        const curve = document.getElementById('gosper-curve');
+
+        const W = window.innerWidth;
+        const H = window.innerHeight;
+
+        // 计算覆盖视图所需的晶格范围
+        // 使用 T1, T2 的逆变换确定 ij 范围
+        const det = TVx * T60y - TVy * T60x; // 叉积 = |T1|·|T2|·sin60 > 0
+        const margin = Math.hypot(TVx, TVy) * 2; // 额外边距
+
+        // 遍历晶格坐标
+        const useNodes = [];
+        const maxDist = Math.hypot(W, H) + margin * 2;
+
+        // 在晶格坐标系中，中心附近的 ij 范围
+        const stepI = Math.ceil(maxDist / Math.abs(det) * Math.abs(T60y)) + 2;
+        const stepJMin = -Math.ceil(maxDist / Math.abs(det) * Math.abs(TVy)) - 2;
+        const stepJMax = Math.ceil(maxDist / Math.abs(det) * Math.abs(TVy)) + 2;
+
+        // 查找覆盖视图的 ij 范围
+        // 更稳健的方法：从 viewport 中心出发，向外扩展
+        const cx = W / 2, cy = H / 2;
+
+        // 搜索 ij 范围
+        let iMin = 0, iMax = 0, jMin = 0, jMax = 0;
+        const testRange = 30;
+        for (let i = -testRange; i <= testRange; i++) {
+          for (let j = -testRange; j <= testRange; j++) {
+            const px = i * TVx + j * T60x;
+            const py = i * TVy + j * T60y;
+            if (px >= -margin && px <= W + margin && py >= -margin && py <= H + margin) {
+              iMin = Math.min(iMin, i); iMax = Math.max(iMax, i);
+              jMin = Math.min(jMin, j); jMax = Math.max(jMax, j);
+            }
+          }
+        }
+
+        for (let i = iMin; i <= iMax; i++) {
+          for (let j = jMin; j <= jMax; j++) {
+            const px = i * TVx + j * T60x;
+            const py = i * TVy + j * T60y;
+            if (px < -margin || px > W + margin || py < -margin || py > H + margin) continue;
+
+            const use = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+            use.setAttribute('href', '#gosper-curve');
+            use.setAttribute('x', px.toFixed(2));
+            use.setAttribute('y', py.toFixed(2));
+            useNodes.push(use);
+          }
+        }
+
+        grid.replaceChildren(...useNodes);
+      }
+
+      renderLattice();
+      window.addEventListener('resize', renderLattice);
+
+      console.log(
+        `Gosper Lv.${LEVEL} | %d segs | T1=(%.1f,%.1f) T2=(%.1f,%.1f) | scale=%d`,
+        pts.length - 1, TVx, TVy, T60x, T60y, SCALE
+      );
+    })();
+  </script>
+</body>
+</html>

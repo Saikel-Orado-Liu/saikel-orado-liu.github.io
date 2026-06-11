@@ -1,0 +1,68 @@
+---
+import BaseLayout from './BaseLayout.astro';
+import { useTranslations, toDateLocale } from '../i18n';
+import type { Locale } from '../i18n';
+
+interface Props {
+  title: string;
+  description?: string;
+  locale: Locale;
+  date?: Date;
+  tags?: string[];
+  categories?: string[];
+}
+
+const { title, description, locale, date, tags, categories } = Astro.props;
+const t = useTranslations(locale);
+---
+
+<BaseLayout title={title} description={description} locale={locale}>
+  <article class="container-narrow blog-article pt-12 pb-24">
+    <header class="blog-header mb-12 pb-8 border-b border-[var(--md-sys-color-outline-variant)]">
+      <h1 class="blog-title text-4xl mb-2">{title}</h1>
+      {date && (
+        <time class="blog-date block text-sm mb-4" datetime={date.toISOString()}>
+          {t('blog-published')} {date.toLocaleDateString(toDateLocale(locale), { year: 'numeric', month: 'long', day: 'numeric' })}
+        </time>
+      )}
+      <div class="flex flex-wrap gap-2">
+        {categories && categories.length > 0 && (
+          <div class="flex gap-2 flex-wrap">
+            {categories.map(cat => <span class="tag-accent"><span>{cat}</span></span>)}
+          </div>
+        )}
+        {tags && tags.length > 0 && (
+          <div class="flex gap-2 flex-wrap">
+            {tags.map(tag => <a href={`${locale === 'zh-cn' ? '' : `/${locale}`}/blog/tag/${tag}/`} class="tag"><span>{tag}</span></a>)}
+          </div>
+        )}
+      </div>
+    </header>
+    <div class="article-content">
+      <slot />
+    </div>
+  </article>
+</BaseLayout>
+
+<style>
+.blog-title { color: var(--md-sys-color-on-surface); }
+.blog-date { color: var(--md-sys-color-on-surface-variant); }
+</style>
+
+<script>
+  const lbOverlay = document.createElement('div');
+  lbOverlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);cursor:zoom-out;justify-content:center;align-items:center;';
+  const lbImg = document.createElement('img');
+  lbImg.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.5);';
+  lbOverlay.appendChild(lbImg);
+  lbOverlay.addEventListener('click', () => lbOverlay.style.display = 'none');
+  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lbOverlay.style.display = 'none'; });
+  document.body.appendChild(lbOverlay);
+
+  document.querySelectorAll<HTMLImageElement>('.article-content img').forEach(img => {
+    img.addEventListener('click', () => {
+      const src = img.getAttribute('src');
+      if (src) { lbImg.src = src; lbOverlay.style.display = 'flex'; }
+    });
+  });
+</script>

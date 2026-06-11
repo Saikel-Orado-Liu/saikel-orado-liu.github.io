@@ -1,0 +1,38 @@
+@import "tailwindcss";
+
+@theme {
+  /* ===== M3 Colors — 动态引用 tokens.css 的 CSS 变量 ===== */
+  --color-primary: var(--clr-primary-accent);
+  --color-on-primary: var(--clr-primary-text);
+  --color-primary-container: var(--md-sys-color-primary-container);
+  --color-on-primary-container: var(--md-sys-color-on-primary-container);
+  --color-secondary: var(--clr-secondary-accent);
+  --color-surface: var(--md-sys-color-surface);
+  --color-on-surface: var(--md-sys-color-on-surface);
+  --color-on-surface-variant: var(--md-sys-color-on-surface-variant);
+  --color-background: var(--md-sys-color-background);
+  --color-on-background: var(--md-sys-color-on-background);
+  --color-error: var(--clr-error);
+  --color-warning: var(--clr-warning);
+  --color-outline: var(--md-sys-color-outline);
+  --color-outline-variant: var(--md-sys-color-outline-variant);
+
+  /* ===== Border Radius — 覆盖 Tailwind 默认值 ===== */
+  --radius-sm: var(--shape-sm);    /* 8px */
+  --radius-md: var(--shape-md);    /* 12px */
+  --radius-lg: var(--shape-lg);    /* 24px */
+
+  /* ===== Shadows ===== */
+  --shadow-near: var(--shadow-near);
+  --shadow-far: var(--shadow-far);
+  --shadow-embed: var(--shadow-embed);
+
+  /* ===== Z-index ===== */
+  --z-header: var(--z-header);
+  --z-overlay: var(--z-overlay);
+  --z-modal: var(--z-modal);
+
+  /* ===== Font Families ===== */
+  --font-sans: var(--font-sans);
+  --font-mono: var(--font-mono);
+}
