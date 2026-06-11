@@ -2,6 +2,7 @@
   "name": "saikel-orado-liu.github.io",
   "type": "module",
   "version": "0.1.0",
+  "packageManager": "pnpm@11.5.3",
   "scripts": {
     "dev": "astro dev",
     "start": "astro dev",
