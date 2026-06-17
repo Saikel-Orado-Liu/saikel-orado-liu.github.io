@@ -28,7 +28,7 @@ const { Content } = await render(post);
   categories={post.data.categories}
 >
   <div class="mb-8">
-    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-secondary transition-colors">
+    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="back-link">
       <i class="bx bx-left-arrow-alt"></i> {t('blog-back')}
     </a>
   </div>

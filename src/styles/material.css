@@ -199,3 +199,17 @@
   mix-blend-mode: normal;
   opacity: 1;
 }
+
+/* ===== .back-link — 返回导航链接 ===== */
+.back-link {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-xs);
+  font-size: var(--font-size-sm);
+  color: var(--md-sys-color-on-surface-variant);
+  text-decoration: none;
+  transition: color 0.2s ease;
+}
+.back-link:hover {
+  color: var(--clr-secondary-accent);
+}

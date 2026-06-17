@@ -3,8 +3,8 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import { localeLabels, useTranslations, supportedLocales, stripLocalePrefix } from '../../i18n';
 import type { Locale } from '../../i18n';
 
-const currentLocale = (Astro.currentLocale || 'zh-cn') as Locale;
-const t = useTranslations(currentLocale);
+const locale = (Astro.currentLocale || 'zh-cn') as Locale;
+const t = useTranslations(locale);
 
 const navItems: { key: string; path: string }[] = [
   { key: 'nav-home', path: '/' },
@@ -18,9 +18,9 @@ const navItems: { key: string; path: string }[] = [
 <header class="navbar plate">
   <div class="navbar-inner">
     <div class="navbar-main">
-      <a href={getRelativeLocaleUrl(currentLocale, '/')} class="navbar-brand" aria-label="Home">
+      <a href={getRelativeLocaleUrl(locale, '/')} class="navbar-brand" aria-label="Home">
         <img class="navbar-logo" src="https://avatars.githubusercontent.com/u/88531138" alt="Logo" width="32" height="32" />
-        <span class="navbar-title">{currentLocale === 'zh-cn' ? '游戏极客-Saikel' : 'GameGeek-Saikel'}</span>
+        <span class="navbar-title">{locale === 'zh-cn' ? '游戏极客-Saikel' : 'GameGeek-Saikel'}</span>
       </a>
     </div>
 
@@ -28,10 +28,10 @@ const navItems: { key: string; path: string }[] = [
       <ul>
         {navItems.map(item => (
           <li>
-            <a href={getRelativeLocaleUrl(currentLocale, item.path)}
+            <a href={getRelativeLocaleUrl(locale, item.path)}
                class:list={{ active: item.path === '/'
-                  ? Astro.url.pathname === getRelativeLocaleUrl(currentLocale, '/')
-                  : Astro.url.pathname.startsWith(getRelativeLocaleUrl(currentLocale, item.path)) }}>
+                  ? Astro.url.pathname === getRelativeLocaleUrl(locale, '/')
+                  : Astro.url.pathname.startsWith(getRelativeLocaleUrl(locale, item.path)) }}>
               <span>{t(item.key)}</span>
             </a>
           </li>
@@ -55,7 +55,7 @@ const navItems: { key: string; path: string }[] = [
               <li>
                 <a href={getRelativeLocaleUrl(loc, stripLocalePrefix(Astro.url.pathname) || '/')}
                    data-lang={loc}
-                   class:list={{ active: currentLocale === loc }}>
+                   class:list={{ active: locale === loc }}>
                   <span>{localeLabels[loc]}</span>
                 </a>
               </li>
