@@ -1,0 +1,201 @@
+/* ===== Material Utility Classes =====
+   提取项目中反复出现的三种材质模式为可复用工具类：
+   .plate       — 标准亚克力板（Card/Navbar/Footer/blockquote/table）
+   .plate-accent — 强调色亚克力板（tag-accent/theme-toggle/slider 等）
+   .groove      — 凹槽容器（card .tag/doc-toc-group/nav tabs）
+   ================================================================ */
+
+/* ===== .plate — 标准亚克力板（大尺寸） ===== */
+.plate {
+  position: relative;
+  isolation: isolate;
+  background: var(--clr-primary-bg);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
+  border-right: none;
+  border-bottom: none;
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+    inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
+}
+.plate > * {
+  position: relative;
+  z-index: 3;
+}
+.plate::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nd' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nd)' opacity='1'/%3E%3C/svg%3E");
+  background-size: 120px 120px;
+  filter: contrast(8.0);
+  mix-blend-mode: overlay;
+  opacity: 0.25;
+  pointer-events: none;
+  z-index: 1;
+}
+.plate::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* 亮色模式 */
+.light-style .plate {
+  background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+  box-shadow:
+    4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    10px 8px 6px 1px rgba(0, 0, 0, 0.10),
+    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+}
+.light-style .plate::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nl)'/%3E%3C/svg%3E");
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
+.light-style .plate::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+}
+
+/* ===== .plate-accent — 强调色亚克力板 ===== */
+.plate-accent {
+  position: relative;
+  isolation: isolate;
+  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    2px 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+.plate-accent > * {
+  position: relative;
+  z-index: 3;
+}
+.plate-accent::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='td' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23td)'/%3E%3C/svg%3E");
+  background-size: 70px 70px;
+  opacity: 1;
+  mix-blend-mode: normal;
+  pointer-events: none;
+  z-index: 1;
+}
+.plate-accent::after {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  opacity: 0.5;
+  pointer-events: none;
+  z-index: 2;
+}
+
+/* .plate-accent--lg — 大尺寸变体（btn-primary） */
+.plate-accent--lg {
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    6px 10px 2px 0 rgba(0, 0, 0, 0.30),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+
+/* .plate-accent--bottom — 底部落影变体（slider/active tab） */
+.plate-accent--bottom {
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.67),
+    inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+
+/* 亮色模式 */
+.light-style .plate-accent {
+  background: var(--clr-primary-accent);
+  color: #F5F5F5;
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+  box-shadow:
+    1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    2px 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+.light-style .plate-accent::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='tl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23tl)'/%3E%3C/svg%3E");
+}
+.light-style .plate-accent::after {
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
+}
+
+.light-style .plate-accent--lg {
+  box-shadow:
+    2px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    6px 10px 2px 0 rgba(0, 0, 0, 0.12),
+    inset 2px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+
+.light-style .plate-accent--bottom {
+  box-shadow:
+    0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+    0 3px 4px 0 rgba(0, 0, 0, 0.33),
+    inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+
+/* ===== .groove — 凹槽容器 ===== */
+.groove {
+  position: relative;
+  isolation: isolate;
+  background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+  border-right: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+    inset 4px 6px 0 0 rgba(0, 0, 0, 0.45),
+    inset -2px -3px 8px color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+}
+.groove::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nu' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nu)' opacity='0.50'/%3E%3C/svg%3E");
+  background-size: 100px 100px;
+  filter: contrast(5.0);
+  mix-blend-mode: overlay;
+  pointer-events: none;
+  z-index: 1;
+}
+
+/* 亮色模式 */
+.light-style .groove {
+  background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+  border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+  border-right: 1px solid rgba(255, 255, 255, 1.00);
+  border-bottom: 1px solid rgba(255, 255, 255, 1.00);
+  box-shadow:
+    2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+    inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+    inset -4px -6px 8px rgba(255, 255, 255, 0.80);
+}
+.light-style .groove::before {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='nul' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nul)'/%3E%3C/svg%3E");
+  background-size: 150px 150px;
+  filter: none;
+  mix-blend-mode: normal;
+  opacity: 1;
+}
