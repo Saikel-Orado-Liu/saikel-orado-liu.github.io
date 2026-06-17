@@ -19,9 +19,9 @@ const t = useTranslations(locale);
 <BaseLayout title={title} description={description} locale={locale}>
   <article class="container-narrow blog-article pt-12 pb-24">
     <header class="blog-header mb-12 pb-8 border-b border-[var(--md-sys-color-outline-variant)]">
-      <h1 class="blog-title text-4xl mb-2">{title}</h1>
+      <h1 class="text-4xl mb-2 text-on-surface">{title}</h1>
       {date && (
-        <time class="blog-date block text-sm mb-4" datetime={date.toISOString()}>
+        <time class="block text-sm mb-4 text-on-surface-variant" datetime={date.toISOString()}>
           {t('blog-published')} {date.toLocaleDateString(toDateLocale(locale), { year: 'numeric', month: 'long', day: 'numeric' })}
         </time>
       )}
@@ -44,10 +44,6 @@ const t = useTranslations(locale);
   </article>
 </BaseLayout>
 
-<style>
-.blog-title { color: var(--md-sys-color-on-surface); }
-.blog-date { color: var(--md-sys-color-on-surface-variant); }
-</style>
 
 <script>
   const lbOverlay = document.createElement('div');

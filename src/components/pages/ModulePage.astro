@@ -25,7 +25,7 @@ const isReady = mod === 'ue5';
     {isReady && plugins && plugins.length > 0 ? (
       <div class="grid grid-cols-2 gap-8 max-[640px]:grid-cols-1">
         {plugins.map(p => (
-          <a href={getRelativeLocaleUrl(locale, `/ue5/plugins/${p.id}/`)} class="card plugin-card flex flex-col gap-2 no-underline">
+          <a href={getRelativeLocaleUrl(locale, `/ue5/plugins/${p.id}/`)} class="card flex flex-col gap-2 no-underline text-inherit hover:[&_.plugin-card-title]:text-secondary">
             <h3 class="plugin-card-title text-xl">{p.data.title}</h3>
             {p.data.version && <span class="tag-accent"><span>v{p.data.version}</span></span>}
           </a>
@@ -34,7 +34,7 @@ const isReady = mod === 'ue5';
     ) : plugins && plugins.length > 0 ? (
       <div class="grid grid-cols-2 gap-8 max-[640px]:grid-cols-1">
         {plugins.map(p => (
-          <div class="card plugin-card flex flex-col gap-2">
+          <div class="card flex flex-col gap-2 text-inherit hover:[&_.plugin-card-title]:text-secondary">
             <h3 class="plugin-card-title text-xl">{p.data.title}</h3>
           </div>
         ))}
@@ -49,7 +49,3 @@ const isReady = mod === 'ue5';
   </section>
 </div>
 
-<style>
-.plugin-card { color: inherit; }
-.plugin-card:hover .plugin-card-title { color: var(--clr-secondary-accent); }
-</style>

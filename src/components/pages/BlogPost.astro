@@ -27,15 +27,11 @@ const { Content } = await render(post);
   tags={post.data.tags}
   categories={post.data.categories}
 >
-  <div class="blog-back-link mb-8">
-    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="inline-flex items-center gap-1 text-sm">
+  <div class="mb-8">
+    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="inline-flex items-center gap-1 text-sm text-on-surface-variant hover:text-secondary transition-colors">
       <i class="bx bx-left-arrow-alt"></i> {t('blog-back')}
     </a>
   </div>
   <Content />
 </BlogLayout>
 
-<style>
-.blog-back-link a { color: var(--md-sys-color-on-surface-variant); }
-.blog-back-link a:hover { color: var(--clr-secondary-accent); }
-</style>

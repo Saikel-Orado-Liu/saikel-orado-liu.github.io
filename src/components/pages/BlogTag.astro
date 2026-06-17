@@ -15,7 +15,7 @@ const posts = await getPostsByTag(locale, tag);
   <section class="section">
     <h1 class="section-title">{t('blog-tags')}: #{tag}</h1>
     <p class="section-subtitle">{posts.length} {locale === 'zh-cn' ? '篇文章' : locale === 'ja-jp' ? '記事' : 'posts'}</p>
-    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="blog-back-link inline-flex items-center gap-1 text-sm mb-8">
+    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="inline-flex items-center gap-1 text-sm mb-8 text-on-surface-variant hover:text-secondary transition-colors">
       <i class="bx bx-left-arrow-alt"></i> {t('blog-back')}
     </a>
     {posts.length > 0 ? (
@@ -32,7 +32,3 @@ const posts = await getPostsByTag(locale, tag);
   </section>
 </div>
 
-<style>
-.blog-back-link { color: var(--md-sys-color-on-surface-variant); }
-.blog-back-link:hover { color: var(--clr-secondary-accent); }
-</style>
