@@ -126,6 +126,8 @@ body {
   gap: 2px;
   padding: 3px;
   border-radius: var(--shape-full);
+  position: relative;
+  isolation: isolate;
 }
 /* 与 .card .tag 保持一致：取消左上反射渐变 + 亮色左上厚度统一 */
 .card .tag::after {
