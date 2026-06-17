@@ -1,6 +1,7 @@
 ---
 import { useTranslations } from '../../i18n';
 import { getLocalizedProjects } from '../../utils/content';
+import { toUrlSlug } from '../../utils/docs';
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import type { Locale } from '../../i18n';
 
@@ -17,7 +18,7 @@ const projects = await getLocalizedProjects(locale);
     {projects.length > 0 ? (
       <div class="flex flex-col gap-6">
         {projects.map(p => (
-          <a href={getRelativeLocaleUrl(locale, `/projects/${p.id}/`)} class="card no-underline text-inherit hover:[&_h3]:text-secondary">
+          <a href={getRelativeLocaleUrl(locale, `/projects/${toUrlSlug(p.id)}/`)} class="card no-underline text-inherit hover:[&_h3]:text-secondary">
             <h3 class="text-xl mb-1">{p.data.title}</h3>
             <p class="text-sm text-on-surface-variant mb-4 mt-0">{p.data.excerpt ?? ''}</p>
             {p.data.tags && (
