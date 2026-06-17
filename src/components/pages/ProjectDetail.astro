@@ -29,23 +29,6 @@ const tocGroups = buildTocGroups(headings);
 
 // 2. 文档注册表
 const registry = await buildDocRegistry(slug, locale);
-
-// 3. 跨项目前后篇
-const topLevelProjects = projects.filter((p) => {
-    const segs = p.id.split('/');
-    if (!p.id.includes("/")) return true;
-    if (segs.length === 2 && segs[1] === segs[0]) return true;
-    if (segs.length === 2 && segs[1] === 'index') return true;
-    return false;
-});
-const projIdx = topLevelProjects.findIndex((p) => p.id === project.id);
-const prevProj = projIdx > 0 ? topLevelProjects[projIdx - 1] : null;
-const nextProj = projIdx < topLevelProjects.length - 1 ? topLevelProjects[projIdx + 1] : null;
-
-const pager = {
-    prev: prevProj ? { id: prevProj.id, title: prevProj.data.title } : null,
-    next: nextProj ? { id: nextProj.id, title: nextProj.data.title } : null,
-};
 ---
 
 <DocShell
@@ -56,7 +39,6 @@ const pager = {
     registry={registry}
     tocGroups={tocGroups}
     activeSidebarLink={slug}
-    pager={pager}
 >
     <Fragment slot="before-content">
         <div class="doc-meta">
