@@ -51,7 +51,7 @@ const DOC_RE     = /(\d{2})\.?([^./]+)$/;
  * 从 collection entry id 解析文档树节点元信息。
  *
  * ID 格式：
- *   texturge/index                           → isIndex
+ *   texturge/texturge                        → isIndex（文件名与项目 slug 同名）
  *   texturge/01.getting-started/01.overview  → chapterOrder=1, docOrder=1
  */
 function parseDocId(id: string): {
@@ -68,9 +68,14 @@ function parseDocId(id: string): {
   const projectSlug = parts[0];
   const rest = parts.slice(1);
 
-  // index.md → index
-  if (rest.length === 1 && rest[0].startsWith('index')) {
-    return { projectSlug, isIndex: true, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: 'index' };
+  // 项目首页：文件名与项目 slug 同名（如 texturge/texturge.md）
+  if (rest.length === 1 && rest[0] === projectSlug) {
+    return { projectSlug, isIndex: true, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: projectSlug };
+  }
+
+  // 向后兼容：旧 index.md 命名
+  if (rest.length === 1 && rest[0] === 'index') {
+    return { projectSlug, isIndex: true, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: projectSlug };
   }
 
   // chapter/doc
@@ -228,11 +233,11 @@ export function buildToc(
  */
 export function buildBreadcrumbs(registry: DocRegistry, currentId: string) {
   const doc = registry.flatList.find(d => d.id === currentId);
-  if (!doc || doc.isIndex) return [{ label: '文档首页', slug: 'index' }];
+  if (!doc || doc.isIndex) return [{ label: '文档首页', slug: registry.projectSlug }];
 
   const chapter = registry.chapters.find(c => c.slug === doc.chapterSlug);
   return [
-    { label: '文档首页', slug: 'index' },
+    { label: '文档首页', slug: registry.projectSlug },
     { label: chapter?.titleKey ?? doc.chapterSlug, slug: doc.chapterSlug },
     { label: doc.title, slug: doc.docSlug },
   ];
@@ -243,14 +248,14 @@ export function buildBreadcrumbs(registry: DocRegistry, currentId: string) {
 /**
  * 将 entry ID 转为干净 URL slug（剥离数字前缀、点号和 locale 后缀）。
  *   texturge/01.getting-started/01.overview → texturge/getting-started/overview
- *   texturge/index → texturge
+ *   texturge/texturge → texturge
  */
 export function toUrlSlug(entryId: string): string {
   return entryId
     // 1. 剥离 locale 后缀（可能带点也可能无点，glob 加载器会吞掉点号）
     .replace(/(\.|)(en-us|ja-jp|ko-kr|ar-sa|es-es|fr-fr|pt-pt|ru-ru|de-de)$/, '')
-    // 2. 剥离 /index
-    .replace(/\/index$/, '')
+    // 2. 剥离 /index 或 /{projectSlug}（项目首页）
+    .replace(/^([^/]+)\/(?:index|\1)$/, '$1')
     // 3. 剥离数字排序前缀（NN. 或 NN，glob 加载器吞点后无点）
     .replace(/\/(\d+)\./g, '/')
     .replace(/\/(\d+)(?=[a-zA-Z])/g, '/');

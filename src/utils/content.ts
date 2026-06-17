@@ -46,10 +46,13 @@ export async function getLocalizedPosts(locale: string, limit?: number) {
 
 export async function getLocalizedProjects(locale: string, limit?: number) {
   const projects = await getLocalizedCollection('projects', locale);
-  // 过滤子文档：只保留顶层项目（flat file 或 index.md）
+  // 过滤子文档：只保留顶层项目（flat file 或 与项目 slug 同名的文件）
   const filtered = projects.filter(p => {
     const segs = p.id.split('/');
-    return segs.length <= 1 || (segs.length === 2 && segs[1] === 'index');
+    if (segs.length <= 1) return true;
+    if (segs.length === 2 && segs[1] === segs[0]) return true; // texturge/texturge
+    if (segs.length === 2 && segs[1] === 'index') return true; // 向后兼容
+    return false;
   });
   return limit ? filtered.slice(0, limit) : filtered;
 }
