@@ -325,48 +325,6 @@
 }
 :root.light-style .doc-pager-card:not(.doc-pager-card--empty):active::after { opacity: 0.05; }
 
-@media (prefers-color-scheme: light) {
-    .doc-pager-card {
-        background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
-        border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
-        border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
-        box-shadow:
-            3px 3px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
-            0 8px 32px rgba(0, 0, 0, 0.05),
-            inset 0 0 0 1px color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
-    }
-    .doc-pager-card::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='dpnls' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.28' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.83 0.14 0 0 0 0.82 0.05 0 0 0 0.77 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dpnls)'/%3E%3C/svg%3E");
-        background-size: 120px 120px;
-        opacity: 1;
-        filter: none;
-        mix-blend-mode: normal;
-        z-index: 2;
-    }
-    .doc-pager-card::after {
-        background: linear-gradient(155deg,
-            color-mix(in srgb, var(--clr-primary-bg) 98%, var(--clr-primary-accent) 2%) 0%,
-            color-mix(in srgb, var(--clr-primary-bg) 96%, var(--clr-primary-accent) 4%) 30%,
-            color-mix(in srgb, var(--clr-primary-bg) 88%, var(--clr-primary-accent) 12%) 55%,
-            color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%) 100%);
-        z-index: 0;
-    }
-    .doc-pager-card:not(.doc-pager-card--empty):hover {
-        box-shadow:
-            4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
-            11px 12px 8px 0 rgba(0, 0, 0, 0.10),
-            inset 4px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
-    }
-    .doc-pager-card:not(.doc-pager-card--empty):hover::after { opacity: 0.67; }
-    .doc-pager-card:not(.doc-pager-card--empty):active {
-        box-shadow:
-            4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
-            6px 6px 2px 0 rgba(0, 0, 0, 0.20),
-            inset 4px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
-    }
-    .doc-pager-card:not(.doc-pager-card--empty):active::after { opacity: 0.05; }
-}
-
 /* ===== TOC 标签与容器 ===== */
 .doc-toc-label {
     font-size: var(--font-size-lg);
@@ -432,26 +390,6 @@
     filter: none;
     mix-blend-mode: normal;
     opacity: 1;
-}
-@media (prefers-color-scheme: light) {
-    .doc-toc-group {
-        background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
-        border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
-        border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
-        border-right: 1px solid rgba(255, 255, 255, 0.15);
-        border-bottom: 1px solid rgba(255, 255, 255, 0.15);
-        box-shadow:
-            2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
-            inset 2px 3px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
-            inset -3px -4px 6px rgba(255, 255, 255, 0.80);
-    }
-    .doc-toc-group::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='tcgls' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23tcgls)'/%3E%3C/svg%3E");
-        background-size: 150px 150px;
-        filter: none;
-        mix-blend-mode: normal;
-        opacity: 1;
-    }
 }
 
 /* ===== TOC 链接 ===== */
@@ -537,26 +475,6 @@
 }
 :root.light-style .doc-toc-depth-2::after {
     background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
-}
-
-@media (prefers-color-scheme: light) {
-    .doc-toc-depth-2,
-    .doc-toc-depth-2:visited {
-        background: var(--clr-primary-accent);
-        color: #F5F5F5;
-        border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
-        border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
-        box-shadow:
-            1px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
-            1px 3px 4px 0 rgba(0, 0, 0, 0.33),
-            inset 1px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
-    }
-    .doc-toc-depth-2::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='t2ls' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23t2ls)'/%3E%3C/svg%3E");
-    }
-    .doc-toc-depth-2::after {
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.6) 0%, transparent 55%);
-    }
 }
 
 .doc-toc-depth-3,
@@ -768,60 +686,6 @@
     color: #F5F5F5;
 }
 
-@media (prefers-color-scheme: light) {
-    .doc-toc-slider {
-        background: var(--clr-primary-accent);
-        border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
-        border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
-        box-shadow:
-            1px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
-            1px 3px 4px 0 rgba(0, 0, 0, 0.33),
-            inset 1px 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
-        transition:
-            top 0.4s cubic-bezier(0.4, 0, 0.2, 1),
-            height 0.3s cubic-bezier(0.4, 0, 0.2, 1),
-            transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
-            box-shadow 0.4s ease,
-            border-color 0.4s ease;
-    }
-    .doc-toc-slider::before {
-        background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='tsls' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23tsls)'/%3E%3C/svg%3E");
-    }
-    .doc-toc-slider::after {
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.15) 0%, transparent 45%);
-    }
-    .doc-toc-slider-highlight {
-        background: linear-gradient(160deg, rgba(255, 255, 255, 0.5) 0%, transparent 55%);
-    }
-    .doc-toc-slider.lifted {
-        border-top-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
-        border-left-color: color-mix(in srgb, var(--clr-primary-accent) 50%, #FFFFFF 50%);
-        box-shadow:
-            1px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%),
-            1px 3px 8px 1px rgba(0, 0, 0, 0.10),
-            inset 1px 3px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 65%, #000000 35%);
-    }
-    .has-toc-slider .doc-toc-depth-2,
-    .has-toc-slider .doc-toc-depth-2:visited {
-        background: transparent;
-        border-top-color: transparent;
-        border-left-color: transparent;
-        box-shadow: none;
-        color: var(--md-sys-color-on-surface-variant);
-        transition: color 0.2s ease;
-    }
-    .has-toc-slider .doc-toc-link,
-    .has-toc-slider .doc-toc-link:visited,
-    .has-toc-slider .doc-toc-link:hover,
-    .has-toc-slider .doc-toc-link:active {
-        color: var(--md-sys-color-on-surface-variant);
-        border-left-color: transparent;
-    }
-    .doc-toc-group.has-toc-slider .toc-lift,
-    .doc-toc-group.has-toc-slider .toc-lift:visited {
-        color: #F5F5F5;
-    }
-}
 
 /* ===== 图片占位描述块（remark-image-figure 生成） ===== */
 .img-placeholder {
