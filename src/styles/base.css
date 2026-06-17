@@ -9,14 +9,7 @@
 /* Boxicons */
 @import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
 
-/* ===== Reset ===== */
-*,
-*::before,
-*::after {
-  box-sizing: border-box;
-  margin: 0;
-  padding: 0;
-}
+/* Reset — Tailwind v4 preflight handles box-sizing/margin/padding */
 
 html {
   scroll-behavior: smooth;
@@ -271,14 +264,4 @@ hr {
   padding: 0 var(--space-lg);
 }
 
-.sr-only {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  margin: -1px;
-  overflow: hidden;
-  clip: rect(0, 0, 0, 0);
-  white-space: nowrap;
-  border-width: 0;
-}
+/* .sr-only — 使用 Tailwind 内置 sr-only 工具类 */

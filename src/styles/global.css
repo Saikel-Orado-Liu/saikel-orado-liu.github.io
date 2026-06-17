@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
 @theme {
-  /* ===== M3 Colors — 动态引用 tokens.css 的 CSS 变量 ===== */
+  /* ===== M3 Colors ===== */
   --color-primary: var(--clr-primary-accent);
   --color-on-primary: var(--clr-primary-text);
   --color-primary-container: var(--md-sys-color-primary-container);
@@ -17,22 +17,44 @@
   --color-outline: var(--md-sys-color-outline);
   --color-outline-variant: var(--md-sys-color-outline-variant);
 
-  /* ===== Border Radius — 覆盖 Tailwind 默认值 ===== */
-  --radius-sm: var(--shape-sm);    /* 8px */
-  --radius-md: var(--shape-md);    /* 12px */
-  --radius-lg: var(--shape-lg);    /* 24px */
+  /* ===== Border Radius ===== */
+  --radius-sm: var(--shape-sm);
+  --radius-md: var(--shape-md);
+  --radius-lg: var(--shape-lg);
 
-  /* ===== Shadows ===== */
-  --shadow-near: var(--shadow-near);
-  --shadow-far: var(--shadow-far);
-  --shadow-embed: var(--shadow-embed);
+  /* ===== Spacing (4px base scale) ===== */
+  --spacing-xs: var(--space-xs);
+  --spacing-sm: var(--space-sm);
+  --spacing-md: var(--space-md);
+  --spacing-lg: var(--space-lg);
+  --spacing-xl: var(--space-xl);
+  --spacing-2xl: var(--space-2xl);
+  --spacing-3xl: var(--space-3xl);
+  --spacing-4xl: var(--space-4xl);
 
-  /* ===== Z-index ===== */
-  --z-header: var(--z-header);
-  --z-overlay: var(--z-overlay);
-  --z-modal: var(--z-modal);
+  /* ===== Font Sizes ===== */
+  --text-xs: var(--font-size-xs);
+  --text-sm: var(--font-size-sm);
+  --text-base: var(--font-size-base);
+  --text-lg: var(--font-size-lg);
+  --text-xl: var(--font-size-xl);
+  --text-2xl: var(--font-size-2xl);
+  --text-3xl: var(--font-size-3xl);
+  --text-4xl: var(--font-size-4xl);
+  --text-5xl: var(--font-size-5xl);
+
+  /* ===== Font Weights ===== */
+  --font-weight-light: var(--font-weight-light);
+  --font-weight-normal: var(--font-weight-regular);
+  --font-weight-medium: var(--font-weight-medium);
+  --font-weight-bold: var(--font-weight-bold);
+
+  /* ===== Line Heights ===== */
+  --leading-tight: var(--line-height-tight);
+  --leading-normal: var(--line-height-normal);
+  --leading-relaxed: var(--line-height-relaxed);
 
   /* ===== Font Families ===== */
-  --font-sans: var(--font-sans);
-  --font-mono: var(--font-mono);
+  --font-sans: 'MiSansLatin', 'MiSans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 }
