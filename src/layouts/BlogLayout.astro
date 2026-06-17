@@ -46,19 +46,6 @@ const t = useTranslations(locale);
 
 
 <script>
-  const lbOverlay = document.createElement('div');
-  lbOverlay.style.cssText = 'display:none;position:fixed;inset:0;z-index:9999;background:rgba(0,0,0,.85);cursor:zoom-out;justify-content:center;align-items:center;';
-  const lbImg = document.createElement('img');
-  lbImg.style.cssText = 'max-width:90vw;max-height:90vh;object-fit:contain;border-radius:8px;box-shadow:0 8px 40px rgba(0,0,0,.5);';
-  lbOverlay.appendChild(lbImg);
-  lbOverlay.addEventListener('click', () => lbOverlay.style.display = 'none');
-  document.addEventListener('keydown', (e) => { if (e.key === 'Escape') lbOverlay.style.display = 'none'; });
-  document.body.appendChild(lbOverlay);
-
-  document.querySelectorAll<HTMLImageElement>('.article-content img').forEach(img => {
-    img.addEventListener('click', () => {
-      const src = img.getAttribute('src');
-      if (src) { lbImg.src = src; lbOverlay.style.display = 'flex'; }
-    });
-  });
+  import { initLightbox } from '../scripts/lightbox';
+  initLightbox();
 </script>

@@ -294,3 +294,22 @@ export async function getDocEntry(urlSlug: string, locale: Locale) {
   if (localeMatch) return localeMatch;
   return allDocs.find(e => toUrlSlug(e.id) === urlSlug) ?? null;
 }
+
+/**
+ * 将 headings 数组按 H2/H3 分组，用于侧边栏 TOC 渲染。
+ */
+export function buildTocGroups(headings: { depth: number; slug: string; text: string }[]) {
+  const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
+  const groups: { h2: any; h3s: any[] }[] = [];
+  let cur: { h2: any; h3s: any[] } | null = null;
+  for (const h of toc) {
+    if (h.depth === 2) {
+      cur = { h2: h, h3s: [] };
+      groups.push(cur);
+    } else if (h.depth === 3) {
+      if (cur) cur.h3s.push(h);
+      else groups.push({ h2: h, h3s: [] });
+    }
+  }
+  return groups;
+}

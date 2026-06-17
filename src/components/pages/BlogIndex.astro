@@ -12,14 +12,14 @@ const posts = await getLocalizedPosts(locale);
 const tags = await getAllTags(locale);
 ---
 
-<div class="blog-page">
-  <header class="blog-header">
-    <h1 class="blog-title">{t('blog-title')}</h1>
-    <p class="blog-desc">{t('blog-description')}</p>
+<div class="container-narrow pt-16 pb-16">
+  <header class="mb-12">
+    <h1 class="section-title text-4xl mb-2">{t('blog-title')}</h1>
+    <p class="section-subtitle text-lg text-on-surface-variant mb-6 max-w-[60ch]">{t('blog-description')}</p>
 
     {
       tags.length > 0 && (
-        <nav class="blog-tags" aria-label={t('blog-tags')}>
+        <nav class="flex flex-wrap gap-1" aria-label={t('blog-tags')}>
           {tags.map(([tag, _count]) => (
             <a href={getRelativeLocaleUrl(locale, `/blog/tag/${tag}/`)} class="tag"><span>{tag}</span></a>
           ))}
@@ -29,7 +29,7 @@ const tags = await getAllTags(locale);
   </header>
 
   {posts.length > 0 ? (
-    <div class="blog-list">
+    <div class="flex flex-col">
       {posts.map(post => (
         <PostCard
           title={post.data.title}
@@ -49,43 +49,3 @@ const tags = await getAllTags(locale);
     </div>
   )}
 </div>
-
-<style>
-.blog-page {
-  max-width: 720px;
-  margin: 0 auto;
-  padding: var(--space-4xl) var(--space-lg) var(--space-4xl);
-}
-
-/* Header */
-.blog-header {
-  margin-bottom: var(--space-3xl);
-}
-
-.blog-title {
-  font-size: var(--font-size-4xl);
-  font-weight: var(--font-weight-bold);
-  color: var(--md-sys-color-on-surface);
-  margin: 0 0 var(--space-sm);
-}
-
-.blog-desc {
-  font-size: var(--font-size-lg);
-  color: var(--md-sys-color-on-surface-variant);
-  margin: 0 0 var(--space-xl);
-  max-width: 60ch;
-}
-
-/* Tags bar — horizontal wrapped, clean */
-.blog-tags {
-  display: flex;
-  flex-wrap: wrap;
-  gap: var(--space-xs);
-}
-
-/* Post list */
-.blog-list {
-  display: flex;
-  flex-direction: column;
-}
-</style>
