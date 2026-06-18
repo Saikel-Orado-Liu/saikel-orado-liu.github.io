@@ -1,4 +1,7 @@
-/* MiSans CJK — Unicode-range split, must use CSS @import */
+/* MiSans — CDN @import（Latin + CJK） */
+@import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Latin/MiSansLatin-Regular.min.css');
+@import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Latin/MiSansLatin-Medium.min.css');
+@import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Latin/MiSansLatin-Bold.min.css');
 @import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Regular.min.css');
 @import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Medium.min.css');
 @import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Bold.min.css');
