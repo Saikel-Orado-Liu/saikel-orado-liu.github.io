@@ -1,4 +1,4 @@
-import { defineConfig } from 'astro/config';
+import { defineConfig, fontProviders } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { remarkAlert } from 'remark-github-blockquote-alert';
@@ -66,6 +66,27 @@ export default defineConfig({
   build: {
     format: 'directory',
   },
+
+  fonts: [
+    {
+      provider: fontProviders.local(),
+      name: 'MiSans',
+      cssVariable: '--font-mi',
+      options: {
+        variants: [
+          { weight: 300, style: 'normal', src: ['./src/assets/fonts/MiSansLatin-Light.woff2'] },
+          { weight: 380, style: 'normal', src: ['./src/assets/fonts/MiSansLatin-Regular.woff2'] },
+          { weight: 630, style: 'normal', src: ['./src/assets/fonts/MiSansLatin-Bold.woff2'] },
+        ],
+      },
+    },
+    {
+      provider: fontProviders.fontsource(),
+      name: 'JetBrains Mono',
+      cssVariable: '--font-jbmono',
+      subsets: ['latin', 'latin-ext'],
+    },
+  ],
 
   vite: {
     plugins: [tailwindcss()],
