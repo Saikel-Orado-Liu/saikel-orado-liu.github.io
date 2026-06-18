@@ -1,7 +1,7 @@
 @import "tailwindcss";
 
-@theme inline {
-  /* Font families (set by Fonts API via --font-mi / --font-jbmono) */
-  --font-sans: var(--font-mi), system-ui, sans-serif;
-  --font-mono: var(--font-jbmono), 'Fira Code', 'Cascadia Code', Consolas, monospace;
+@theme {
+  /* Font families */
+  --font-sans: 'MiSans', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
 }

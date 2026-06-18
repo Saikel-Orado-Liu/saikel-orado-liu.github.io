@@ -3,7 +3,6 @@ import { getRelativeLocaleUrl } from 'astro:i18n';
 import { supportedLocales, toOgLocale, stripLocalePrefix, getLocaleDir, locales } from '../i18n';
 import type { Locale } from '../i18n';
 import { ClientRouter } from 'astro:transitions';
-import { Font } from 'astro:assets';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import '../styles/tokens.css';
@@ -65,10 +64,6 @@ const barePath = stripLocalePrefix(Astro.url.pathname);
     {locales.map(loc => (
       <link rel="alternate" type="application/rss+xml" title={`Blog RSS (${loc})`} href={loc === 'zh-cn' ? '/blog/rss.xml' : `/${loc}/blog/rss.xml`} />
     ))}
-
-    <!-- Fonts API (MiSans variable font + JetBrains Mono) -->
-    <Font cssVariable="--font-mi" preload />
-    <Font cssVariable="--font-jbmono" />
 
     <!-- 主题同步脚本：在页面渲染前应用主题，防止 FOUC -->
     <script is:inline>

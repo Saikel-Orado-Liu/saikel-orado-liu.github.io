@@ -1,7 +1,8 @@
-/* MiSans CJK — CDN @import（Unicode-range 拆分） */
-@import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Regular.min.css');
-@import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Medium.min.css');
-@import url('https://cdn.jsdelivr.net/npm/misans@4.0.0/lib/Normal/MiSans-Bold.min.css');
+/* MiSans — 小米官方 CDN（Latin + Chinese Simplified，全部字重） */
+@import url('https://cdn-font.hyperos.mi.com/font/css?family=MiSans:100,200,300,400,450,500,600,650,700,900:Chinese_Simplify,Latin&display=swap');
+
+/* JetBrains Mono — Google Fonts CDN */
+@import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap');
 
 /* Boxicons */
 @import url('https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css');
