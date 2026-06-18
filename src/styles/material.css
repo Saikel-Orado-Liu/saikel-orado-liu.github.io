@@ -154,7 +154,8 @@
 }
 
 /* ===== .groove — 凹槽容器 ===== */
-.groove {
+.groove,
+:root .groove {
   position: relative;
   isolation: isolate;
   background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);

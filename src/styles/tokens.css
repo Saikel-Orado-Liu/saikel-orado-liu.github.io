@@ -126,8 +126,8 @@
   --space-4xl: 96px;
 
   /* ===== Typography ===== */
-  --font-sans: var(--font-sans-latin), 'MiSans', system-ui, -apple-system, sans-serif;
-  --font-mono: var(--font-mono), 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  --font-sans: var(--font-sans-latin, 'MiSansLatin'), 'MiSans', system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono, 'JetBrains Mono'), 'Fira Code', 'Cascadia Code', Consolas, monospace;
   --font-size-xs: 0.75rem;
   --font-size-sm: 0.875rem;
   --font-size-base: 1rem;
