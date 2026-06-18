@@ -2,6 +2,7 @@
 import { getRelativeLocaleUrl } from 'astro:i18n';
 import { supportedLocales, toOgLocale, stripLocalePrefix, getLocaleDir, locales } from '../i18n';
 import type { Locale } from '../i18n';
+import { ClientRouter } from 'astro:transitions';
 import Header from '../components/layout/Header.astro';
 import Footer from '../components/layout/Footer.astro';
 import '../styles/tokens.css';
@@ -63,6 +64,23 @@ const barePath = stripLocalePrefix(Astro.url.pathname);
     {locales.map(loc => (
       <link rel="alternate" type="application/rss+xml" title={`Blog RSS (${loc})`} href={loc === 'zh-cn' ? '/blog/rss.xml' : `/${loc}/blog/rss.xml`} />
     ))}
+
+    <!-- 主题同步脚本：在页面渲染前应用主题，防止 FOUC -->
+    <script is:inline>
+      (function() {
+        try {
+          var stored = localStorage.getItem('theme');
+          var theme = (stored === 'dark' || stored === 'light')
+            ? stored
+            : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+          var root = document.documentElement;
+          if (theme === 'light') root.classList.add('light-style');
+          root.setAttribute('data-theme', theme);
+        } catch(e) {}
+      })();
+    </script>
+
+    <ClientRouter />
   </head>
   <body>
     <!-- Layer 2: 希尔伯特曲线分形纹理 -->
@@ -149,6 +167,23 @@ const barePath = stripLocalePrefix(Astro.url.pathname);
     initNavSlider();
     initLangSlider();
   }
+
+  // 客户端导航后重新初始化
+  document.addEventListener('astro:page-load', init);
+
+  // 导航交换前同步主题，防止闪白
+  document.addEventListener('astro:after-swap', () => {
+    try {
+      var stored = localStorage.getItem('theme');
+      var theme = (stored === 'dark' || stored === 'light')
+        ? stored
+        : (window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark');
+      var root = document.documentElement;
+      root.classList.remove('light-style', 'dark-style');
+      if (theme === 'light') root.classList.add('light-style');
+      root.setAttribute('data-theme', theme);
+    } catch(e) {}
+  });
 
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', init);

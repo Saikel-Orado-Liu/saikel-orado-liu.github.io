@@ -12,6 +12,11 @@ export default defineConfig({
   site: 'https://saikel-orado-liu.github.io',
   output: 'static',
 
+  prefetch: {
+    prefetchAll: true,
+    defaultStrategy: 'hover',
+  },
+
   markdown: {
     remarkPlugins: [[remarkAlert, { tagName: "blockquote" }]],
     rehypePlugins: [rehypeExternalLinks],
