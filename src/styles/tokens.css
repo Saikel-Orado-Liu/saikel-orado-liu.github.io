@@ -138,9 +138,9 @@
   --font-size-4xl: 2.5rem;
   --font-size-5xl: 3rem;
   --font-weight-light: 300;
-  --font-weight-regular: 330;
-  --font-weight-medium: 380;
-  --font-weight-bold: 630;
+  --font-weight-regular: 400;
+  --font-weight-medium: 500;
+  --font-weight-bold: 700;
   --line-height-tight: 1.25;
   --line-height-normal: 1.6;
   --line-height-relaxed: 1.75;
