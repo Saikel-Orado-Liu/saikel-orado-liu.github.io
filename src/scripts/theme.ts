@@ -42,6 +42,12 @@ function initTheme(): void {
   const theme = stored ?? getSystemTheme();
   applyTheme(theme);
   updateIcon(theme);
+  // 重新绑定按钮（ClientRouter 导航后 DOM 重建，旧 handler 丢失）
+  const btn = document.querySelector('.theme-toggle');
+  if (btn) {
+    btn.removeEventListener('click', toggleTheme as any);
+    btn.addEventListener('click', (e: Event) => toggleTheme(e as MouseEvent));
+  }
 }
 
 function toggleTheme(e?: MouseEvent): void {
@@ -75,12 +81,6 @@ window.matchMedia('(prefers-color-scheme: light)').addEventListener('change', (e
     applyTheme(t);
     updateIcon(t);
   }
-});
-
-document.addEventListener('DOMContentLoaded', () => {
-  initTheme();
-  const btn = document.querySelector('.theme-toggle');
-  if (btn) btn.addEventListener('click', (e: Event) => toggleTheme(e as MouseEvent));
 });
 
 export { initTheme, toggleTheme, getSystemTheme, getStoredTheme };
