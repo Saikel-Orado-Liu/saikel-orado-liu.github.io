@@ -2087,8 +2087,8 @@ blockquote:not(.markdown-alert)::after {
 /* ── 图片覆盖层 / 阴影 — 亮色 ── */
 :root.light-style .article-content p:has(> img:only-child)::after {
   background-image:
-    linear-gradient(155deg, rgba(255,255,255,0.65) 0%, rgba(255,255,255,0.45) 15%, rgba(255,255,255,0.22) 35%, rgba(255,255,255,0.08) 60%, transparent 85%),
-    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='pnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnl)' opacity='0.35'/%3E%3C/svg%3E");
+    linear-gradient(155deg, rgba(255,255,255,0.25) 0%, rgba(255,255,255,0.15) 15%, rgba(255,255,255,0.06) 35%, rgba(255,255,255,0.02) 60%, transparent 85%),
+    url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'%3E%3Cfilter id='pnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='1.5' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0.23 0.23 0.23 0 0.15 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23pnl)' opacity='0.15'/%3E%3C/svg%3E");
   background-size: auto, 100px 100px;
 }
 :root.light-style .article-content img {
