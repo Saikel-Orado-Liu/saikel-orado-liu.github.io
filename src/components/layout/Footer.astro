@@ -85,9 +85,9 @@ const socialLinks: SocialLink[] = [
   </div>
 </footer>
 
-<style is:global>
+<style>
 /* ===== Footer — 卡片材质 + Readwise 双栏布局 ===== */
-footer.footer {
+:global(footer.footer) {
   position: relative;
   isolation: isolate;
   max-width: var(--header-max-width);
@@ -107,8 +107,7 @@ footer.footer {
     inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
 }
 
-/* SVG 噪点 */
-footer.footer::before {
+:global(footer.footer::before) {
   content: '';
   position: absolute;
   inset: 0;
@@ -122,8 +121,7 @@ footer.footer::before {
   pointer-events: none;
 }
 
-/* 漫反射高光 */
-footer.footer::after {
+:global(footer.footer::after) {
   content: '';
   position: absolute;
   inset: 0;
@@ -152,7 +150,6 @@ footer.footer::after {
   }
 }
 
-/* Left column — 自然宽度，随文本自动延展 */
 .footer-left {
   display: flex;
   flex-direction: column;
@@ -204,11 +201,10 @@ footer.footer::after {
 .footer-link:hover {
   color: var(--clr-secondary-accent) !important;
 }
-:root.light-style .footer-link:hover {
+:global(:root.light-style) .footer-link:hover {
   color: var(--md-sys-color-primary) !important;
 }
 
-/* Right column — 上下顶满 */
 .footer-right {
   display: flex;
   flex-direction: column;
@@ -258,7 +254,7 @@ footer.footer::after {
 .footer-social-link:hover {
   color: var(--clr-secondary-accent) !important;
 }
-:root.light-style .footer-social-link:hover {
+:global(:root.light-style) .footer-social-link:hover {
   color: var(--md-sys-color-primary) !important;
 }
 
@@ -269,8 +265,8 @@ footer.footer::after {
   margin: 0;
 }
 
-/* 亮色模式 */
-:root.light-style footer.footer {
+/* 亮色模式 — :root.light-style 在组件外部，需 :global() */
+:global(:root.light-style) footer.footer {
   background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
@@ -279,36 +275,14 @@ footer.footer::after {
     10px 8px 6px 1px rgba(0, 0, 0, 0.10),
     inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
 }
-:root.light-style footer.footer::before {
+:global(:root.light-style) footer.footer::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='fvl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fvl)'/%3E%3C/svg%3E");
   filter: none;
   mix-blend-mode: normal;
   opacity: 1;
   background-size: 200px 200px;
 }
-:root.light-style footer.footer::after {
+:global(:root.light-style) footer.footer::after {
   background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
-}
-
-@media (prefers-color-scheme: light) {
-  footer.footer {
-    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
-    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
-    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
-    box-shadow:
-      4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
-      10px 8px 6px 1px rgba(0, 0, 0, 0.10),
-      inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
-  }
-  footer.footer::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='fvm' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fvm)'/%3E%3C/svg%3E");
-    filter: none;
-    mix-blend-mode: normal;
-    opacity: 1;
-    background-size: 200px 200px;
-  }
-  footer.footer::after {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
-  }
 }
 </style>
