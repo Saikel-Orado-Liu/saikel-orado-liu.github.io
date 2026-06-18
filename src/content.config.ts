@@ -45,26 +45,4 @@ const ue5Plugins = defineCollection({
   }),
 });
 
-const game = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/game' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-    locale: localeEnum,
-    tags: z.array(z.string()).optional(),
-    draft: z.boolean().optional().default(false),
-  }),
-});
-
-const ai = defineCollection({
-  loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/ai' }),
-  schema: z.object({
-    title: z.string(),
-    date: z.date(),
-    locale: localeEnum,
-    tags: z.array(z.string()).optional(),
-    draft: z.boolean().optional().default(false),
-  }),
-});
-
-export const collections = { blog, projects, 'ue5-plugins': ue5Plugins, game, ai };
+export const collections = { blog, projects, 'ue5-plugins': ue5Plugins };
