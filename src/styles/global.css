@@ -55,6 +55,6 @@
   --leading-relaxed: var(--line-height-relaxed);
 
   /* ===== Font Families ===== */
-  --font-sans: 'MiSansLatin', 'MiSans', system-ui, -apple-system, sans-serif;
-  --font-mono: 'JetBrains Mono', 'Fira Code', 'Cascadia Code', Consolas, monospace;
+  --font-sans: var(--font-sans-latin), 'MiSans', system-ui, -apple-system, sans-serif;
+  --font-mono: var(--font-mono), 'Fira Code', 'Cascadia Code', Consolas, monospace;
 }
