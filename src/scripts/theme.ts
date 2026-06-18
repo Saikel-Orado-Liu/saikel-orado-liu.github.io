@@ -1,5 +1,7 @@
 type Theme = 'dark' | 'light';
 
+let themeClickHandler: EventListener | null = null;
+
 function getSystemTheme(): Theme {
   return window.matchMedia('(prefers-color-scheme: light)').matches ? 'light' : 'dark';
 }
@@ -42,11 +44,12 @@ function initTheme(): void {
   const theme = stored ?? getSystemTheme();
   applyTheme(theme);
   updateIcon(theme);
-  // 重新绑定按钮（ClientRouter 导航后 DOM 重建，旧 handler 丢失）
+
   const btn = document.querySelector('.theme-toggle');
   if (btn) {
-    btn.removeEventListener('click', toggleTheme as any);
-    btn.addEventListener('click', (e: Event) => toggleTheme(e as MouseEvent));
+    if (themeClickHandler) btn.removeEventListener('click', themeClickHandler);
+    themeClickHandler = ((e: Event) => toggleTheme(e as MouseEvent)) as EventListener;
+    btn.addEventListener('click', themeClickHandler);
   }
 }
 
