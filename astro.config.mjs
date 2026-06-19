@@ -3,7 +3,6 @@ import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
 import { remarkAlert } from 'remark-github-blockquote-alert';
 import rehypeExternalLinks from './src/scripts/rehype-external-links.mjs';
-import rehypeArticleImageSizes from './src/scripts/rehype-article-image-sizes.mjs';
 import customLight from './src/scripts/shiki-theme.mjs';
 
 import tailwindcss from '@tailwindcss/vite';
@@ -20,7 +19,7 @@ export default defineConfig({
 
   markdown: {
     remarkPlugins: [[remarkAlert, { tagName: "blockquote" }]],
-    rehypePlugins: [rehypeExternalLinks, rehypeArticleImageSizes],
+    rehypePlugins: [rehypeExternalLinks],
     shikiConfig: {
       themes: { dark: 'github-dark', light: customLight },
       defaultColor: 'dark',
