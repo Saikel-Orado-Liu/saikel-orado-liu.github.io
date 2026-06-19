@@ -47,5 +47,5 @@ const t = useTranslations(locale);
 
 <script>
   import { initLightbox } from '../scripts/lightbox';
-  initLightbox();
+  document.addEventListener('astro:page-load', () => initLightbox());
 </script>
