@@ -11,10 +11,10 @@ const t = useTranslations(locale);
 export async function getStaticPaths() {
   const locales = ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'];
   const paths = [];
-  for (const locale of locales) {
-    const posts = await getCollection('blog', ({ data }) => data.locale === locale);
+  for (const l of locales) {
+    const posts = await getCollection('blog', ({ data }) => data.locale === l);
     for (const post of posts) {
-      paths.push({ params: { locale, slug: post.id }, props: { post } });
+      paths.push({ params: { locale: l, slug: post.id }, props: { post } });
     }
   }
   return paths;

@@ -1,17 +1,8 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import ModulePage from '@/components/pages/ModulePage.astro';
-import { useTranslations } from '@/i18n';
-import type { Locale } from '@/i18n';
-
-const locale = Astro.currentLocale! as Locale;
-const t = useTranslations(locale);
-
+import ModuleRoute from '@/components/route/ModuleRoute.astro';
+const locale = Astro.currentLocale!;
 export function getStaticPaths() {
-  return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(locale => ({ params: { locale } }));
+  return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(l => ({ params: { locale: l } }));
 }
 ---
-
-<BaseLayout title={t('game-title')} description={t('game-description')} locale={locale}>
-  <ModulePage locale={locale} module="game" icon="bx-joystick" />
-</BaseLayout>
+<ModuleRoute locale={locale} module="game" icon="bx-joystick" titleKey="game-title" descKey="game-description" />

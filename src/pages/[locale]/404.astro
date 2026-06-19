@@ -1,34 +1,8 @@
 ---
-import BaseLayout from '../../layouts/BaseLayout.astro';
-import { useTranslations } from '../../i18n';
-import { getRelativeLocaleUrl } from 'astro:i18n';
-import type { Locale } from '../../i18n';
-
-const locale = Astro.currentLocale! as Locale;
-const t = useTranslations(locale);
-
+import NotFoundRoute from '@/components/route/NotFoundRoute.astro';
+const locale = Astro.currentLocale!;
 export function getStaticPaths() {
-  return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(locale => ({ params: { locale } }));
+  return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(l => ({ params: { locale: l } }));
 }
 ---
-
-<BaseLayout title={`404 — ${t('page-404-title')}`} locale={locale}>
-  <div class="container-narrow">
-    <section class="not-found flex items-center justify-center text-center min-h-[60vh] py-24 px-6">
-      <div class="not-found-card card flex flex-col items-center gap-4 max-w-[480px]">
-        <span class="not-found-code">404</span>
-        <h1>{t('page-404-title')}</h1>
-        <p>{t('page-404-description')}</p>
-        <a href={getRelativeLocaleUrl(locale, '/')} class="btn btn-primary">
-          <i class="bx bx-home"></i> {t('page-404-back')}
-        </a>
-      </div>
-    </section>
-  </div>
-</BaseLayout>
-
-<style>
-.not-found-code { font-size: 8rem; font-weight: var(--font-weight-bold); color: var(--md-sys-color-primary); line-height: 1; opacity: 0.8; }
-.not-found h1 { margin-bottom: 0; }
-.not-found p { color: var(--md-sys-color-on-surface-variant); margin-bottom: var(--space-lg); }
-</style>
+<NotFoundRoute locale={locale} />

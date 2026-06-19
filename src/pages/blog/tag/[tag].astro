@@ -1,21 +1,13 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import BlogTag from '@/components/pages/BlogTag.astro';
-import { useTranslations } from '@/i18n';
-import type { Locale } from '@/i18n';
+import BlogTagRoute from '@/components/route/BlogTagRoute.astro';
 import { getAllTags as getTags } from '@/utils/content';
-
-const locale = Astro.currentLocale! as Locale;
-const t = useTranslations(locale);
 
 export async function getStaticPaths() {
   const tags = await getTags('zh-cn');
-  return tags.map(([tag]) => ({ params: { tag } }));
+  return tags.map(([tag]) => ({ params: { tag }, props: { tag } }));
 }
 
-const { tag } = Astro.params;
+const locale = Astro.currentLocale!;
+const { tag } = Astro.props;
 ---
-
-<BaseLayout title={`#${tag} — ${t('blog-title')}`} locale={locale}>
-  <BlogTag locale={locale} tag={tag!} />
-</BaseLayout>
+<BlogTagRoute locale={locale} tag={tag} />

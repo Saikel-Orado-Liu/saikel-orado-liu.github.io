@@ -7,9 +7,9 @@ export async function getStaticPaths() {
   const locales = ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'] as Locale[];
   const projectPaths = await getProjectPaths('');
   const paths = [];
-  for (const locale of locales) {
+  for (const l of locales) {
     for (const p of projectPaths) {
-      paths.push({ params: { locale, slug: p.params.slug } });
+      paths.push({ params: { locale: l, slug: p.params.slug } });
     }
   }
   return paths;

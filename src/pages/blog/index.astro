@@ -1,13 +1,5 @@
 ---
-import BaseLayout from '@/layouts/BaseLayout.astro';
-import BlogIndex from '@/components/pages/BlogIndex.astro';
-import { useTranslations } from '@/i18n';
-import type { Locale } from '@/i18n';
-
-const locale = Astro.currentLocale! as Locale;
-const t = useTranslations(locale);
+import BlogIndexRoute from '@/components/route/BlogIndexRoute.astro';
+const locale = Astro.currentLocale!;
 ---
-
-<BaseLayout title={t('blog-title')} description={t('blog-description')} locale={locale}>
-  <BlogIndex locale={locale} />
-</BaseLayout>
+<BlogIndexRoute locale={locale} />

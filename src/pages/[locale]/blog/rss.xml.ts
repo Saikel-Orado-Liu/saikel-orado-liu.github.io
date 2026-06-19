@@ -3,7 +3,7 @@ import { getLocalizedPosts } from '@/utils/content';
 import type { Locale } from '@/i18n';
 
 export function getStaticPaths() {
-  return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(locale => ({ params: { locale } }));
+  return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(l => ({ params: { locale: l } }));
 }
 
 export async function GET({ params }: { params: { locale: string } }) {
