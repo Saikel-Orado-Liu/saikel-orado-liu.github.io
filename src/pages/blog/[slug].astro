@@ -1,11 +1,11 @@
 ---
 import { getCollection, render } from 'astro:content';
-import BlogLayout from '../../layouts/BlogLayout.astro';
-import { useTranslations } from '../../i18n';
+import BlogLayout from '@/layouts/BlogLayout.astro';
+import { useTranslations } from '@/i18n';
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import type { Locale } from '../../i18n';
+import type { Locale } from '@/i18n';
 
-const locale = (Astro.currentLocale || 'zh-cn') as Locale;
+const locale = Astro.currentLocale! as Locale;
 const t = useTranslations(locale);
 
 export async function getStaticPaths() {
@@ -17,18 +17,9 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogLayout
-  title={post.data.title}
-  description={post.data.excerpt}
-  locale={locale}
-  date={post.data.date}
-  tags={post.data.tags}
-  categories={post.data.categories}
->
+<BlogLayout title={post.data.title} description={post.data.excerpt} locale={locale} date={post.data.date} tags={post.data.tags} categories={post.data.categories}>
   <div class="mb-8">
-    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="back-link">
-      <i class="bx bx-left-arrow-alt"></i> {t('blog-back')}
-    </a>
+    <a href={getRelativeLocaleUrl(locale, '/blog/')} class="back-link"><i class="bx bx-left-arrow-alt"></i> {t('blog-back')}</a>
   </div>
   <Content />
 </BlogLayout>

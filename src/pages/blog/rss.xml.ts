@@ -1,5 +1,5 @@
 import rss from '@astrojs/rss';
-import { getLocalizedPosts } from '../../utils/content';
+import { getLocalizedPosts } from '@/utils/content';
 
 export async function GET() {
   const posts = await getLocalizedPosts('zh-cn');

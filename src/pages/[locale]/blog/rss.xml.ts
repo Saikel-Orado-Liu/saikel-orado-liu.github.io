@@ -1,6 +1,6 @@
 import rss from '@astrojs/rss';
-import { getLocalizedPosts } from '../../../utils/content';
-import type { Locale } from '../../../i18n';
+import { getLocalizedPosts } from '@/utils/content';
+import type { Locale } from '@/i18n';
 
 export function getStaticPaths() {
   return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(locale => ({ params: { locale } }));

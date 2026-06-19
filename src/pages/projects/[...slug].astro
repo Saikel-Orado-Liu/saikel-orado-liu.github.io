@@ -1,6 +1,6 @@
 ---
-import { getProjectPaths } from '../../utils/docs';
-import ProjectRouter from '../../components/pages/ProjectRouter.astro';
+import { getProjectPaths } from '@/utils/docs';
+import ProjectRouter from '@/components/pages/ProjectRouter.astro';
 
 export async function getStaticPaths() {
   return getProjectPaths('zh-cn');
