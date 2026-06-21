@@ -1,6 +1,8 @@
 /**
- * Version wheel control — CSS 3D cylinder wheel for switching project doc versions
+ * Version wheel — CSS 3D cylinder for switching project doc versions
+ * Supports: mouse wheel, mouse drag, touch drag, click, keyboard
  */
+
 export function initVersionWheel(): void {
   const wheels = document.querySelectorAll('.doc-version-wheel');
   if (wheels.length === 0) return;
@@ -19,136 +21,130 @@ export function initVersionWheel(): void {
     const currentDir = `v${current.split('.')[0]}`;
     const prefix = (wheel as HTMLElement).dataset.prefix || '';
 
-    const itemHeight = 32;
-    const viewportCenter = viewport.offsetHeight / 2;
+    const itemH = 34;
+    const vpCenter = viewport.offsetHeight / 2;
+    let activeIdx = 0;
+    items.forEach((item, i) => { if (item.dataset.version === currentDir) activeIdx = i; });
+    let lastIdx = activeIdx;
 
-    // ── Find active index ──
-    let activeIndex = 0;
-    items.forEach((item, i) => {
-      if (item.dataset.version === currentDir) activeIndex = i;
-    });
-
-    // ── Position track to center active item ──
-    function positionAt(index: number, smooth = true) {
-      const offset = viewportCenter - (index * itemHeight) - (itemHeight / 2);
+    // ── Position track ──
+    function positionAt(idx: number, smooth: boolean) {
+      const offset = vpCenter - (idx * itemH) - (itemH / 2);
       track.style.transition = smooth ? 'transform 0.4s cubic-bezier(0.4, 0, 0.2, 1)' : 'none';
       track.style.transform = `translateY(${offset}px)`;
-      updatePerspective(index);
+      applyPerspective(idx);
     }
 
-    // ── 3D perspective ──
-    function updatePerspective(centerIdx: number) {
+    // ── 3D cylinder ──
+    function applyPerspective(center: number) {
       items.forEach((item, i) => {
-        const dist = i - centerIdx;
-        const absDist = Math.abs(dist);
-
-        if (absDist === 0) {
-          item.style.transform = 'rotateX(0deg) scale(1)';
+        const d = i - center;
+        const a = Math.abs(d);
+        if (a === 0) {
+          item.style.transform = 'rotateX(0) scale(1)';
           item.style.opacity = '1';
-          item.style.filter = 'blur(0)';
-        } else if (absDist === 1) {
-          const angle = dist > 0 ? -35 : 35;
-          item.style.transform = `rotateX(${angle}deg) scale(0.85)`;
-          item.style.opacity = '0.45';
-          item.style.filter = 'blur(1px)';
-        } else if (absDist === 2) {
-          const angle = dist > 0 ? -55 : 55;
-          item.style.transform = `rotateX(${angle}deg) scale(0.7)`;
-          item.style.opacity = '0.2';
-          item.style.filter = 'blur(2px)';
+        } else if (a === 1) {
+          item.style.transform = `rotateX(${d > 0 ? -40 : 40}deg) scale(0.82)`;
+          item.style.opacity = '0.35';
+        } else if (a === 2) {
+          item.style.transform = `rotateX(${d > 0 ? -65 : 65}deg) scale(0.65)`;
+          item.style.opacity = '0.12';
         } else {
-          const angle = dist > 0 ? -70 : 70;
-          item.style.transform = `rotateX(${angle}deg) scale(0.55)`;
-          item.style.opacity = '0.05';
-          item.style.filter = 'blur(3px)';
+          item.style.transform = `rotateX(${d > 0 ? -80 : 80}deg) scale(0.5)`;
+          item.style.opacity = '0.03';
         }
       });
     }
 
-    // ── Switch to index ──
-    let lastIndex = activeIndex;
-    function switchTo(index: number) {
-      const clamped = Math.max(0, Math.min(items.length - 1, index));
-      if (clamped === lastIndex) return;
-      lastIndex = clamped;
-      positionAt(clamped, true);
-
-      const dirVersion = items[clamped].dataset.version!;
-      const isLatest = dirVersion === currentDir;
-      navigateToVersion(project, dirVersion, isLatest, prefix);
+    // ── Navigate ──
+    function goTo(idx: number) {
+      const c = Math.max(0, Math.min(items.length - 1, idx));
+      if (c === lastIdx) return;
+      lastIdx = c;
+      positionAt(c, true);
+      const dv = items[c].dataset.version!;
+      const isLatest = dv === currentDir;
+      const path = window.location.pathname;
+      const ep = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+      const es = project.replace(/[.*+?^${}()|[\]\\]/g, '\\$\\$');
+      const re = new RegExp(`^${ep}/projects/${es}/(?:v[^/]+/)?(.+?)/?$`);
+      const m = path.match(re);
+      const page = m?.[1] ?? '';
+      const seg = isLatest ? '' : `${dv}/`;
+      window.location.href = `${prefix}/projects/${project}/${seg}${page}`;
     }
 
-    // ── Click on items ──
-    items.forEach((item, i) => {
-      item.addEventListener('click', () => switchTo(i));
-    });
+    // ── Click ──
+    items.forEach((item, i) => item.addEventListener('click', () => goTo(i)));
 
     // ── Mouse wheel ──
     wheel.addEventListener('wheel', (e: Event) => {
-      const we = e as WheelEvent;
-      we.preventDefault();
-      const direction = we.deltaY > 0 ? 1 : -1;
-      switchTo(lastIndex + direction);
+      (e as WheelEvent).preventDefault();
+      goTo(lastIdx + ((e as WheelEvent).deltaY > 0 ? 1 : -1));
     }, { passive: false });
 
-    // ── Touch drag ──
-    let touchStartY = 0;
-    let touchStartIndex = 0;
-    wheel.addEventListener('touchstart', (e: Event) => {
-      const te = e as TouchEvent;
-      touchStartY = te.touches[0].clientY;
-      touchStartIndex = lastIndex;
-    }, { passive: true });
+    // ── Mouse drag ──
+    let dragging = false;
+    let dragStartY = 0;
+    let dragStartIdx = 0;
 
-    wheel.addEventListener('touchmove', (e: Event) => {
-      const te = e as TouchEvent;
-      const deltaY = te.touches[0].clientY - touchStartY;
-      const indexDelta = Math.round(-deltaY / itemHeight);
-      const newIndex = Math.max(0, Math.min(items.length - 1, touchStartIndex + indexDelta));
-      if (newIndex !== lastIndex) {
-        lastIndex = newIndex;
-        positionAt(newIndex, false);
+    viewport.addEventListener('mousedown', (e: Event) => {
+      dragging = true;
+      dragStartY = (e as MouseEvent).clientY;
+      dragStartIdx = lastIdx;
+      viewport.style.cursor = 'grabbing';
+      e.preventDefault();
+    });
+
+    window.addEventListener('mousemove', (e: Event) => {
+      if (!dragging) return;
+      const dy = (e as MouseEvent).clientY - dragStartY;
+      const delta = Math.round(-dy / itemH);
+      const ni = Math.max(0, Math.min(items.length - 1, dragStartIdx + delta));
+      if (ni !== lastIdx) {
+        lastIdx = ni;
+        positionAt(ni, false);
       }
+    });
+
+    window.addEventListener('mouseup', () => {
+      if (!dragging) return;
+      dragging = false;
+      viewport.style.cursor = 'grab';
+      positionAt(lastIdx, true);
+      goTo(lastIdx);
+    });
+
+    // ── Touch drag ──
+    let touchY = 0;
+    let touchIdx = 0;
+    viewport.addEventListener('touchstart', (e: Event) => {
+      touchY = (e as TouchEvent).touches[0].clientY;
+      touchIdx = lastIdx;
     }, { passive: true });
 
-    wheel.addEventListener('touchend', () => {
-      positionAt(lastIndex, true);
-      const dirVersion = items[lastIndex].dataset.version!;
-      const isLatest = dirVersion === currentDir;
-      navigateToVersion(project, dirVersion, isLatest, prefix);
+    viewport.addEventListener('touchmove', (e: Event) => {
+      const dy = (e as TouchEvent).touches[0].clientY - touchY;
+      const ni = Math.max(0, Math.min(items.length - 1, touchIdx + Math.round(-dy / itemH)));
+      if (ni !== lastIdx) { lastIdx = ni; positionAt(ni, false); }
+    }, { passive: true });
+
+    viewport.addEventListener('touchend', () => {
+      positionAt(lastIdx, true);
+      goTo(lastIdx);
     });
 
     // ── Keyboard ──
     wheel.setAttribute('tabindex', '0');
-    wheel.addEventListener('keydown', (e) => {
-      const ev = e as KeyboardEvent;
-      if (ev.key === 'ArrowUp' || ev.key === 'ArrowDown') {
-        ev.preventDefault();
-        switchTo(lastIndex + (ev.key === 'ArrowDown' ? 1 : -1));
+    wheel.addEventListener('keydown', (e: Event) => {
+      const k = (e as KeyboardEvent).key;
+      if (k === 'ArrowUp' || k === 'ArrowDown') {
+        e.preventDefault();
+        goTo(lastIdx + (k === 'ArrowDown' ? 1 : -1));
       }
     });
 
     // ── Init ──
-    positionAt(activeIndex, false);
+    positionAt(activeIdx, false);
   }
-}
-
-function navigateToVersion(
-  projectSlug: string,
-  dirVersion: string,
-  isLatest: boolean,
-  prefix: string,
-): void {
-  const path = window.location.pathname;
-  const escapedPrefix = prefix.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
-  const escapedSlug = projectSlug.replace(/[.*+?^${}()|[\]\\]/g, '\\$\\$');
-  const versionRe = new RegExp(`^${escapedPrefix}/projects/${escapedSlug}/(?:v[^/]+/)?(.+?)/?$`);
-  const match = path.match(versionRe);
-
-  let pagePath = '';
-  if (match && match[1]) pagePath = match[1];
-
-  const versionSeg = isLatest ? '' : `${dirVersion}/`;
-  const targetUrl = `${prefix}/projects/${projectSlug}/${versionSeg}${pagePath}`;
-  window.location.href = targetUrl.endsWith('/') ? targetUrl : `${targetUrl}/`;
 }

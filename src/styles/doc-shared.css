@@ -82,10 +82,8 @@
     position: relative;
     margin-bottom: var(--space-md);
     border-radius: var(--shape-md);
-    padding: var(--space-sm) var(--space-md);
     overflow: hidden;
     isolation: isolate;
-    /* 亚克力板材质 */
     background: var(--clr-primary-bg);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
@@ -94,7 +92,6 @@
         10px 8px 6px 1px rgba(0, 0, 0, 0.30),
         inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
 }
-/* 噪点纹理 */
 .doc-version-wheel::before {
     content: "";
     position: absolute;
@@ -105,7 +102,6 @@
     mix-blend-mode: overlay;
     pointer-events: none;
 }
-/* 漫反射高光 */
 .doc-version-wheel::after {
     content: "";
     position: absolute;
@@ -115,40 +111,44 @@
     pointer-events: none;
 }
 
-/* 视口：镂空窗口区域 */
+/* 镂空窗口 — 中心可见，上下渐隐 */
 .doc-version-wheel-viewport {
     position: relative;
     z-index: 3;
-    height: 80px; /* 只显示中心 item */
+    height: 100px;
     overflow: hidden;
-    /* 上下渐变遮罩模拟圆柱曲面 */
+    cursor: grab;
     -webkit-mask-image: linear-gradient(
         to bottom,
         transparent 0%,
-        black 25%,
-        black 75%,
+        rgba(0,0,0,0.15) 15%,
+        black 35%,
+        black 65%,
+        rgba(0,0,0,0.15) 85%,
         transparent 100%
     );
     mask-image: linear-gradient(
         to bottom,
         transparent 0%,
-        black 25%,
-        black 75%,
+        rgba(0,0,0,0.15) 15%,
+        black 35%,
+        black 65%,
+        rgba(0,0,0,0.15) 85%,
         transparent 100%
     );
 }
+.doc-version-wheel-viewport:active { cursor: grabbing; }
 
 .doc-version-wheel-track {
     display: flex;
     flex-direction: column;
     align-items: center;
-    padding: 24px 0;
-    perspective: 150px;
+    perspective: 180px;
     transform-style: preserve-3d;
 }
 
 .doc-version-wheel-item {
-    height: 32px;
+    height: 34px;
     min-width: 80px;
     display: flex;
     align-items: center;
@@ -156,23 +156,19 @@
     gap: var(--space-xs);
     cursor: pointer;
     transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1),
-                opacity 0.35s ease,
-                filter 0.35s ease;
+                opacity 0.35s ease;
     font-size: var(--font-size-base);
     font-weight: var(--font-weight-medium);
     color: var(--clr-primary-text);
     user-select: none;
-    transform-origin: center center -60px;
+    transform-origin: center center -80px;
     backface-visibility: hidden;
 }
-.doc-version-wheel-item:hover {
-    color: var(--clr-primary-accent);
-}
+.doc-version-wheel-item:hover { color: var(--clr-primary-accent); }
 .doc-version-wheel-item.active {
     font-size: var(--font-size-lg);
     font-weight: var(--font-weight-bold);
     color: var(--clr-primary-accent);
-    text-shadow: 0 0 12px color-mix(in srgb, var(--clr-primary-accent) 30%, transparent);
 }
 
 .doc-version-latest {
@@ -185,20 +181,17 @@
 /* 中心选中线 */
 .doc-version-wheel-highlight {
     position: absolute;
-    left: var(--space-sm);
-    right: var(--space-sm);
+    left: 15%;
+    right: 15%;
     top: 50%;
-    height: 32px;
+    height: 34px;
     transform: translateY(-50%);
     z-index: 2;
     pointer-events: none;
     border-radius: var(--shape-sm);
-    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 25%, transparent);
-    border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-accent) 25%, transparent);
-    background: color-mix(in srgb, var(--clr-primary-accent) 8%, transparent);
-    box-shadow:
-        inset 0 1px 0 color-mix(in srgb, var(--clr-primary-text) 8%, transparent),
-        inset 0 -1px 0 color-mix(in srgb, var(--clr-primary-text) 8%, transparent);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 20%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-accent) 20%, transparent);
+    background: color-mix(in srgb, var(--clr-primary-accent) 6%, transparent);
 }
 
 /* 亮色模式 */
@@ -217,9 +210,6 @@
 }
 :root.light-style .doc-version-wheel::after {
     background: linear-gradient(160deg, rgba(255,255,255,0.75) 0%, transparent 45%);
-}
-:root.light-style .doc-version-wheel-item.active {
-    text-shadow: 0 0 8px color-mix(in srgb, var(--clr-primary-accent) 20%, transparent);
 }
 
 /* ===== 文档树导航 ===== */
