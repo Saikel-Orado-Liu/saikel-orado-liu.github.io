@@ -1,20 +1,31 @@
 ---
 import { getCollection, render } from "astro:content";
 import { useTranslations, type Locale } from "../../i18n";
-import { buildDocRegistry, buildTocGroups } from "../../utils/docs";
+import { buildDocRegistry, buildTocGroups, getProjectVersions } from "../../utils/docs";
 import DocShell from "./DocShell.astro";
 
 interface Props {
     locale: Locale;
     slug: string;
+    version?: string;
 }
-const { locale, slug } = Astro.props;
+const { locale, slug, version } = Astro.props;
 const t = useTranslations(locale);
 
-// 1. 项目元数据 — 按 locale 优先匹配
+// 1. Project metadata — match by locale + version
 const projects = await getCollection("projects", ({ data }: any) => !data.draft);
+
 const project =
     projects.find((p) => {
+        if (version) {
+            // 旧版：匹配 slug/v1.0/slug 或 slug/v1.0/index
+            if (locale !== "zh-cn") {
+                return p.id === `${slug}/${version}/${slug}.${locale}` || p.id === `${slug}/${version}/${slug}${locale}`
+                    || p.id === `${slug}/${version}/index.${locale}` || p.id === `${slug}/${version}/index${locale}`;
+            }
+            return p.id === `${slug}/${version}/${slug}` || p.id === `${slug}/${version}/index`;
+        }
+        // 最新版
         if (locale !== "zh-cn") {
             return p.id === `${slug}/${slug}.${locale}` || p.id === `${slug}/${slug}${locale}`
                 || p.id === `${slug}/index.${locale}` || p.id === `${slug}/index${locale}`;
@@ -28,7 +39,10 @@ const { Content, headings } = await render(project);
 const tocGroups = buildTocGroups(headings);
 
 // 2. 文档注册表
-const registry = await buildDocRegistry(slug, locale);
+const registry = await buildDocRegistry(slug, locale, version);
+
+// 3. 版本信息
+const versionInfo = await getProjectVersions(slug);
 ---
 
 <DocShell
@@ -39,6 +53,9 @@ const registry = await buildDocRegistry(slug, locale);
     registry={registry}
     tocGroups={tocGroups}
     activeSidebarLink={slug}
+    versions={versionInfo?.versions}
+    currentVersion={versionInfo?.currentVersion}
+    activeVersion={version}
 >
     <Fragment slot="before-content">
         <div class="doc-meta">

@@ -1,19 +1,21 @@
 ---
 import { render } from "astro:content";
 import { useTranslations, type Locale } from "../../i18n";
-import { buildDocRegistry, getAdjacentDocs, getDocEntry, buildTocGroups } from "../../utils/docs";
+import { buildDocRegistry, getAdjacentDocs, getDocEntry, buildTocGroups, getProjectVersions } from "../../utils/docs";
 import DocShell from "./DocShell.astro";
 
 interface Props {
     slug: string;
     docId: string;
     locale: Locale;
+    version?: string;
 }
-const { slug: projectSlug, docId, locale } = Astro.props;
+const { slug: projectSlug, docId, locale, version } = Astro.props;
 const t = useTranslations(locale);
 const prefix = locale === "zh-cn" ? "" : `/${locale}`;
+const versionPrefix = version ? `/${version}` : '';
 
-const registry = await buildDocRegistry(projectSlug, locale);
+const registry = await buildDocRegistry(projectSlug, locale, version);
 const docEntry = await getDocEntry(docId, locale);
 if (!docEntry) return new Response(null, { status: 404 });
 
@@ -27,6 +29,8 @@ const pager = {
     prev: adj.prev ? { id: adj.prev.id, title: adj.prev.title } : null,
     next: adj.next ? { id: adj.next.id, title: adj.next.title } : null,
 };
+
+const versionInfo = await getProjectVersions(projectSlug);
 ---
 
 <DocShell
@@ -37,11 +41,14 @@ const pager = {
     tocGroups={tocGroups}
     activeDocId={docId}
     pager={pager}
+    versions={versionInfo?.versions}
+    currentVersion={versionInfo?.currentVersion}
+    activeVersion={version}
 >
     <Fragment slot="before-content">
         {currentDoc && !currentDoc.isIndex && (
             <nav class="doc-breadcrumb">
-                <a href={`${prefix}/projects/${projectSlug}/`}>
+                <a href={`${prefix}/projects/${projectSlug}${versionPrefix}/`}>
                     <i class="bx bx-book-open" /> {t("projects-docs-overview")}
                 </a>
                 <span class="doc-breadcrumb-sep">/</span>

@@ -42,6 +42,8 @@
   "ue5-description": "虚幻引擎 5 插件与开发文档",
   "ue5-empty": "暂无插件",
   "ue5-version": "版本",
+  "docs-version": "版本",
+  "docs-latest": "最新",
   "ue5-docs": "查看文档",
   "game-title": "游戏与模组",
   "game-description": "游戏设计与开发指南",

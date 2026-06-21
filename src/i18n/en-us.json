@@ -42,6 +42,8 @@
   "ue5-description": "Unreal Engine 5 plug-in and development documentation",
   "ue5-empty": "No plugins yet",
   "ue5-version": "Version",
+  "docs-version": "Version",
+  "docs-latest": "Latest",
   "ue5-docs": "View Docs",
   "game-title": "Games & Mods",
   "game-description": "Game design & development guides",

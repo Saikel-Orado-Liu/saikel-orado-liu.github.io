@@ -11,18 +11,14 @@ export interface DocNode {
   /** 原始 collection entry（包含 locale 后缀） */
   entry: CollectionEntry<'projects'>;
   projectSlug: string;
+  /** 版本标识（如 "v1.0"），null 表示最新版 */
+  version: string | null;
   isIndex: boolean;
-  /** 章节序号（从文件名前缀解析） */
   chapterOrder: number;
-  /** 章节 slug */
   chapterSlug: string;
-  /** 文档序号 */
   docOrder: number;
-  /** 文档 slug */
   docSlug: string;
-  /** 当前 locale 的标题 */
   title: string;
-  /** 该条目实际使用的 locale */
   locale: Locale;
 }
 
@@ -34,28 +30,44 @@ export interface ChapterGroup {
 }
 
 export interface DocRegistry {
-  /** 项目标识 */
   projectSlug: string;
-  /** 按序排列的章节组 */
+  /** 当前注册表对应的版本 */
+  version: string | null;
   chapters: ChapterGroup[];
-  /** 扁平排序的全部文档（用于前后篇导航） */
   flatList: DocNode[];
 }
 
-// ── ID 解析 ──────────────────────────────────────────────
+// ── 版本与 ID 解析 ──────────────────────────────────────
 
 const CHAPTER_RE = /^(\d{2})\.?([^/]+)/;
 const DOC_RE     = /(\d{2})\.?([^./]+)$/;
+const VERSION_RE = /^v[^/]+$/;
+
+/**
+ * 从 entry ID 中提取项目 slug 和版本号。
+ *   texturge/v1.0/01.getting-started/01.overview → { projectSlug: "texturge", version: "v1.0" }
+ *   texturge/01.getting-started/01.overview       → { projectSlug: "texturge", version: null }
+ *   texturge/texturge                             → { projectSlug: "texturge", version: null }
+ */
+export function parseProjectVersion(entryId: string): {
+  projectSlug: string;
+  version: string | null;
+} {
+  const parts = entryId.split('/');
+  const projectSlug = parts[0];
+  if (parts.length >= 2 && VERSION_RE.test(parts[1])) {
+    return { projectSlug, version: parts[1] };
+  }
+  return { projectSlug, version: null };
+}
 
 /**
  * 从 collection entry id 解析文档树节点元信息。
- *
- * ID 格式：
- *   texturge/texturge                        → isIndex（文件名与项目 slug 同名）
- *   texturge/01.getting-started/01.overview  → chapterOrder=1, docOrder=1
+ * 版本感知：跳过 ID 中的 v{X.Y} 段后再解析章节/文档。
  */
 function parseDocId(id: string): {
   projectSlug: string;
+  version: string | null;
   isIndex: boolean;
   chapterOrder: number;
   chapterSlug: string;
@@ -66,16 +78,18 @@ function parseDocId(id: string): {
   if (parts.length < 2) return null;
 
   const projectSlug = parts[0];
-  const rest = parts.slice(1);
+  let rest = parts.slice(1);
 
-  // 项目首页：文件名与项目 slug 同名（如 texturge/texturge.md）
-  if (rest.length === 1 && rest[0] === projectSlug) {
-    return { projectSlug, isIndex: true, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: projectSlug };
+  // 提取版本段
+  let version: string | null = null;
+  if (rest.length >= 1 && VERSION_RE.test(rest[0])) {
+    version = rest[0];
+    rest = rest.slice(1);
   }
 
-  // 向后兼容：旧 index.md 命名
-  if (rest.length === 1 && rest[0] === 'index') {
-    return { projectSlug, isIndex: true, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: projectSlug };
+  // 项目首页：文件名与项目 slug 同名
+  if (rest.length === 1 && (rest[0] === projectSlug || rest[0] === 'index')) {
+    return { projectSlug, version, isIndex: true, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: projectSlug };
   }
 
   // chapter/doc
@@ -85,6 +99,7 @@ function parseDocId(id: string): {
     if (chMatch && docMatch) {
       return {
         projectSlug,
+        version,
         isIndex: false,
         chapterOrder: parseInt(chMatch[1], 10),
         chapterSlug: chMatch[2],
@@ -100,23 +115,28 @@ function parseDocId(id: string): {
 // ── 本地化筛选 ───────────────────────────────────────────
 
 /**
- * 给定 locale 和项目 slug，返回匹配的文档列表。
- * 选中的文档优先匹配 locale，缺失时回退到 zh-cn。
+ * Given locale, project slug, and optional version, returns matching doc list.
+ * version=undefined returns only latest (no version subdirs).
  */
 export async function getLocalizedDocEntries(
   projectSlug: string,
   locale: Locale,
+  version?: string,
 ): Promise<DocNode[]> {
   const all = await getCollection('projects', ({ data }: any) => !data.draft);
   if (!all.length) return [];
 
-  // 筛选当前项目的文档
-  const projectEntries = all.filter(e => e.id.startsWith(projectSlug + '/'));
+  // 筛选当前项目 + 版本
+  const projectEntries = all.filter(e => {
+    if (!e.id.startsWith(projectSlug + '/')) return false;
+    const pv = parseProjectVersion(e.id);
+    if (version) return pv.version === version;
+    return pv.version === null;
+  });
 
-  // 按 locale 分组：locale → entries
+  // 按 locale 分组
   const byLocale = new Map<string, typeof projectEntries>();
   for (const entry of projectEntries) {
-    // 从最后一个文件名段提取 locale（glob 加载器可能吞掉点号）
     const fileName = entry.id.split('/').pop()!;
     const localeMatch = fileName.match(/(\.|)(en-us|ja-jp|ko-kr|ar-sa|es-es|fr-fr|pt-pt|ru-ru|de-de)$/);
     const entryLocale = localeMatch ? localeMatch[2] : 'zh-cn';
@@ -124,14 +144,12 @@ export async function getLocalizedDocEntries(
     byLocale.get(entryLocale)!.push(entry);
   }
 
-  // 构造结果：先取目标 locale，不足时从 zh-cn 补充
   const seen = new Set<string>();
   const result: DocNode[] = [];
 
   for (const loc of [locale, DEFAULT_LOCALE] as Locale[]) {
     const entries = byLocale.get(loc) ?? [];
     for (const entry of entries) {
-      // 用不含 locale 后缀的 base id 去重
       const baseId = entry.id.replace(/(\.|)(en-us|ja-jp|ko-kr|ar-sa|es-es|fr-fr|pt-pt|ru-ru|de-de)$/, '');
       if (seen.has(baseId)) continue;
       seen.add(baseId);
@@ -141,8 +159,9 @@ export async function getLocalizedDocEntries(
 
       result.push({
         id: toUrlSlug(baseId),
-        entry: entry,
+        entry,
         projectSlug: parsed.projectSlug,
+        version: parsed.version,
         isIndex: parsed.isIndex,
         chapterOrder: parsed.chapterOrder,
         chapterSlug: parsed.chapterSlug,
@@ -154,7 +173,6 @@ export async function getLocalizedDocEntries(
     }
   }
 
-  // 排序：index 排最前 → chapterOrder → docOrder
   result.sort((a, b) => {
     if (a.isIndex !== b.isIndex) return a.isIndex ? -1 : 1;
     if (a.chapterOrder !== b.chapterOrder) return a.chapterOrder - b.chapterOrder;
@@ -166,19 +184,16 @@ export async function getLocalizedDocEntries(
 
 // ── 注册表构建 ───────────────────────────────────────────
 
-/**
- * 为指定 locale + 项目 slug 构建完整文档注册表。
- */
 export async function buildDocRegistry(
   projectSlug: string,
   locale: Locale,
+  version?: string,
 ): Promise<DocRegistry> {
-  const flatList = await getLocalizedDocEntries(projectSlug, locale);
+  const flatList = await getLocalizedDocEntries(projectSlug, locale, version);
 
-  // 按 chapter 分组
   const chapterMap = new Map<string, { order: number; slug: string; docs: DocNode[] }>();
   for (const doc of flatList) {
-    if (doc.isIndex) continue; // index 不进入章节组
+    if (doc.isIndex) continue;
     const key = `${doc.chapterOrder}-${doc.chapterSlug}`;
     if (!chapterMap.has(key)) {
       chapterMap.set(key, { order: doc.chapterOrder, slug: doc.chapterSlug, docs: [] });
@@ -195,7 +210,60 @@ export async function buildDocRegistry(
       docs: ch.docs,
     }));
 
-  return { projectSlug, chapters, flatList };
+  return { projectSlug, version: version ?? null, chapters, flatList };
+}
+
+// ── 版本查询 ─────────────────────────────────────────────
+
+/**
+ * 从项目索引文件的 frontmatter 读取版本信息。
+ */
+export async function getProjectVersions(projectSlug: string): Promise<{
+  versions: string[];
+  currentVersion: string;
+} | null> {
+  const all = await getCollection('projects');
+  const index = all.find(e => {
+    const pv = parseProjectVersion(e.id);
+    if (pv.projectSlug !== projectSlug || pv.version !== null) return false;
+    const parsed = parseDocId(e.id);
+    return parsed?.isIndex;
+  });
+  if (!index) return null;
+  const { versions, currentVersion } = index.data as any;
+  if (!versions?.length || !currentVersion) return null;
+  return { versions, currentVersion };
+}
+
+/**
+ * 当切换版本时当前页面不存在，找到目标版本中同章节的第一个文档。
+ */
+export function findVersionFallback(
+  currentDocId: string,
+  _targetVersion: string | null,
+  targetFlatList: DocNode[],
+): string | null {
+  const currentParsed = parseDocId(currentDocId);
+  if (!currentParsed) return null;
+
+  // 如果当前是索引页，返回目标版本的索引页
+  if (currentParsed.isIndex) {
+    const targetIndex = targetFlatList.find(d => d.isIndex);
+    return targetIndex?.id ?? null;
+  }
+
+  // 找同章节的第一个文档
+  const sameChapter = targetFlatList.filter(
+    d => !d.isIndex && d.chapterSlug === currentParsed.chapterSlug
+  );
+  if (sameChapter.length > 0) {
+    sameChapter.sort((a, b) => a.docOrder - b.docOrder);
+    return sameChapter[0].id;
+  }
+
+  // 章节不存在，返回目标版本索引页
+  const targetIndex = targetFlatList.find(d => d.isIndex);
+  return targetIndex?.id ?? null;
 }
 
 // ── 导航查询 ─────────────────────────────────────────────
@@ -205,9 +273,6 @@ export interface AdjacentDocs {
   next: DocNode | null;
 }
 
-/**
- * 在扁平文档列表中找到当前文档的前后篇（跨章节）。
- */
 export function getAdjacentDocs(flatList: DocNode[], currentId: string): AdjacentDocs {
   const idx = flatList.findIndex(d => d.id === currentId);
   if (idx === -1) return { prev: null, next: null };
@@ -217,9 +282,6 @@ export function getAdjacentDocs(flatList: DocNode[], currentId: string): Adjacen
   };
 }
 
-/**
- * 构建当前文档的 h2/h3 目录树（从渲染后的 headings 数组中过滤）。
- */
 export function buildToc(
   headings: { depth: number; slug: string; text: string }[],
   minDepth = 2,
@@ -228,9 +290,6 @@ export function buildToc(
   return headings.filter(h => h.depth >= minDepth && h.depth <= maxDepth);
 }
 
-/**
- * 生成文档面包屑数组。
- */
 export function buildBreadcrumbs(registry: DocRegistry, currentId: string) {
   const doc = registry.flatList.find(d => d.id === currentId);
   if (!doc || doc.isIndex) return [{ label: '文档首页', slug: registry.projectSlug }];
@@ -246,24 +305,26 @@ export function buildBreadcrumbs(registry: DocRegistry, currentId: string) {
 // ── 静态路径与 entry 查找 ─────────────────────────────────
 
 /**
- * 将 entry ID 转为干净 URL slug（剥离数字前缀、点号和 locale 后缀）。
+ * 将 entry ID 转为干净 URL slug。
+ * 版本段（v1.0 等）保留在 URL 中。
+ *   texturge/v1.0/01.getting-started/01.overview → texturge/v1.0/getting-started/overview
  *   texturge/01.getting-started/01.overview → texturge/getting-started/overview
  *   texturge/texturge → texturge
  */
 export function toUrlSlug(entryId: string): string {
-  return entryId
-    // 1. 剥离 locale 后缀（可能带点也可能无点，glob 加载器会吞掉点号）
+  const clean = entryId
     .replace(/(\.|)(en-us|ja-jp|ko-kr|ar-sa|es-es|fr-fr|pt-pt|ru-ru|de-de)$/, '')
-    // 2. 剥离 /index 或 /{projectSlug}（项目首页）
-    .replace(/^([^/]+)\/(?:index|\1)$/, '$1')
-    // 3. 剥离数字排序前缀（NN. 或 NN，glob 加载器吞点后无点）
-    .replace(/\/(\d+)\./g, '/')
-    .replace(/\/(\d+)(?=[a-zA-Z])/g, '/');
+    .replace(/^([^/]+)\/(?:index|\1)$/, '$1');
+
+  return clean.split('/').map((seg, i) => {
+    if (i === 0) return seg;
+    if (/^v\d/.test(seg)) return seg;
+    return seg.replace(/^\d+\./, '').replace(/^\d+(?=[a-zA-Z])/, '');
+  }).join('/');
 }
 
 /**
- * 为 Astro getStaticPaths 生成所有项目页和文档页路径。
- * 用于 [...slug].astro 路由。
+ * 为 Astro getStaticPaths 生成所有项目页和文档页路径（含版本路由）。
  */
 export async function getProjectPaths(_locale: string) {
   const allEntries = await getCollection('projects', ({ data }: any) => !data.draft);
@@ -282,22 +343,17 @@ export async function getProjectPaths(_locale: string) {
 
 /**
  * 根据干净 URL slug + locale 找到对应的 collection entry。
- * 优先精确匹配 locale 后缀，再回退无后缀版本。
  */
 export async function getDocEntry(urlSlug: string, locale: Locale) {
   const allDocs = await getCollection('projects');
   const localeMatch = allDocs.find(e => {
     if (toUrlSlug(e.id) !== urlSlug) return false;
-    // 检查 locale 后缀（带点或无点，glob 加载器可能吞点）
     return e.id.endsWith(`.${locale}`) || e.id.endsWith(locale);
   });
   if (localeMatch) return localeMatch;
   return allDocs.find(e => toUrlSlug(e.id) === urlSlug) ?? null;
 }
 
-/**
- * 将 headings 数组按 H2/H3 分组，用于侧边栏 TOC 渲染。
- */
 export function buildTocGroups(headings: { depth: number; slug: string; text: string }[]) {
   const toc = headings.filter((h) => h.depth >= 2 && h.depth <= 3);
   const groups: { h2: any; h3s: any[] }[] = [];

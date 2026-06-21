@@ -7,14 +7,22 @@ interface Props { slug: string; locale: Locale; }
 const { slug, locale } = Astro.props;
 
 // slug 格式：
-//   'texturge'                         → 项目概览页
-//   'texturge/01.getting-started/01.overview'  → 子文档页
-const isDoc = slug.includes('/');
-const projectSlug = isDoc ? slug.split('/')[0] : slug;
+//   'texturge'                              → 项目概览（最新版）
+//   'texturge/v1.0'                         → 项目概览（v1.0）
+//   'texturge/getting-started/overview'     → 文档（最新版）
+//   'texturge/v1.0/getting-started/overview'→ 文档（v1.0）
+
+const parts = slug.split('/');
+const hasVersion = parts.length >= 2 && /^v[^/]+$/.test(parts[1]);
+
+const projectSlug = parts[0];
+const version = hasVersion ? parts[1] : undefined;
+const restParts = hasVersion ? parts.slice(2) : parts.slice(1);
+const isDoc = restParts.length > 0;
 const docId = isDoc ? slug : undefined;
 ---
 {isDoc ? (
-  <ProjectDoc slug={projectSlug} docId={docId!} locale={locale} />
+  <ProjectDoc slug={projectSlug} docId={docId!} locale={locale} version={version} />
 ) : (
-  <ProjectDetail slug={slug} locale={locale} />
+  <ProjectDetail slug={projectSlug} locale={locale} version={version} />
 )}
