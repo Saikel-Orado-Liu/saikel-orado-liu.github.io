@@ -41,12 +41,16 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-image: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
-  background-size: 400px 400px;
-  background-position: top left;
-  background-repeat: no-repeat;
   pointer-events: none;
   z-index: 2;
+  --light-x: 30%;
+  --light-y: 20%;
+  --light-intensity: 0.12;
+  background: radial-gradient(
+    ellipse at var(--light-x) var(--light-y),
+    color-mix(in srgb, var(--clr-primary-text) calc(var(--light-intensity) * 100%), transparent) 0%,
+    transparent 60%
+  );
 }
 
 /* 亮色模式 */
@@ -66,10 +70,7 @@
   opacity: 1;
 }
 .light-style .plate::after {
-  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
-  background-size: 400px 400px;
-  background-position: top left;
-  background-repeat: no-repeat;
+  --light-intensity: 0.45;
 }
 
 /* ===== .plate-accent — 强调色亚克力板 ===== */
@@ -105,13 +106,17 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background-image: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
-  background-size: 400px 400px;
-  background-position: top left;
-  background-repeat: no-repeat;
-  opacity: 0.5;
   pointer-events: none;
   z-index: 2;
+  --light-x: 30%;
+  --light-y: 20%;
+  --light-intensity: 0.25;
+  opacity: 0.5;
+  background: radial-gradient(
+    ellipse at var(--light-x) var(--light-y),
+    color-mix(in srgb, var(--clr-primary-text) calc(var(--light-intensity) * 100%), transparent) 0%,
+    transparent 60%
+  );
 }
 
 /* .plate-accent--lg — 大尺寸变体（btn-primary） */
