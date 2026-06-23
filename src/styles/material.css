@@ -43,13 +43,14 @@
   border-radius: inherit;
   pointer-events: none;
   z-index: 2;
-  --light-x: 30%;
-  --light-y: 20%;
-  --light-intensity: 0.12;
+  --light-x: 80px;
+  --light-y: 60px;
+  --light-size: 180px;
+  --light-alpha: 0.15;
   background: radial-gradient(
-    ellipse at var(--light-x) var(--light-y),
-    color-mix(in srgb, var(--clr-primary-text) calc(var(--light-intensity) * 100%), transparent) 0%,
-    transparent 60%
+    circle at var(--light-x) var(--light-y),
+    color-mix(in srgb, var(--clr-primary-text) calc(var(--light-alpha) * 100%), transparent) 0%,
+    transparent var(--light-size)
   );
 }
 
@@ -70,7 +71,7 @@
   opacity: 1;
 }
 .light-style .plate::after {
-  --light-intensity: 0.45;
+  --light-alpha: 0.55;
 }
 
 /* ===== .plate-accent — 强调色亚克力板 ===== */
@@ -108,14 +109,15 @@
   border-radius: inherit;
   pointer-events: none;
   z-index: 2;
-  --light-x: 30%;
-  --light-y: 20%;
-  --light-intensity: 0.25;
+  --light-x: 80px;
+  --light-y: 60px;
+  --light-size: 180px;
+  --light-alpha: 0.30;
   opacity: 0.5;
   background: radial-gradient(
-    ellipse at var(--light-x) var(--light-y),
-    color-mix(in srgb, var(--clr-primary-text) calc(var(--light-intensity) * 100%), transparent) 0%,
-    transparent 60%
+    circle at var(--light-x) var(--light-y),
+    color-mix(in srgb, var(--clr-primary-text) calc(var(--light-alpha) * 100%), transparent) 0%,
+    transparent var(--light-size)
   );
 }
 
