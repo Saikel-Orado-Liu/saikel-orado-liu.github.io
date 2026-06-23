@@ -5,9 +5,11 @@ locale: en-us
 excerpt: Texturge Pro — A high-performance modular glyph processing and text animation engine for Unreal Engine 5, filling the professional per-character animation workflow gap in UE5.
 featured: true
 versions:
-  - "2.0"
-  - "1.0"
-currentVersion: "2.0"
+  - "Alpha"
+  - "Beta"
+  - "v1.0"
+  - "v2.0"
+currentVersion: "Alpha"
 ---
 
 # Texturge

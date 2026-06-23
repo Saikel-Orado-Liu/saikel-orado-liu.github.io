@@ -41,7 +41,10 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  background-image: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
+  background-size: 400px 400px;
+  background-position: top left;
+  background-repeat: no-repeat;
   pointer-events: none;
   z-index: 2;
 }
@@ -63,7 +66,10 @@
   opacity: 1;
 }
 .light-style .plate::after {
-  background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+  background-size: 400px 400px;
+  background-position: top left;
+  background-repeat: no-repeat;
 }
 
 /* ===== .plate-accent — 强调色亚克力板 ===== */
@@ -99,7 +105,10 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
-  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  background-image: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  background-size: 400px 400px;
+  background-position: top left;
+  background-repeat: no-repeat;
   opacity: 0.5;
   pointer-events: none;
   z-index: 2;

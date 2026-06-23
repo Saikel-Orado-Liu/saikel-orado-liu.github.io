@@ -1,12 +1,12 @@
 ---
 title: Texturge
-date: 2025-12-01
-excerpt: Texturge — Unreal Engine 5 文本动画引擎（1.0 版本）。
+date: 2026-09-01
+excerpt: Texturge — Unreal Engine 5 文本动画引擎 Beta 版本。
 featured: true
 ---
 
-# Texturge (v1.0)
+# Texturge Beta
 
-**Texturge** 是面向 Unreal Engine 5 的文本动画引擎 1.0 版本。
+**Texturge** Beta 版本文档正在编写中。
 
-此为旧版文档，最新版本请切换到 v2.0。
+此版本尚未发布，请使用 [Alpha 版本](/projects/texturge/) 查看最新可用文档。
