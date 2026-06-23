@@ -159,32 +159,35 @@ const showWheel = versions && versions.length > 1;
         {/* 右侧栏：版本蜗轮 + 目录树 */}
         {(showWheel || tocGroups.length > 0) && (
             <aside class="doc-sidebar doc-sidebar-right">
-                {/* 版本蜗轮控件 — 独立于 TOC 卡片 */}
-                {showWheel && (
-                    <div class="doc-version-wheel" role="listbox" aria-label={t('docs-version')} data-project={projectSlug} data-current={activeVersion || currentVersion} data-prefix={prefix}>
-                        <div class="doc-version-wheel-viewport">
-                            <div class="doc-version-wheel-track">
-                                {versions!.map((v, i) => {
-                                    const dirVersion = `v${v.split('.')[0]}`;
+                {/* 版本切换卡片 */}
+                {showWheel && (() => {
+                    const activeVer = activeVersion || currentVersion;
+                    const activeDir = activeVer ? `v${activeVer.split('.')[0]}` : '';
+                    return (
+                        <div class="doc-version-card card">
+                            <p class="doc-version-card-label">{t('docs-version')}</p>
+                            <div class="doc-version-card-list">
+                                {versions!.map((v) => {
+                                    const dir = `v${v.split('.')[0]}`;
+                                    const isActive = v === activeVer;
+                                    const isLatest = v === currentVersion;
+                                    const pagePath = '';
+                                    const verSeg = isLatest ? '' : `${dir}/`;
+                                    const href = `${prefix}/projects/${projectSlug}/${verSeg}`;
                                     return (
-                                        <div
-                                            class:list={['doc-version-wheel-item', { active: v === (activeVersion || currentVersion) }]}
-                                            role="option"
-                                            aria-selected={v === (activeVersion || currentVersion)}
-                                            data-version={dirVersion}
-                                            data-display={v}
-                                            data-index={i}
+                                        <a
+                                            href={href}
+                                            class:list={['doc-version-item', { 'doc-version-item--active': isActive }]}
                                         >
-                                            <span class="doc-version-wheel-text">v{v}</span>
-                                            {v === currentVersion && <span class="doc-version-latest">{t('docs-latest')}</span>}
-                                        </div>
+                                            <span>v{v}</span>
+                                            {isLatest && <span class="doc-version-latest">{t('docs-latest')}</span>}
+                                        </a>
                                     );
                                 })}
                             </div>
                         </div>
-                        <div class="doc-version-wheel-highlight" aria-hidden="true"></div>
-                    </div>
-                )}
+                    );
+                })()}
 
                 {/* TOC 卡片 */}
                 {tocGroups.length > 0 && (
@@ -206,10 +209,3 @@ const showWheel = versions && versions.length > 1;
         )}
     </div>
 </BaseLayout>
-
-{showWheel && (
-    <script>
-      import { initVersionWheel } from '../../scripts/version-wheel';
-      document.addEventListener('astro:page-load', () => initVersionWheel());
-    </script>
-)}
