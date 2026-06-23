@@ -162,24 +162,22 @@ const showWheel = versions && versions.length > 1;
                 {/* 版本切换卡片 */}
                 {showWheel && (() => {
                     const activeVer = activeVersion || currentVersion;
-                    const activeDir = activeVer ? `v${activeVer.split('.')[0]}` : '';
                     return (
                         <div class="doc-version-card card">
                             <p class="doc-version-card-label">{t('docs-version')}</p>
                             <div class="doc-version-card-list">
-                                {versions!.map((v) => {
-                                    const dir = `v${v.split('.')[0]}`;
+                                {versions!.map((v, i) => {
                                     const isActive = v === activeVer;
                                     const isLatest = v === currentVersion;
-                                    const pagePath = '';
-                                    const verSeg = isLatest ? '' : `${dir}/`;
+                                    // 最新版无前缀，旧版用 v{index} 目录
+                                    const verSeg = isLatest ? '' : `v${i}/`;
                                     const href = `${prefix}/projects/${projectSlug}/${verSeg}`;
                                     return (
                                         <a
                                             href={href}
                                             class:list={['doc-version-item', { 'doc-version-item--active': isActive }]}
                                         >
-                                            <span>v{v}</span>
+                                            <span>{v}</span>
                                             {isLatest && <span class="doc-version-latest">{t('docs-latest')}</span>}
                                         </a>
                                     );

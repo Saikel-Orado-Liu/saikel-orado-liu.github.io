@@ -5,3 +5,4 @@ minimumReleaseAgeExclude:
   - astro@6.4.7
 overrides:
   esbuild: ">=0.28.1"
+  dompurify: ">=3.4.11"
