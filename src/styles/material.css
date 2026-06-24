@@ -41,12 +41,9 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
   pointer-events: none;
   z-index: 2;
-  background-image: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 12%, transparent) 0%, transparent 45%);
-  background-size: 1200px 1200px;
-  background-position: var(--lx, -200px) var(--ly, -150px);
-  background-repeat: no-repeat;
 }
 
 /* 亮色模式 */
@@ -66,10 +63,7 @@
   opacity: 1;
 }
 .light-style .plate::after {
-  background-image: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
-  background-size: 1200px 1200px;
-  background-position: var(--lx, -200px) var(--ly, -150px);
-  background-repeat: no-repeat;
+  background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
 }
 
 /* ===== .plate-accent — 强调色亚克力板 ===== */
@@ -105,13 +99,10 @@
   position: absolute;
   inset: 0;
   border-radius: inherit;
+  background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
+  opacity: 0.5;
   pointer-events: none;
   z-index: 2;
-  background-image: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%);
-  background-size: 1200px 1200px;
-  background-position: var(--lx, -200px) var(--ly, -150px);
-  background-repeat: no-repeat;
-  opacity: 0.5;
 }
 
 /* .plate-accent--lg — 大尺寸变体（btn-primary） */

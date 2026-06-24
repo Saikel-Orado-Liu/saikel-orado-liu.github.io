@@ -122,7 +122,6 @@ const barePath = stripLocalePrefix(Astro.url.pathname);
   import { initHilbert } from '../scripts/hilbert';
   import { initCodeBg } from '../scripts/code-bg';
   import { initNavSlider, initLangSlider } from '../scripts/nav-slider';
-  import { initParallelLight } from '../scripts/parallel-light';
 
   // 浏览器语言自动跳转：首次访问检测语言写入 localStorage，
   // 后续无 locale 前缀的页面据此跳转。用户手动切换语言时更新。
@@ -172,7 +171,6 @@ const barePath = stripLocalePrefix(Astro.url.pathname);
     initCodeBg();
     initNavSlider();
     initLangSlider();
-    initParallelLight();
   }
 
   // 客户端导航后重新初始化
