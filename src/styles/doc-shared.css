@@ -116,23 +116,20 @@
     mix-blend-mode: normal;
     opacity: 1;
 }
-/* accent 滑块 — 占满凹槽，比凹槽小一圈，参考 nav-slider */
+/* accent 滑块 */
 .doc-version-accent {
     position: absolute;
-    inset: 3px;
+    inset: 0px 1px -2px 1px;
     transform: translateY(-3px);
-    border-radius: var(--shape-md);
+    border-radius: 50% 50% 0 0 / 12px 12px 0 0;
+    clip-path: inset(0 round calc(var(--shape-md) + 8px) calc(var(--shape-md) + 6px) calc(var(--shape-md)) calc(var(--shape-md) + 2px));
     z-index: 2;
     pointer-events: none;
     isolation: isolate;
     overflow: hidden;
-    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
-    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
-    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
-    box-shadow:
-        0 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
-        0 3px 4px 0 rgba(0, 0, 0, 0.67),
-        inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+    background:
+      radial-gradient(50% 10px at center bottom, transparent 90%, var(--clr-primary-accent) 100%) center bottom / 100% 100% no-repeat,
+      color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%);
 }
 .doc-version-accent::before {
     content: '';
@@ -155,28 +152,28 @@
     pointer-events: none;
     z-index: 2;
 }
-:root.light-style .doc-version-accent {
-    background: var(--clr-primary-accent);
-    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
-    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
-    box-shadow:
-        0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
-        0 3px 4px 0 rgba(0, 0, 0, 0.33),
-        inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
-}
-:root.light-style .doc-version-accent::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='dval' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dval)'/%3E%3C/svg%3E");
-}
-:root.light-style .doc-version-accent::after {
-    background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
-}
 
-/* 版本选项链接 */
+/* 版本选项链接 — 3D 弧面文字 */
+.doc-version-slider {
+    perspective: 300px;
+}
 .doc-version-slider .doc-toc-link {
     flex: 1;
     text-align: center;
     position: relative;
     z-index: 3;
+    transition: transform 0.35s cubic-bezier(0.4, 0, 0.2, 1), opacity 0.35s ease;
+}
+.doc-version-slider .doc-toc-link[data-pos="center"] {
+    transform: translateZ(12px) scale(1.08);
+}
+.doc-version-slider .doc-toc-link[data-pos="prev"] {
+    transform: rotateY(35deg) translateZ(-8px);
+    opacity: 0.6;
+}
+.doc-version-slider .doc-toc-link[data-pos="next"] {
+    transform: rotateY(-35deg) translateZ(-8px);
+    opacity: 0.6;
 }
 .doc-version-active {
     color: #FFFFFF !important;
