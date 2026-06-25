@@ -6,9 +6,6 @@ excerpt: Texturge Pro — A high-performance modular glyph processing and text a
 featured: true
 versions:
   - "Alpha"
-  - "Beta"
-  - "v1.0"
-  - "v2.0"
 currentVersion: "Alpha"
 ---
 

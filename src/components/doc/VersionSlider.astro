@@ -16,12 +16,16 @@ const t = useTranslations(locale);
 const activeVer = activeVersion || currentVersion || versions[0];
 const activeIdx = versions.indexOf(activeVer);
 const total = versions.length;
+const ppIdx = ((activeIdx - 2) + total) % total;
 const prevIdx = ((activeIdx - 1) + total) % total;
 const nextIdx = (activeIdx + 1) % total;
+const nnIdx = (activeIdx + 2) % total;
 const ordered = [
+    { v: versions[ppIdx], i: ppIdx, pos: 'pp' },
     { v: versions[prevIdx], i: prevIdx, pos: 'prev' },
     { v: versions[activeIdx], i: activeIdx, pos: 'center' },
     { v: versions[nextIdx], i: nextIdx, pos: 'next' },
+    { v: versions[nnIdx], i: nnIdx, pos: 'nn' },
 ];
 ---
 
@@ -33,17 +37,22 @@ const ordered = [
             <defs>
                 <path id="version-arc" d="M 10,22 Q 130,10 250,22" fill="none"/>
             </defs>
-            {ordered.map(({ v, pos }) => (
-                <text class:list={['doc-version-text', { 'doc-version-text--active': pos === 'center' }]} data-pos={pos}>
-                    <textPath href="#version-arc" startOffset={pos === 'prev' ? '12%' : pos === 'center' ? '50%' : '88%'} text-anchor="middle">{v}</textPath>
-                </text>
-            ))}
+            {ordered.map(({ v, pos }) => {
+                const offset = pos === 'pp' ? '-26%' : pos === 'prev' ? '12%' : pos === 'center' ? '50%' : pos === 'next' ? '88%' : '126%';
+                const fill = pos === 'center' ? 'rgba(255,255,255,1)' : pos === 'prev' || pos === 'next' ? 'rgba(255,255,255,0.75)' : 'rgba(255,255,255,0)';
+                const size = pos === 'center' ? '18' : '16';
+                const weight = pos === 'center' ? '700' : '500';
+                return (
+                    <text class="doc-version-text" data-pos={pos} fill={fill} font-size={size} font-weight={weight}>
+                        <textPath href="#version-arc" startOffset={offset} text-anchor="middle">{v}</textPath>
+                    </text>
+                );
+            })}
         </svg>
         <div class="doc-version-links">
-            {ordered.map(({ v, i, pos }) => {
-                const verSeg = i === 0 ? '' : `v${i}/`;
-                const href = `${prefix}/projects/${projectSlug}/${verSeg}`;
-                return <a href={href} class="doc-version-link" data-pos={pos} data-idx={i}></a>;
+            {ordered.filter(({ pos }) => pos === 'prev' || pos === 'center' || pos === 'next').map(({ v, i, pos }) => {
+                const href = `${prefix}/projects/${projectSlug}/${v === 'Alpha' ? '' : v === 'Beta' ? 'beta/' : 'v1/'}`;
+                return <div class="doc-version-link" data-pos={pos} data-idx={i} data-href={href}></div>;
             })}
         </div>
     </div>
@@ -65,15 +74,31 @@ const ordered = [
     let current = parseInt(card.querySelector<HTMLElement>('[data-pos="center"]')?.dataset.idx || '0', 10);
     const accent = group.querySelector<HTMLElement>('.doc-version-accent');
 
-    function verSeg(i: number): string { return i === 0 ? '' : `v${i}/`; }
+    const DIR_MAP: Record<string, string> = { 'Alpha': '', 'Beta': 'beta/', 'v1.0': 'v1/' };
+    const OFFSETS = ['-26%', '12%', '50%', '88%', '126%'];
+
+    function styleText(el: SVGTextElement, pos: string): void {
+      const cfg = pos === 'center'
+        ? { fill: '1', size: '18', weight: '700' }
+        : pos === 'prev' || pos === 'next'
+        ? { fill: '0.75', size: '16', weight: '500' }
+        : { fill: '0', size: '14', weight: '500' };
+      el.setAttribute('fill', `rgba(255,255,255,${cfg.fill})`);
+      el.setAttribute('font-size', cfg.size);
+      el.setAttribute('font-weight', cfg.weight);
+    }
 
     function render(): void {
+      const ppIdx = ((current - 2) + total) % total;
       const prevIdx = ((current - 1) + total) % total;
       const nextIdx = (current + 1) % total;
+      const nnIdx = (current + 2) % total;
       const items = [
-        { v: versions[prevIdx], i: prevIdx, pos: 'prev', offset: '12%' },
-        { v: versions[current], i: current, pos: 'center', offset: '50%' },
-        { v: versions[nextIdx], i: nextIdx, pos: 'next', offset: '88%' },
+        { v: versions[ppIdx], i: ppIdx, pos: 'pp' },
+        { v: versions[prevIdx], i: prevIdx, pos: 'prev' },
+        { v: versions[current], i: current, pos: 'center' },
+        { v: versions[nextIdx], i: nextIdx, pos: 'next' },
+        { v: versions[nnIdx], i: nnIdx, pos: 'nn' },
       ];
 
       const svg = group!.querySelector<SVGSVGElement>('.doc-version-svg');
@@ -84,20 +109,92 @@ const ordered = [
             texts[idx].dataset.pos = item.pos;
             const tp = texts[idx].querySelector('textPath');
             if (tp) tp.textContent = item.v;
-            if (tp) tp.setAttribute('startOffset', item.offset);
-            texts[idx].classList.toggle('doc-version-text--active', item.pos === 'center');
+            if (tp) tp.setAttribute('startOffset', OFFSETS[idx]);
+            styleText(texts[idx], item.pos);
           }
         });
       }
 
       const links = group!.querySelectorAll<HTMLElement>('.doc-version-link');
-      items.forEach((item, idx) => {
+      const visibleItems = items.filter(it => it.pos === 'prev' || it.pos === 'center' || it.pos === 'next');
+      visibleItems.forEach((item, idx) => {
         if (links[idx]) {
           links[idx].dataset.pos = item.pos;
           links[idx].dataset.idx = String(item.i);
-          (links[idx] as HTMLAnchorElement).href = `${prefix}/projects/${project}/${verSeg(item.i)}`;
+          links[idx].dataset.href = `${prefix}/projects/${project}/${DIR_MAP[item.v] ?? ''}`;
         }
       });
+    }
+
+    function lerp(a: number, b: number, t: number): number { return a + (b - a) * t; }
+    let animFrame = 0;
+    let ridgeOffset = 0;
+
+    function animateSwitch(dir: number, onDone?: () => void): void {
+      // 取消上一个动画，先重置到正确状态
+      if (animFrame) { cancelAnimationFrame(animFrame); animFrame = 0; render(); }
+      const svg = group!.querySelector<SVGSVGElement>('.doc-version-svg');
+      if (!svg) { render(); return; }
+
+      const textEls = Array.from(svg.querySelectorAll<SVGTextElement>('.doc-version-text'));
+      const textPaths = textEls.map(t => t.querySelector('textPath'));
+      const fromOffsets = textPaths.map(tp => parseFloat(tp?.getAttribute('startOffset') || '50'));
+
+      // 移动距离 = 相邻 item 间距（50% - 12% = 38%）
+      const shift = dir * 38;
+
+      // 预设 pp/nn 样式
+      textEls.forEach((el) => {
+        const pos = el.dataset.pos;
+        if (pos === 'pp' || pos === 'nn') {
+          el.setAttribute('fill', 'rgba(255,255,255,0.75)');
+          el.setAttribute('font-size', '16');
+          el.setAttribute('font-weight', '500');
+        }
+      });
+
+      const ridgeShift = -dir * (group!.offsetWidth * 0.38);
+      const ridgeFrom = ridgeOffset;
+      const ridgeTo = ridgeOffset + ridgeShift;
+      const duration = 350;
+      const start = performance.now();
+
+      function tick(now: number): void {
+        const t = Math.min((now - start) / duration, 1);
+        const ease = t < 0.5 ? 2 * t * t : 1 - Math.pow(-2 * t + 2, 2) / 2;
+
+        textPaths.forEach((tp, i) => {
+          if (!tp) return;
+          const from = fromOffsets[i];
+          const to = from - shift;
+          const pos = from + (to - from) * ease;
+          tp.setAttribute('startOffset', `${pos}%`);
+
+          const dist = Math.abs(pos - 50) / 50;
+          const blend = Math.max(0, Math.min(1, 1 - dist));
+          const opacity = lerp(0.75, 1, blend);
+          const fontSize = lerp(14, 18, blend);
+          const weight = Math.round(lerp(500, 700, blend));
+          textEls[i].setAttribute('fill', `rgba(255,255,255,${opacity.toFixed(2)})`);
+          textEls[i].setAttribute('font-size', `${fontSize.toFixed(0)}`);
+          textEls[i].setAttribute('font-weight', `${weight}`);
+        });
+
+        if (accent) {
+          accent.style.setProperty('--ridge-x', `${ridgeFrom + (ridgeTo - ridgeFrom) * ease}px`);
+        }
+
+        if (t < 1) {
+          animFrame = requestAnimationFrame(tick);
+        } else {
+          animFrame = 0;
+          ridgeOffset = ridgeTo;
+          if (accent) accent.style.setProperty('--ridge-x', `${ridgeOffset}px`);
+          render();
+          if (onDone) onDone();
+        }
+      }
+      animFrame = requestAnimationFrame(tick);
     }
 
     group!.addEventListener('click', (e: MouseEvent) => {
@@ -105,9 +202,13 @@ const ordered = [
       if (!target) return;
       const pos = target.dataset.pos;
       if (pos === 'prev' || pos === 'next') {
-        e.preventDefault();
-        current = parseInt(target.dataset.idx || '0', 10);
-        render();
+        const dir = pos === 'next' ? 1 : -1;
+        const href = target.dataset.href;
+        current = ((current + dir) + total) % total;
+        animateSwitch(dir, () => { if (href) window.location.href = href; });
+      } else if (pos === 'center') {
+        const href = target.dataset.href;
+        if (href) window.location.href = href;
       }
     });
 
@@ -116,7 +217,7 @@ const ordered = [
       e.preventDefault();
       const dir = (Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX) > 0 ? 1 : -1;
       current = ((current + dir) + total) % total;
-      render();
+      animateSwitch(dir);
     }, { passive: false });
 
     let touchStartX = 0;
@@ -126,8 +227,9 @@ const ordered = [
     group!.addEventListener('touchend', (e: TouchEvent) => {
       const dx = e.changedTouches[0].pageX - touchStartX;
       if (Math.abs(dx) > 30) {
-        current = ((current + (dx < 0 ? 1 : -1)) + total) % total;
-        render();
+        const dir = dx < 0 ? 1 : -1;
+        current = ((current + dir) + total) % total;
+        animateSwitch(dir);
       }
     }, { passive: true });
   }

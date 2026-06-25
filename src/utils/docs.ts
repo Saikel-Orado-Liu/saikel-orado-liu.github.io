@@ -336,6 +336,30 @@ export async function getProjectPaths(_locale: string) {
     if (seen.has(slug)) continue;
     seen.add(slug);
     paths.push({ params: { slug } });
+
+    // 为最新版生成 alpha/ 别名路径（用于重定向）
+    if (entry.data.currentVersion) {
+      const verDir = entry.data.currentVersion.toLowerCase();
+      if (verDir === 'alpha' && !slug.includes('/')) {
+        const alphaSlug = slug + '/alpha';
+        if (!seen.has(alphaSlug)) {
+          seen.add(alphaSlug);
+          paths.push({ params: { slug: alphaSlug } });
+        }
+        // 也处理 alpha/ 下的文档路径
+        const docPrefix = slug + '/alpha/';
+        for (const docEntry of allEntries) {
+          const docSlug = toUrlSlug(docEntry.id);
+          if (docSlug.startsWith(slug + '/') && !docSlug.includes('/v')) {
+            const alphaDocSlug = slug + '/alpha/' + docSlug.split('/').slice(1).join('/');
+            if (!seen.has(alphaDocSlug)) {
+              seen.add(alphaDocSlug);
+              paths.push({ params: { slug: alphaDocSlug } });
+            }
+          }
+        }
+      }
+    }
   }
 
   return paths;

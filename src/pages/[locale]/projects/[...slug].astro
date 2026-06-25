@@ -1,5 +1,5 @@
 ---
-import { getProjectPaths } from '@/utils/docs';
+import { getProjectPaths, getProjectVersions } from '@/utils/docs';
 import ProjectRouter from '@/components/pages/ProjectRouter.astro';
 import type { Locale } from '@/i18n';
 
@@ -17,5 +17,23 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const locale = Astro.currentLocale! as Locale;
+const parts = slug!.split('/');
+const projectSlug = parts[0];
+
+// 检测是否为最新版本路径，生成重定向
+const VERSION_RE = /^(v\d+|alpha|beta)$/i;
+if (parts.length >= 2 && VERSION_RE.test(parts[1])) {
+  const verDir = parts[1].toLowerCase();
+  const versionInfo = await getProjectVersions(projectSlug);
+  const currentVersion = versionInfo?.currentVersion?.toLowerCase();
+  const latestDir = currentVersion === 'alpha' ? 'alpha' : currentVersion === 'beta' ? 'beta' : currentVersion ? `v${currentVersion.replace(/\./, '')}` : '';
+
+  if (verDir === latestDir) {
+    const rest = parts.slice(2).join('/');
+    const prefix = `/${locale}`;
+    const target = rest ? `${prefix}/projects/${projectSlug}/${rest}/` : `${prefix}/projects/${projectSlug}/`;
+    return Astro.redirect(target, 301);
+  }
+}
 ---
 <ProjectRouter slug={slug!} locale={locale} />

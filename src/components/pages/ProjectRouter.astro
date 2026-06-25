@@ -6,14 +6,9 @@ import ProjectDoc from './ProjectDoc.astro';
 interface Props { slug: string; locale: Locale; }
 const { slug, locale } = Astro.props;
 
-// slug 格式：
-//   'texturge'                              → 项目概览（最新版）
-//   'texturge/v1.0'                         → 项目概览（v1.0）
-//   'texturge/getting-started/overview'     → 文档（最新版）
-//   'texturge/v1.0/getting-started/overview'→ 文档（v1.0）
-
 const parts = slug.split('/');
-const hasVersion = parts.length >= 2 && /^v[^/]+$/.test(parts[1]);
+const VERSION_RE = /^(v\d+|alpha|beta)$/i;
+const hasVersion = parts.length >= 2 && VERSION_RE.test(parts[1]);
 
 const projectSlug = parts[0];
 const version = hasVersion ? parts[1] : undefined;

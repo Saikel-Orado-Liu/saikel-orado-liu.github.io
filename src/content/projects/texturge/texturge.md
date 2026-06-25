@@ -5,9 +5,6 @@ excerpt: Texturge Pro — Unreal Engine 5 高性能模块化字形处理与文�
 featured: true
 versions:
   - "Alpha"
-  - "Beta"
-  - "v1.0"
-  - "v2.0"
 currentVersion: "Alpha"
 ---
 
