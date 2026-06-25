@@ -9,6 +9,7 @@ export function initTocSlider(): void {
 
   groups.forEach(group => {
     if (group.classList.contains('has-toc-slider')) return;
+    if (group.classList.contains('doc-version-slider')) return;
 
     const links = group.querySelectorAll('.doc-toc-link') as NodeListOf<HTMLAnchorElement>;
     if (links.length < 1) return;

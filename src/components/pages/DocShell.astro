@@ -3,11 +3,10 @@ import BaseLayout from "../../layouts/BaseLayout.astro";
 import { useTranslations, type Locale } from "../../i18n";
 import type { DocRegistry } from "../../utils/docs";
 import "../../styles/doc-shared.css";
-
-interface PagerItem {
-  id: string;
-  title: string;
-}
+import VersionSlider from "../doc/VersionSlider.astro";
+import TocCard from "../doc/TocCard.astro";
+import DocTree from "../doc/DocTree.astro";
+import DocPager from "../doc/DocPager.astro";
 
 interface Props {
   locale: Locale;
@@ -18,7 +17,7 @@ interface Props {
   tocGroups: { h2: any; h3s: any[] }[];
   activeDocId?: string;
   activeSidebarLink?: string;
-  pager?: { prev: PagerItem | null; next: PagerItem | null };
+  pager?: { prev: { id: string; title: string } | null; next: { id: string; title: string } | null };
   emptyPrevText?: string;
   emptyNextText?: string;
   versions?: string[];
@@ -44,165 +43,25 @@ const {
 } = Astro.props;
 const t = useTranslations(locale);
 const prefix = locale === "zh-cn" ? "" : `/${locale}`;
-const versionPrefix = activeVersion ? `/${activeVersion}` : '';
 const showWheel = versions && versions.length > 1;
 ---
 
 <BaseLayout title={pageTitle} description={description} locale={locale}>
     <div class="doc-layout">
-        <!-- 左侧栏：文档树 -->
         <aside class="doc-sidebar doc-sidebar-left">
-            <div class="doc-sidebar-inner card">
-                <nav class="doc-tree-nav">
-                    <a
-                        href={`${prefix}/projects/${projectSlug}${versionPrefix}/`}
-                        class:list={[
-                            "doc-tree-link doc-tree-link--index",
-                            { "doc-tree-link--active": activeSidebarLink === "index" },
-                        ]}
-                    >
-                        <i class="bx bx-book-open"></i>
-                        {t("projects-docs-overview")}
-                    </a>
-
-                    {registry.chapters.map((ch) => (
-                        <div class="doc-tree-chapter">
-                            <p class="doc-tree-chapter-label">
-                                {t(ch.titleKey) !== ch.titleKey
-                                    ? t(ch.titleKey)
-                                    : ch.slug.replace(/-/g, " ")}
-                            </p>
-                            {ch.docs.map((doc) => {
-                                const docUrl = `${prefix}/projects/${doc.id}/`;
-                                const isActive = activeDocId
-                                    ? doc.id === activeDocId
-                                    : activeSidebarLink === doc.id;
-                                return (
-                                    <a
-                                        href={docUrl}
-                                        class:list={[
-                                            "doc-tree-link",
-                                            { "doc-tree-link--active": isActive },
-                                        ]}
-                                    >
-                                        {doc.title}
-                                    </a>
-                                );
-                            })}
-                        </div>
-                    ))}
-                </nav>
-            </div>
+            <DocTree locale={locale} projectSlug={projectSlug} activeVersion={activeVersion} registry={registry} activeDocId={activeDocId} activeSidebarLink={activeSidebarLink} />
         </aside>
 
-        <!-- 主内容区 -->
         <main class="doc-main">
             <slot name="before-content" />
             <div class="article-content"><slot /></div>
-
-            {pager && (
-                <nav class="doc-pager">
-                    {pager.prev ? (
-                        <a
-                            href={`${prefix}/projects/${pager.prev.id}/`}
-                            rel="prev"
-                            class="doc-pager-card"
-                        >
-                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="doc-pager-arrow">
-                                <defs>
-                                    <filter id="pe">
-                                        <feDropShadow dx="-2" dy="-2" stdDeviation="0" flood-color="rgba(0,0,0,0.33)" />
-                                        <feDropShadow dx="1.5" dy="1.5" stdDeviation="0" flood-color="rgba(255,255,255,0.22)" />
-                                    </filter>
-                                </defs>
-                                <g filter="url(#pe)">
-                                    <path d="M17 11H9.41l3.3-3.29a1.004 1.004 0 1 0-1.42-1.42l-5 5a1 1 0 0 0-.21.33 1 1 0 0 0 0 .76 1 1 0 0 0 .21.33l5 5a1.002 1.002 0 0 0 1.639-.325 1 1 0 0 0-.219-1.095L9.41 13H17a1 1 0 0 0 0-2Z" />
-                                </g>
-                            </svg>
-                            <span>
-                                <span class="doc-pager-label">{t("blog-back")}</span>
-                                <span class="doc-pager-title">{pager.prev.title}</span>
-                            </span>
-                        </a>
-                    ) : (
-                        <span class="doc-pager-card doc-pager-card--empty"><span class="doc-pager-empty-text">{emptyPrevText}</span></span>
-                    )}
-                    {pager.next ? (
-                        <a
-                            href={`${prefix}/projects/${pager.next.id}/`}
-                            rel="next"
-                            class="doc-pager-card next"
-                        >
-                            <span>
-                                <span class="doc-pager-label">{t("blog-read-more")}</span>
-                                <span class="doc-pager-title">{pager.next.title}</span>
-                            </span>
-                            <svg aria-hidden="true" width="16" height="16" viewBox="0 0 24 24" fill="currentColor" class="doc-pager-arrow">
-                                <defs>
-                                    <filter id="pe2">
-                                        <feDropShadow dx="-2" dy="-2" stdDeviation="0" flood-color="rgba(0,0,0,0.33)" />
-                                        <feDropShadow dx="1.5" dy="1.5" stdDeviation="0" flood-color="rgba(255,255,255,0.22)" />
-                                    </filter>
-                                </defs>
-                                <g filter="url(#pe2)">
-                                    <path d="M17.92 11.62a1.001 1.001 0 0 0-.21-.33l-5-5a1.003 1.003 0 1 0-1.42 1.42l3.3 3.29H7a1 1 0 0 0 0 2h7.59l-3.3 3.29a1.002 1.002 0 0 0 .325 1.639 1 1 0 0 0 1.095-.219l5-5a1 1 0 0 0 .21-.33 1 1 0 0 0 0-.76Z" />
-                                </g>
-                            </svg>
-                        </a>
-                    ) : (
-                        <span class="doc-pager-card doc-pager-card--empty"><span class="doc-pager-empty-text">{emptyNextText}</span></span>
-                    )}
-                </nav>
-            )}
+            {pager && <DocPager locale={locale} prefix={prefix} pager={pager} emptyPrevText={emptyPrevText} emptyNextText={emptyNextText} />}
         </main>
 
-        {/* 右侧栏：版本蜗轮 + 目录树 */}
         {(showWheel || tocGroups.length > 0) && (
             <aside class="doc-sidebar doc-sidebar-right">
-                {/* 版本切换卡片 */}
-                {showWheel && (() => {
-                    const activeVer = activeVersion || currentVersion;
-                    return (
-                        <div class="doc-version-card card">
-                            <p class="doc-version-card-label">{t('docs-version')}</p>
-                            <div class="doc-version-card-list">
-                                {versions!.map((v, i) => {
-                                    const isActive = v === activeVer;
-                                    const isLatest = v === currentVersion;
-                                    // 最新版无前缀，旧版用 v{index} 目录
-                                    const verSeg = isLatest ? '' : `v${i}/`;
-                                    const href = `${prefix}/projects/${projectSlug}/${verSeg}`;
-                                    return (
-                                        <a
-                                            href={href}
-                                            class:list={['doc-version-item', { 'doc-version-item--active': isActive }]}
-                                        >
-                                            <span>{v}</span>
-                                            {isLatest && <span class="doc-version-latest">{t('docs-latest')}</span>}
-                                        </a>
-                                    );
-                                })}
-                            </div>
-                        </div>
-                    );
-                })()}
-
-                {/* TOC 卡片 */}
-                {tocGroups.length > 0 && (
-                    <div class="doc-sidebar-inner card">
-                        <p class="doc-toc-label">{t("projects-on-this-page")}</p>
-                        <nav class="doc-toc-nav">
-                            {tocGroups.map((group) => (
-                                <div class="doc-toc-group">
-                                    <a href={`#${group.h2.slug}`} class="doc-toc-link doc-toc-depth-2"><span>{group.h2.text}</span></a>
-                                    {group.h3s.map((h3: any) => (
-                                        <a href={`#${h3.slug}`} class="doc-toc-link doc-toc-depth-3"><span>{h3.text}</span></a>
-                                    ))}
-                                </div>
-                            ))}
-                        </nav>
-                    </div>
-                )}
+                {showWheel && <VersionSlider locale={locale} versions={versions!} currentVersion={currentVersion!} activeVersion={activeVersion} projectSlug={projectSlug} prefix={prefix} />}
+                <TocCard locale={locale} tocGroups={tocGroups} />
             </aside>
         )}
     </div>

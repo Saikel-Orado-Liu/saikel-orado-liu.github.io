@@ -1,0 +1,116 @@
+---
+import { useTranslations, type Locale } from "../../i18n";
+
+interface Props {
+    locale: Locale;
+    versions: string[];
+    currentVersion: string;
+    activeVersion?: string;
+    projectSlug: string;
+    prefix: string;
+}
+
+const { locale, versions, currentVersion, activeVersion, projectSlug, prefix } = Astro.props;
+const t = useTranslations(locale);
+
+const activeVer = activeVersion || currentVersion || versions[0];
+const activeIdx = versions.indexOf(activeVer);
+const total = versions.length;
+const prevIdx = ((activeIdx - 1) + total) % total;
+const nextIdx = (activeIdx + 1) % total;
+const ordered = [
+    { v: versions[prevIdx], i: prevIdx, pos: 'prev' as const },
+    { v: versions[activeIdx], i: activeIdx, pos: 'center' as const },
+    { v: versions[nextIdx], i: nextIdx, pos: 'next' as const },
+];
+---
+
+<div class="doc-version-card card" data-versions={JSON.stringify(versions)} data-project={projectSlug} data-prefix={prefix}>
+    <p class="doc-version-card-label">{t('docs-version')}</p>
+    <div class="doc-version-slider">
+        <div class="doc-version-accent"></div>
+        {ordered.map(({ v, i, pos }) => {
+            const verSeg = i === 0 ? '' : `v${i}/`;
+            const href = `${prefix}/projects/${projectSlug}/${verSeg}`;
+            return (
+                <a href={href} class:list={[
+                    'doc-toc-link',
+                    { 'doc-version-active': pos === 'center' },
+                ]} data-pos={pos} data-idx={i}>
+                    <span>{v}</span>
+                </a>
+            );
+        })}
+    </div>
+</div>
+
+<script>
+  function initVersionSlider(): void {
+    const card = document.querySelector<HTMLElement>('.doc-version-card[data-versions]');
+    if (!card) return;
+    const group = card.querySelector<HTMLElement>('.doc-version-slider');
+    if (!group) return;
+
+    const versions: string[] = JSON.parse(card.dataset.versions || '[]');
+    const project = card.dataset.project || '';
+    const prefix = card.dataset.prefix || '';
+    const total = versions.length;
+    if (total <= 1) return;
+
+    let current = parseInt(group.querySelector<HTMLElement>('[data-pos="center"]')?.dataset.idx || '0', 10);
+    const accent = group.querySelector<HTMLElement>('.doc-version-accent');
+
+    function render(): void {
+      const prevIdx = ((current - 1) + total) % total;
+      const nextIdx = (current + 1) % total;
+      const items = [
+        { v: versions[prevIdx], i: prevIdx, pos: 'prev' },
+        { v: versions[current], i: current, pos: 'center' },
+        { v: versions[nextIdx], i: nextIdx, pos: 'next' },
+      ];
+      const verSeg = (i: number) => i === 0 ? '' : `v${i}/`;
+      group!.innerHTML = items.map(({ v, i, pos }) =>
+        `<a href="${prefix}/projects/${project}/${verSeg(i)}" class="doc-toc-link${pos === 'center' ? ' doc-version-active' : ''}" data-pos="${pos}" data-idx="${i}"><span>${v}</span></a>`
+      ).join('');
+      group!.appendChild(accent!);
+    }
+
+    group!.addEventListener('click', (e: MouseEvent) => {
+      const target = (e.target as HTMLElement).closest<HTMLElement>('[data-pos]');
+      if (!target) return;
+      const pos = target.dataset.pos;
+      if (pos === 'prev' || pos === 'next') {
+        e.preventDefault();
+        current = parseInt(target.dataset.idx || '0', 10);
+        render();
+      }
+    });
+
+    group!.addEventListener('wheel', (e: WheelEvent) => {
+      if (Math.abs(e.deltaY) < 1 && Math.abs(e.deltaX) < 1) return;
+      e.preventDefault();
+      const dir = (Math.abs(e.deltaY) > Math.abs(e.deltaX) ? e.deltaY : e.deltaX) > 0 ? 1 : -1;
+      current = ((current + dir) + total) % total;
+      render();
+    }, { passive: false });
+
+    let touchStartX = 0;
+    group!.addEventListener('touchstart', (e: TouchEvent) => {
+      touchStartX = e.touches[0].pageX;
+    }, { passive: true });
+    group!.addEventListener('touchend', (e: TouchEvent) => {
+      const dx = e.changedTouches[0].pageX - touchStartX;
+      if (Math.abs(dx) > 30) {
+        current = ((current + (dx < 0 ? 1 : -1)) + total) % total;
+        render();
+      }
+    }, { passive: true });
+  }
+
+  document.addEventListener('astro:page-load', initVersionSlider);
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVersionSlider);
+  } else {
+    initVersionSlider();
+  }
+</script>

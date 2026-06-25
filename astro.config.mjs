@@ -1,6 +1,7 @@
 import { defineConfig } from 'astro/config';
 import mdx from '@astrojs/mdx';
 import sitemap from '@astrojs/sitemap';
+import { unified } from '@astrojs/markdown-remark';
 import { remarkAlert } from 'remark-github-blockquote-alert';
 import rehypeExternalLinks from './src/scripts/rehype-external-links.mjs';
 import customLight from './src/scripts/shiki-theme.mjs';
@@ -18,8 +19,10 @@ export default defineConfig({
   },
 
   markdown: {
-    remarkPlugins: [[remarkAlert, { tagName: "blockquote" }]],
-    rehypePlugins: [rehypeExternalLinks],
+    processor: unified({
+      remarkPlugins: [[remarkAlert, { tagName: "blockquote" }]],
+      rehypePlugins: [rehypeExternalLinks],
+    }),
     shikiConfig: {
       themes: { dark: 'github-dark', light: customLight },
       defaultColor: 'dark',

@@ -38,6 +38,151 @@
     padding: var(--space-md);
 }
 
+/* ===== 版本切换控件 ===== */
+.doc-version-card.card {
+    max-height: calc(100vh - var(--header-height) - var(--space-2xl));
+    padding: 16px !important;
+    margin-bottom: var(--space-md);
+}
+.doc-version-card-label {
+    font-size: var(--font-size-lg);
+    font-weight: var(--font-weight-bold);
+    color: var(--md-sys-color-on-surface-variant);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    margin-bottom: var(--space-sm);
+}
+/* 凹槽容器 */
+.doc-version-slider {
+    position: relative;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 0;
+    isolation: isolate;
+    background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+    border-radius: calc(var(--shape-md) + 3px);
+    box-shadow:
+        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+        inset 4px 6px 0 0 rgba(0, 0, 0, 0.45),
+        inset -2px -3px 8px color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+    padding: var(--space-xs);
+}
+/* 边缘渐隐覆盖层 — 在最顶层，覆盖 accent 所有内容（含阴影） */
+.doc-version-slider::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%) 0%, transparent 6%, transparent 94%, color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%) 100%);
+    pointer-events: none;
+    z-index: 10;
+}
+.doc-version-slider::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='dvs' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dvs)' opacity='0.50'/%3E%3C/svg%3E");
+    background-size: 100px 100px;
+    filter: contrast(5.0);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 1;
+}
+:root.light-style .doc-version-slider {
+    background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-right: 1px solid rgba(255, 255, 255, 1.00);
+    border-bottom: 1px solid rgba(255, 255, 255, 1.00);
+    box-shadow:
+        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+        inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+        inset -4px -6px 8px rgba(255, 255, 255, 0.80);
+}
+:root.light-style .doc-version-slider::after {
+    background:
+      linear-gradient(90deg, color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%) 0%, transparent 6%, transparent 94%, color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%) 100%);
+}
+:root.light-style .doc-version-slider::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='dvsl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dvsl)'/%3E%3C/svg%3E");
+    filter: none;
+    mix-blend-mode: normal;
+    opacity: 1;
+}
+/* accent 滑块 — 占满凹槽，比凹槽小一圈，参考 nav-slider */
+.doc-version-accent {
+    position: absolute;
+    inset: 3px;
+    transform: translateY(-3px);
+    border-radius: var(--shape-md);
+    z-index: 2;
+    pointer-events: none;
+    isolation: isolate;
+    overflow: hidden;
+    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
+    box-shadow:
+        0 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
+        0 3px 4px 0 rgba(0, 0, 0, 0.67),
+        inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
+}
+.doc-version-accent::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='dva' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dva)'/%3E%3C/svg%3E");
+    background-size: 70px 70px;
+    opacity: 1;
+    mix-blend-mode: normal;
+    pointer-events: none;
+    z-index: 1;
+}
+.doc-version-accent::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 20%, transparent) 0%, transparent 45%);
+    pointer-events: none;
+    z-index: 2;
+}
+:root.light-style .doc-version-accent {
+    background: var(--clr-primary-accent);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
+    box-shadow:
+        0 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
+        0 3px 4px 0 rgba(0, 0, 0, 0.33),
+        inset 0 4px 2px 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #000000 30%);
+}
+:root.light-style .doc-version-accent::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='dval' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dval)'/%3E%3C/svg%3E");
+}
+:root.light-style .doc-version-accent::after {
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.25) 0%, transparent 45%);
+}
+
+/* 版本选项链接 */
+.doc-version-slider .doc-toc-link {
+    flex: 1;
+    text-align: center;
+    position: relative;
+    z-index: 3;
+}
+.doc-version-active {
+    color: #FFFFFF !important;
+    font-weight: var(--font-weight-bold) !important;
+}
+
 /* 侧边栏标签 */
 .doc-sidebar-label {
     font-size: var(--font-size-xs);
@@ -73,54 +218,6 @@
     color: var(--md-sys-color-primary);
     border-left-color: var(--md-sys-color-primary);
     font-weight: var(--font-weight-medium);
-}
-
-/* ===== 版本切换卡片 ===== */
-.doc-version-card {
-    margin-bottom: var(--space-md);
-}
-
-.doc-version-card-label {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-bold);
-    color: var(--md-sys-color-on-surface-variant);
-    text-transform: uppercase;
-    letter-spacing: 0.06em;
-    margin-bottom: var(--space-sm);
-}
-
-.doc-version-card-list {
-    display: flex;
-    flex-direction: column;
-    gap: 2px;
-}
-
-.doc-version-item {
-    display: flex;
-    align-items: center;
-    justify-content: space-between;
-    padding: var(--space-xs) var(--space-sm);
-    border-radius: var(--shape-sm);
-    text-decoration: none;
-    color: var(--clr-primary-text);
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
-    transition: background 0.15s ease, color 0.15s ease;
-}
-.doc-version-item:hover {
-    background: var(--clr-secondary-bg);
-    color: var(--clr-primary-accent);
-}
-.doc-version-item--active {
-    color: var(--clr-primary-accent);
-    font-weight: var(--font-weight-bold);
-    background: color-mix(in srgb, var(--clr-primary-accent) 8%, transparent);
-}
-
-.doc-version-latest {
-    font-size: var(--font-size-xs);
-    font-weight: var(--font-weight-regular);
-    color: var(--clr-secondary-text);
 }
 
 /* ===== 文档树导航 ===== */

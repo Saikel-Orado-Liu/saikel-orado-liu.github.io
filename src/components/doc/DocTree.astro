@@ -1,0 +1,60 @@
+---
+import { useTranslations, type Locale } from "../../i18n";
+import type { DocRegistry } from "../../utils/docs";
+
+interface Props {
+    locale: Locale;
+    projectSlug: string;
+    activeVersion?: string;
+    registry: DocRegistry;
+    activeDocId?: string;
+    activeSidebarLink?: string;
+}
+
+const { locale, projectSlug, activeVersion, registry, activeDocId, activeSidebarLink } = Astro.props;
+const t = useTranslations(locale);
+const prefix = locale === "zh-cn" ? "" : `/${locale}`;
+const versionPrefix = activeVersion ? `/${activeVersion}` : '';
+---
+
+<div class="doc-sidebar-inner card">
+    <nav class="doc-tree-nav">
+        <a
+            href={`${prefix}/projects/${projectSlug}${versionPrefix}/`}
+            class:list={[
+                "doc-tree-link doc-tree-link--index",
+                { "doc-tree-link--active": activeSidebarLink === "index" },
+            ]}
+        >
+            <i class="bx bx-book-open"></i>
+            {t("projects-docs-overview")}
+        </a>
+
+        {registry.chapters.map((ch) => (
+            <div class="doc-tree-chapter">
+                <p class="doc-tree-chapter-label">
+                    {t(ch.titleKey) !== ch.titleKey
+                        ? t(ch.titleKey)
+                        : ch.slug.replace(/-/g, " ")}
+                </p>
+                {ch.docs.map((doc) => {
+                    const docUrl = `${prefix}/projects/${doc.id}/`;
+                    const isActive = activeDocId
+                        ? doc.id === activeDocId
+                        : activeSidebarLink === doc.id;
+                    return (
+                        <a
+                            href={docUrl}
+                            class:list={[
+                                "doc-tree-link",
+                                { "doc-tree-link--active": isActive },
+                            ]}
+                        >
+                            {doc.title}
+                        </a>
+                    );
+                })}
+            </div>
+        ))}
+    </nav>
+</div>
