@@ -53,7 +53,7 @@
     margin-bottom: var(--space-sm);
 }
 /* 凹槽容器 */
-.doc-version-slider {
+.doc-version-wheel {
     position: relative;
     display: flex;
     align-items: center;
@@ -73,7 +73,7 @@
     padding: var(--space-xs);
 }
 /* 边缘渐隐覆盖层 — 在最顶层，覆盖 accent 所有内容（含阴影） */
-.doc-version-slider::after {
+.doc-version-wheel::after {
     content: '';
     position: absolute;
     inset: 0;
@@ -83,7 +83,7 @@
     pointer-events: none;
     z-index: 10;
 }
-.doc-version-slider::before {
+.doc-version-wheel::before {
     content: '';
     position: absolute;
     inset: 0;
@@ -95,7 +95,7 @@
     pointer-events: none;
     z-index: 1;
 }
-:root.light-style .doc-version-slider {
+:root.light-style .doc-version-wheel {
     background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
@@ -106,11 +106,11 @@
         inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
         inset -4px -6px 8px rgba(255, 255, 255, 0.80);
 }
-:root.light-style .doc-version-slider::after {
+:root.light-style .doc-version-wheel::after {
     background:
       linear-gradient(90deg, color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%) 0%, transparent 6%, transparent 94%, color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%) 100%);
 }
-:root.light-style .doc-version-slider::before {
+:root.light-style .doc-version-wheel::before {
     background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='dvsl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dvsl)'/%3E%3C/svg%3E");
     filter: none;
     mix-blend-mode: normal;

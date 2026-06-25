@@ -31,7 +31,7 @@ const ordered = [
 
 <div class="doc-version-card card" data-versions={JSON.stringify(versions)} data-project={projectSlug} data-prefix={prefix}>
     <p class="doc-version-card-label">{t('docs-version')}</p>
-    <div class="doc-version-slider">
+    <div class="doc-version-wheel">
         <div class="doc-version-accent"></div>
         <svg class="doc-version-svg" viewBox="0 0 260 36" preserveAspectRatio="xMidYMid meet" aria-hidden="true">
             <defs>
@@ -59,10 +59,10 @@ const ordered = [
 </div>
 
 <script>
-  function initVersionSlider(): void {
+  function initVersionWheel(): void {
     const card = document.querySelector<HTMLElement>('.doc-version-card[data-versions]');
     if (!card) return;
-    const group = card.querySelector<HTMLElement>('.doc-version-slider');
+    const group = card.querySelector<HTMLElement>('.doc-version-wheel');
     if (!group) return;
 
     const versions: string[] = JSON.parse(card.dataset.versions || '[]');
@@ -234,10 +234,10 @@ const ordered = [
     }, { passive: true });
   }
 
-  document.addEventListener('astro:page-load', initVersionSlider);
+  document.addEventListener('astro:page-load', initVersionWheel);
   if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initVersionSlider);
+    document.addEventListener('DOMContentLoaded', initVersionWheel);
   } else {
-    initVersionSlider();
+    initVersionWheel();
   }
 </script>
