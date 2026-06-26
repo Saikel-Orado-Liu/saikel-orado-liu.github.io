@@ -34,9 +34,10 @@ function applyTheme(theme: Theme): void {
 }
 
 function updateIcon(theme: Theme): void {
-  const icon = document.querySelector('.theme-toggle i') as HTMLElement | null;
-  if (!icon) return;
-  icon.className = theme === 'dark' ? 'bx bx-moon' : 'bx bx-sun';
+  const moon = document.querySelector('.theme-icon-moon') as SVGPathElement | null;
+  const sun = document.querySelector('.theme-icon-sun') as SVGPathElement | null;
+  if (moon) moon.style.display = theme === 'dark' ? 'block' : 'none';
+  if (sun) sun.style.display = theme === 'light' ? 'block' : 'none';
 }
 
 function initTheme(): void {
