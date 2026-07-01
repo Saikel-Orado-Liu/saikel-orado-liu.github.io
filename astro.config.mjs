@@ -55,6 +55,12 @@ export default defineConfig({
           'de-de': 'de-DE',
         },
       },
+      // 移除未使用的 XML 命名空间，精简 sitemap 体积
+      namespaces: {
+        news: false,
+        image: false,
+        video: false,
+      },
       filter: (page) => {
         const path = page || '';
         // 排除旧版本文档（alpha/beta），避免重复内容
