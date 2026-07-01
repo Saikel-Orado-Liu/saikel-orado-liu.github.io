@@ -1,5 +1,3 @@
 User-agent: *
 Allow: /
-
-
 Sitemap: https://saikel-orado-liu.github.io/sitemap-index.xml
