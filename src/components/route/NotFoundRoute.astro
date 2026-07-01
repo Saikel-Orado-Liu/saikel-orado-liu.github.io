@@ -9,7 +9,7 @@ const { locale } = Astro.props;
 const t = useTranslations(locale as Locale);
 ---
 
-<BaseLayout title={`404 — ${t('page-404-title')} — ${t('site-title')}`} description={t('page-404-description-meta') || t('page-404-description')} ogImage="/og-default.png" locale={locale as Locale}>
+<BaseLayout title={`404 — ${t('page-404-title')} — ${t('site-title')}`} description={t('page-404-description')} seoDescription={t('page-404-description-meta')} ogImage="/og-default.png" locale={locale as Locale}>
   <div class="container-narrow">
     <section class="not-found flex items-center justify-center text-center min-h-[60vh] py-24 px-6">
       <div class="not-found-card card flex flex-col items-center gap-4 max-w-[480px]">
