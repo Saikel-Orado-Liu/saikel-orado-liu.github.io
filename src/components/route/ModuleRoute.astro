@@ -11,13 +11,15 @@ export interface Props {
   icon: string;
   titleKey: string;
   descKey: string;
+  seoDescKey: string;
+  imageKey: string;
 }
 
-const { locale, module, icon, titleKey, descKey } = Astro.props;
+const { locale, module, icon, titleKey, descKey, seoDescKey, imageKey } = Astro.props;
 const t = useTranslations(locale as Locale);
 const plugins = module === 'ue5' ? await getLocalizedPlugins(locale) : undefined;
 ---
 
-<BaseLayout title={t(titleKey)} description={t(descKey)} locale={locale as Locale}>
+<BaseLayout title={`${t(titleKey)} — ${t('site-title')}`} description={t(descKey)} seoDescription={t(seoDescKey)} ogImage={`/${imageKey}.png`} locale={locale as Locale}>
   <ModulePage locale={locale as Locale} module={module} icon={icon} {...(plugins ? { plugins } : {})} />
 </BaseLayout>

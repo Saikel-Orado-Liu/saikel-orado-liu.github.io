@@ -24,6 +24,8 @@ const tocGroups = buildTocGroups(headings);
 const adj = getAdjacentDocs(registry.flatList, docId);
 const currentDoc = registry.flatList.find((d) => d.id === docId);
 const pageTitle = currentDoc?.title ?? docEntry.data.title;
+const pageDescription = docEntry.data.excerpt;
+const docDescription = pageDescription || `${pageTitle} — Texturge Pro 文档页面`;
 
 const pager = {
     prev: adj.prev ? { id: adj.prev.id, title: adj.prev.title } : null,
@@ -36,7 +38,11 @@ const versionInfo = await getProjectVersions(projectSlug);
 <DocShell
     locale={locale}
     projectSlug={projectSlug}
-    pageTitle={`${pageTitle} — ${projectSlug}`}
+    pageTitle={pageTitle}
+    pageSeoTitle={`${pageTitle} — Texturge Pro | ${t('site-title')}`}
+    description={pageDescription}
+    seoDescription={docDescription}
+    ogImage={`/og-${projectSlug}.png`}
     registry={registry}
     tocGroups={tocGroups}
     activeDocId={docId}

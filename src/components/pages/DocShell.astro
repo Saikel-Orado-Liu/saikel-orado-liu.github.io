@@ -12,7 +12,10 @@ interface Props {
   locale: Locale;
   projectSlug: string;
   pageTitle: string;
+  pageSeoTitle?: string;
   description?: string;
+  seoDescription?: string;
+  ogImage?: string;
   registry: DocRegistry;
   tocGroups: { h2: any; h3s: any[] }[];
   activeDocId?: string;
@@ -29,7 +32,10 @@ const {
   locale,
   projectSlug,
   pageTitle,
+  pageSeoTitle,
   description,
+  seoDescription,
+  ogImage,
   registry,
   tocGroups,
   activeDocId,
@@ -46,7 +52,7 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
 const showWheel = versions && versions.length > 1;
 ---
 
-<BaseLayout title={pageTitle} description={description} locale={locale}>
+<BaseLayout title={pageTitle} seoTitle={pageSeoTitle} description={description} seoDescription={seoDescription} ogImage={ogImage} locale={locale}>
     <div class="doc-layout">
         <aside class="doc-sidebar doc-sidebar-left">
             <DocTree locale={locale} projectSlug={projectSlug} activeVersion={activeVersion} registry={registry} activeDocId={activeDocId} activeSidebarLink={activeSidebarLink} />

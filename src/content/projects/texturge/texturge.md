@@ -1,5 +1,5 @@
 ---
-title: Texturge
+title: Texturge Pro — UE5 逐字文本动画引擎
 date: 2026-06-06
 excerpt: Texturge Pro — Unreal Engine 5 高性能模块化字形处理与文本动画引擎，为 UE5 补全专业逐字动画工作流。
 featured: true

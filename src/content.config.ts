@@ -42,6 +42,8 @@ const ue5Plugins = defineCollection({
     date: z.date(),
     locale: localeEnum,
     version: z.string().optional(),
+    excerpt: z.string().optional(),
+    image: z.string().optional(),
     tags: z.array(z.string()).optional(),
     draft: z.boolean().optional().default(false),
   }),

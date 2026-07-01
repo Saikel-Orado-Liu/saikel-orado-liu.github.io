@@ -17,7 +17,7 @@ const { post } = Astro.props;
 const { Content } = await render(post);
 ---
 
-<BlogLayout title={post.data.title} description={post.data.excerpt} locale={locale} date={post.data.date} tags={post.data.tags} categories={post.data.categories}>
+<BlogLayout title={post.data.title} seoTitle={`${post.data.title} — ${t('blog-title')} | ${t('site-title')}`} description={post.data.excerpt} seoDescription={post.data.excerpt} locale={locale} date={post.data.date} tags={post.data.tags} categories={post.data.categories} image={post.data.image}>
   <div class="mb-8">
     <a href={getRelativeLocaleUrl(locale, '/blog/')} class="back-link"><i class="bx bx-left-arrow-alt"></i> {t('blog-back')}</a>
   </div>

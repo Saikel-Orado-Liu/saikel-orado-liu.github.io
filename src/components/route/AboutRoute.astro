@@ -9,6 +9,6 @@ const { locale } = Astro.props;
 const t = useTranslations(locale as Locale);
 ---
 
-<BaseLayout title={t('about-title')} description={t('about-description')} locale={locale as Locale}>
+<BaseLayout title={`${t('about-title')} — ${t('site-title')}`} description={t('about-description')} seoDescription={t('about-seo-description')} ogImage="/og-about.png" locale={locale as Locale}>
   <AboutPage locale={locale as Locale} />
 </BaseLayout>

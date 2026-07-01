@@ -1,5 +1,5 @@
 ---
-title: Texturge
+title: Texturge Pro — Text Animation Engine for Unreal Engine 5
 date: 2026-06-06
 locale: en-us
 excerpt: Texturge Pro — A high-performance modular glyph processing and text animation engine for Unreal Engine 5, filling the professional per-character animation workflow gap in UE5.

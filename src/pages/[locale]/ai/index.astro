@@ -5,4 +5,4 @@ export function getStaticPaths() {
   return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(l => ({ params: { locale: l } }));
 }
 ---
-<ModuleRoute locale={locale} module="ai" icon="bx-brain" titleKey="ai-title" descKey="ai-description" />
+<ModuleRoute locale={locale} module="ai" icon="bx-brain" titleKey="ai-title" descKey="ai-description" seoDescKey="ai-seo-description" imageKey="og-ai" />

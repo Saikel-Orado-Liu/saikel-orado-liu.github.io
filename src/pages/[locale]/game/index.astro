@@ -5,4 +5,4 @@ export function getStaticPaths() {
   return ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'].map(l => ({ params: { locale: l } }));
 }
 ---
-<ModuleRoute locale={locale} module="game" icon="bx-joystick" titleKey="game-title" descKey="game-description" />
+<ModuleRoute locale={locale} module="game" icon="bx-joystick" titleKey="game-title" descKey="game-description" seoDescKey="game-seo-description" imageKey="og-game" />
