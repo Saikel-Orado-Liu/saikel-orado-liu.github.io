@@ -141,7 +141,7 @@ const canonical = canonicalURL || new URL(barePath, Astro.site).href;
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
       headline: pageSeoTitle,
-      description: resolvedDescription,
+      description: pageSeoDescription,
       image: ogImage,
       url: canonical,
       datePublished: articlePublishedTime,
@@ -152,7 +152,7 @@ const canonical = canonicalURL || new URL(barePath, Astro.site).href;
       '@type': 'WebSite',
       name: currentLocale === 'zh-cn' ? '游戏极客-Saikel' : 'GameGeek-Saikel',
       url: Astro.site?.href,
-      description: resolvedDescription,
+      description: pageSeoDescription,
       inLanguage: currentLocale,
     })} />
 
