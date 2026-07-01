@@ -55,6 +55,14 @@ export default defineConfig({
           'de-de': 'de-DE',
         },
       },
+      filter: (page) => {
+        const path = page || '';
+        // 排除旧版本文档（alpha/beta），避免重复内容
+        if (/\/alpha\//.test(path) || /\/beta\//.test(path)) return false;
+        // 排除标签页（thin content）
+        if (/\/blog\/tag\//.test(path)) return false;
+        return true;
+      },
     }),
   ],
 
