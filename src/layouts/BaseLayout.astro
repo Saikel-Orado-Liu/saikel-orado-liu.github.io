@@ -1,6 +1,6 @@
 ---
 import { getRelativeLocaleUrl } from 'astro:i18n';
-import { supportedLocales, toOgLocale, stripLocalePrefix, getLocaleDir, locales } from '../i18n';
+import { supportedLocales, toOgLocale, toHreflangLocale, stripLocalePrefix, getLocaleDir, locales } from '../i18n';
 import type { Locale } from '../i18n';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/layout/Header.astro';
@@ -56,7 +56,7 @@ const pageSeoTitle = seoTitle || title;
 const pageSeoDescription = seoDescription || resolvedDescription;
 
 const barePath = stripLocalePrefix(Astro.url.pathname);
-const canonical = canonicalURL || new URL(barePath, Astro.site).href;
+const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
 ---
 
 <!doctype html>
@@ -109,7 +109,7 @@ const canonical = canonicalURL || new URL(barePath, Astro.site).href;
     <!-- Alternate locales -->
     <link rel="canonical" href={canonical} />
     {supportedLocales.map(loc => (
-      <link rel="alternate" hreflang={loc} href={new URL(getRelativeLocaleUrl(loc, barePath), Astro.site).href} />
+      <link rel="alternate" hreflang={toHreflangLocale(loc)} href={new URL(getRelativeLocaleUrl(loc, barePath), Astro.site).href} />
     ))}
     <link rel="alternate" hreflang="x-default" href={new URL('/', Astro.site).href} />
 

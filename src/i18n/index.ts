@@ -95,6 +95,12 @@ export function toOgLocale(locale: Locale): string {
   return `${parts[0]}_${(parts[1] || parts[0]).toUpperCase()}`;
 }
 
+// 将 locale 转为 hreflang 的 BCP 47 格式（zh-cn → zh-CN）
+export function toHreflangLocale(locale: Locale): string {
+  const parts = locale.split('-');
+  return `${parts[0]}-${(parts[1] || parts[0]).toUpperCase()}`;
+}
+
 // 获取 Date.toLocaleDateString 使用的 locale 参数
 export function toDateLocale(locale: Locale): string {
   return locale;
