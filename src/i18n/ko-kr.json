@@ -75,5 +75,8 @@
   "texturge-faq": "자주 묻는 질문",
   "texturge-advanced-features": "고급 기능",
   "texturge-editor-guide": "편집기 가이드",
-  "doc-search-placeholder": "문서 검색…"
+  "doc-search-placeholder": "문서 검색…",
+  "doc-search-navigate": "탐색",
+  "doc-search-select": "선택",
+  "doc-search-close": "닫기"
 }

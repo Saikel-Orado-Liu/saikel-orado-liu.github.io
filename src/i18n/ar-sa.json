@@ -75,5 +75,8 @@
   "texturge-faq": "الأسئلة الشائعة",
   "texturge-advanced-features": "ميزات متقدمة",
   "texturge-editor-guide": "دليل المحرر",
-  "doc-search-placeholder": "بحث في المستندات…"
+  "doc-search-placeholder": "بحث في المستندات…",
+  "doc-search-navigate": "تنقل",
+  "doc-search-select": "تحديد",
+  "doc-search-close": "إغلاق"
 }

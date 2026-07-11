@@ -82,5 +82,8 @@
   "doc-category-reference": "参考",
   "doc-category-api": "API",
   "doc-search-placeholder": "搜索文档…",
+  "doc-search-navigate": "导航",
+  "doc-search-select": "选择",
+  "doc-search-close": "关闭",
   "doc-header-suffix": "文档"
 }

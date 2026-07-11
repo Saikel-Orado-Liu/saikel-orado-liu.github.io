@@ -75,5 +75,8 @@
   "texturge-faq": "Часто задаваемые вопросы",
   "texturge-advanced-features": "Расширенные функции",
   "texturge-editor-guide": "Руководство редактора",
-  "doc-search-placeholder": "Поиск по документации…"
+  "doc-search-placeholder": "Поиск по документации…",
+  "doc-search-navigate": "Навигация",
+  "doc-search-select": "Выбрать",
+  "doc-search-close": "Закрыть"
 }

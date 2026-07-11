@@ -75,5 +75,8 @@
   "texturge-faq": "よくある質問",
   "texturge-advanced-features": "高度な機能",
   "texturge-editor-guide": "エディターガイド",
-  "doc-search-placeholder": "ドキュメントを検索…"
+  "doc-search-placeholder": "ドキュメントを検索…",
+  "doc-search-navigate": "移動",
+  "doc-search-select": "選択",
+  "doc-search-close": "閉じる"
 }

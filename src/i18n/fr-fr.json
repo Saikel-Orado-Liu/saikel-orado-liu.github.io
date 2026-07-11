@@ -75,5 +75,8 @@
   "texturge-faq": "FAQ",
   "texturge-advanced-features": "Fonctionnalités Avancées",
   "texturge-editor-guide": "Guide de l'Éditeur",
-  "doc-search-placeholder": "Rechercher dans la documentation…"
+  "doc-search-placeholder": "Rechercher dans la documentation…",
+  "doc-search-navigate": "Naviguer",
+  "doc-search-select": "Sélectionner",
+  "doc-search-close": "Fermer"
 }

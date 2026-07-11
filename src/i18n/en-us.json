@@ -82,5 +82,8 @@
   "doc-category-reference": "Reference",
   "doc-category-api": "API",
   "doc-search-placeholder": "Search docs…",
+  "doc-search-navigate": "Navigate",
+  "doc-search-select": "Select",
+  "doc-search-close": "Close",
   "doc-header-suffix": "Docs"
 }

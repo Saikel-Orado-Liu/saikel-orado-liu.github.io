@@ -9,25 +9,196 @@ interface Props {
 const { locale } = Astro.props;
 const t = useTranslations(locale);
 const placeholder = t('doc-search-placeholder');
+const navLabel = t('doc-search-navigate');
+const selLabel = t('doc-search-select');
+const closeLabel = t('doc-search-close');
 ---
 
-<link rel="stylesheet" href="/pagefind/pagefind-component-ui.css" />
-<pagefind-searchbox
-    placeholder={placeholder}
-    debounce="300"
-    show-sub-results="true"
-    max-results="8"
-    hide-shortcut
-    data-pf-searchbox
-/>
+<div class="search-container" data-search-container>
+    <div class="search-input-wrapper">
+        <svg class="search-icon" viewBox="0 0 18 18" width="16" height="16" fill="none" aria-hidden="true">
+            <path d="M12.755 11.255h-.79l-.28-.27A6.471 6.471 0 0 0 13.255 6.76a6.5 6.5 0 1 0-6.5 6.5 6.471 6.471 0 0 0 4.23-1.53l.27.28v.79l5 4.99 1.49-1.49-4.99-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z" fill="currentColor"/>
+        </svg>
+        <input type="search" class="search-input" placeholder={placeholder} aria-label={placeholder} autocomplete="off" autocapitalize="none" enterkeyhint="search" />
+    </div>
+    <div class="search-dropdown card" hidden>
+        <div class="search-results groove" role="listbox" aria-label="Search results"></div>
+        <div class="search-footer" aria-hidden="true">
+            <span class="search-footer-hint"><kbd>↑</kbd><kbd>↓</kbd> <span class="search-footer-label">{navLabel}</span></span>
+            <span class="search-footer-hint"><kbd>↵</kbd> <span class="search-footer-label">{selLabel}</span></span>
+            <span class="search-footer-hint"><kbd>esc</kbd> <span class="search-footer-label">{closeLabel}</span></span>
+        </div>
+    </div>
+</div>
 
-<script src="/pagefind/pagefind-component-ui.js" type="module"></script>
-<script>
-    document.addEventListener('astro:after-swap', () => {
-        const searchbox = document.querySelector('pagefind-searchbox');
-        if (searchbox?.instance) {
-            searchbox.instance.setLanguage(document.documentElement.lang);
-            searchbox.update();
+<script is:inline>
+(() => {
+    'use strict';
+
+    let pagefindInstance = null;
+    let currentSearch = 0;
+    let activeIndex = -1;
+    let resultElements = [];
+
+    function init() {
+        const container = document.querySelector('[data-search-container]');
+        if (!container) return;
+
+        const input = container.querySelector('.search-input');
+        const dropdown = container.querySelector('.search-dropdown');
+        const resultsContainer = container.querySelector('.search-results');
+
+        if (!input || !dropdown || !resultsContainer) return;
+
+        // --- Pagefind lazy init ---
+        if (!pagefindInstance) {
+            import('/pagefind/pagefind.js').then(pf => {
+                pagefindInstance = pf;
+            }).catch(err => {
+                console.error('[DocSearch] Failed to load Pagefind:', err);
+            });
         }
+
+        // --- Input handler ---
+        input.oninput = null; // detach old listener to avoid duplicates
+        input.addEventListener('input', handleInput);
+
+        // --- Keyboard navigation ---
+        input.onkeydown = null;
+        input.addEventListener('keydown', handleKeydown);
+
+        function handleInput() {
+            const term = input.value.trim();
+            const searchId = ++currentSearch;
+
+            if (!term) {
+                closeDropdown();
+                return;
+            }
+
+            if (!pagefindInstance) return;
+
+            showLoading();
+
+            pagefindInstance.debouncedSearch(term, {}, 300).then(result => {
+                if (searchId !== currentSearch) return;
+                if (!result) return;
+
+                if (result.results.length === 0) {
+                    showEmpty();
+                    return;
+                }
+
+                renderResults(result.results.slice(0, 8), term);
+            });
+        }
+
+        function handleKeydown(e) {
+            if (e.key === 'Escape') {
+                closeDropdown();
+                input.blur();
+                return;
+            }
+            if (e.key === 'ArrowDown') {
+                e.preventDefault();
+                if (!dropdown.hidden && resultElements.length > 0) {
+                    activeIndex = Math.min(activeIndex + 1, resultElements.length - 1);
+                    updateActive();
+                }
+                return;
+            }
+            if (e.key === 'ArrowUp') {
+                e.preventDefault();
+                if (!dropdown.hidden && resultElements.length > 0) {
+                    activeIndex = Math.max(activeIndex - 1, 0);
+                    updateActive();
+                }
+                return;
+            }
+            if (e.key === 'Enter') {
+                if (!dropdown.hidden && activeIndex >= 0 && resultElements[activeIndex]) {
+                    resultElements[activeIndex].click();
+                    closeDropdown();
+                }
+                return;
+            }
+        }
+
+        function openDropdown() {
+            dropdown.hidden = false;
+            dropdown.classList.add('open');
+        }
+
+        function closeDropdown() {
+            dropdown.hidden = true;
+            dropdown.classList.remove('open');
+            resultsContainer.innerHTML = '';
+            activeIndex = -1;
+            resultElements = [];
+        }
+
+        function showLoading() {
+            dropdown.hidden = false;
+            resultsContainer.innerHTML = '<div class="search-status search-loading">Searching\u2026</div>';
+        }
+
+        function showEmpty() {
+            dropdown.hidden = false;
+            resultsContainer.innerHTML = '<div class="search-status search-empty">No results found</div>';
+        }
+
+        async function renderResults(results, term) {
+            const items = await Promise.all(results.map(async (r) => {
+                const data = await r.data();
+                const a = document.createElement('a');
+                a.className = 'search-result-item';
+                a.href = data.url;
+                a.setAttribute('role', 'option');
+
+                const title = document.createElement('div');
+                title.className = 'search-result-title';
+                title.textContent = data.title || 'Untitled';
+                a.appendChild(title);
+
+                if (data.excerpt) {
+                    const excerpt = document.createElement('div');
+                    excerpt.className = 'search-result-excerpt';
+                    excerpt.innerHTML = data.excerpt;
+                    a.appendChild(excerpt);
+                }
+
+                return a;
+            }));
+
+            resultsContainer.innerHTML = '';
+            items.forEach(el => resultsContainer.appendChild(el));
+            resultElements = items;
+            activeIndex = -1;
+            openDropdown();
+        }
+
+        function updateActive() {
+            resultElements.forEach((el, i) => {
+                el.classList.toggle('active', i === activeIndex);
+                el.setAttribute('aria-selected', String(i === activeIndex));
+            });
+            if (activeIndex >= 0 && resultElements[activeIndex]) {
+                resultElements[activeIndex].scrollIntoView({ block: 'nearest' });
+            }
+        }
+    }
+
+    // Run on initial load
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+
+    // Re-run after Astro SPA navigation (header may be re-rendered)
+    document.addEventListener('astro:after-swap', () => {
+        // On after-swap, the DOM is already updated; re-init to attach listeners
+        setTimeout(init, 0);
     });
+})();
 </script>
