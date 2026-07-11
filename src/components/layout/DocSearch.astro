@@ -60,7 +60,7 @@ const closeLabel = t('doc-search-close');
         }
 
         // --- Input handler ---
-        input.oninput = null; // detach old listener to avoid duplicates
+        input.oninput = null;
         input.addEventListener('input', handleInput);
 
         // --- Keyboard navigation ---
@@ -89,7 +89,7 @@ const closeLabel = t('doc-search-close');
                     return;
                 }
 
-                renderResults(result.results.slice(0, 8), term);
+                renderResults(result.results.slice(0, 8));
             });
         }
 
@@ -147,7 +147,7 @@ const closeLabel = t('doc-search-close');
             resultsContainer.innerHTML = '<div class="search-status search-empty">No results found</div>';
         }
 
-        async function renderResults(results, term) {
+        async function renderResults(results) {
             const items = await Promise.all(results.map(async (r) => {
                 const data = await r.data();
                 const a = document.createElement('a');
@@ -197,7 +197,6 @@ const closeLabel = t('doc-search-close');
 
     // Re-run after Astro SPA navigation (header may be re-rendered)
     document.addEventListener('astro:after-swap', () => {
-        // On after-swap, the DOM is already updated; re-init to attach listeners
         setTimeout(init, 0);
     });
 })();
