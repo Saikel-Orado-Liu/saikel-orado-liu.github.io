@@ -74,5 +74,6 @@
   "texturge-configuration": "Configuración",
   "texturge-faq": "Preguntas Frecuentes",
   "texturge-advanced-features": "Funciones Avanzadas",
-  "texturge-editor-guide": "Guía del Editor"
+  "texturge-editor-guide": "Guía del Editor",
+  "doc-search-placeholder": "Buscar documentos…"
 }

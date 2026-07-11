@@ -76,5 +76,11 @@
   "texturge-advanced-features": "高级功能",
   "texturge-editor-guide": "编辑器指南",
   "texturge-configuration": "配置",
-  "texturge-faq": "常见问题"
+  "texturge-faq": "常见问题",
+  "doc-category-tutorial": "教程",
+  "doc-category-guides": "指南",
+  "doc-category-reference": "参考",
+  "doc-category-api": "API",
+  "doc-search-placeholder": "搜索文档…",
+  "doc-header-suffix": "文档"
 }

@@ -1,0 +1,94 @@
+.doc-header-suffix {
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    color: var(--md-sys-color-on-surface-variant);
+    opacity: 0.65;
+}
+
+/* ===== DocSearch / Pagefind 搜索栏 ===== */
+
+/* 搜索区域 — 在品牌区和控件区之间居中 */
+.navbar-search {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    flex: 0 0 474px;
+    min-width: 0;
+    margin-left: 3rem;
+    padding: 0 var(--space-sm);
+}
+
+.navbar-search pagefind-searchbox {
+    display: flex;
+    width: 474px;
+}
+
+/* Pagefind CSS 变量覆盖 — 暗色（默认）主题 */
+:root {
+    --pf-text: var(--md-sys-color-on-surface);
+    --pf-text-secondary: var(--md-sys-color-on-surface-variant);
+    --pf-text-muted: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 70%, transparent);
+    --pf-background: var(--clr-primary-bg);
+    --pf-border: color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
+    --pf-border-focus: var(--md-sys-color-primary);
+    --pf-skeleton: color-mix(in srgb, var(--clr-primary-bg) 80%, #ffffff 20%);
+    --pf-skeleton-shine: color-mix(in srgb, var(--clr-primary-bg) 70%, #ffffff 30%);
+    --pf-hover: color-mix(in srgb, var(--clr-primary-bg) 85%, var(--md-sys-color-primary) 15%);
+    --pf-mark: var(--md-sys-color-primary);
+    --pf-scroll-shadow: rgba(0, 0, 0, 0.3);
+
+    --pf-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.2);
+    --pf-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.3);
+    --pf-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.5);
+
+    --pf-outline-focus: var(--md-sys-color-primary);
+
+    --pf-input-height: 32px;
+    --pf-input-font-size: 14px;
+
+    --pf-border-radius: var(--shape-md);
+
+    --pf-searchbox-max-width: 474px;
+    --pf-searchbox-dropdown-max-height: min(360px, 60vh);
+
+    --pf-dropdown-z-index: calc(var(--z-header) + 10);
+}
+
+/* Pagefind CSS 变量覆盖 — 亮色主题 */
+:root.light-style {
+    --pf-text: var(--md-sys-color-on-surface);
+    --pf-text-secondary: var(--md-sys-color-on-surface-variant);
+    --pf-text-muted: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 60%, transparent);
+    --pf-background: var(--clr-primary-bg);
+    --pf-border: var(--md-sys-color-outline-variant);
+    --pf-border-focus: var(--md-sys-color-primary);
+    --pf-skeleton: color-mix(in srgb, var(--clr-primary-bg) 90%, #000000 10%);
+    --pf-skeleton-shine: color-mix(in srgb, var(--clr-primary-bg) 80%, #000000 20%);
+    --pf-hover: color-mix(in srgb, var(--clr-primary-bg) 80%, #000000 20%);
+    --pf-mark: var(--md-sys-color-primary);
+    --pf-scroll-shadow: rgba(0, 0, 0, 0.08);
+
+    --pf-shadow-sm: 0 2px 8px rgba(0, 0, 0, 0.06);
+    --pf-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --pf-shadow-lg: 0 16px 48px rgba(0, 0, 0, 0.2);
+
+    --pf-outline-focus: var(--md-sys-color-primary);
+}
+
+/* 响应式调整 — 移动端搜索换行显示 */
+@media (max-width: 640px) {
+    .navbar-inner {
+        flex-wrap: wrap;
+        gap: var(--space-xs) 0;
+    }
+
+    .navbar-search {
+        flex: 1 1 100%;
+        order: 3;
+        padding: var(--space-xs) 0 0;
+    }
+
+    .navbar-search pagefind-searchbox {
+        max-width: 100%;
+    }
+}

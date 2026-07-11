@@ -1,0 +1,33 @@
+---
+import { useTranslations } from '../../i18n';
+import type { Locale } from '../../i18n';
+
+interface Props {
+    locale: Locale;
+}
+
+const { locale } = Astro.props;
+const t = useTranslations(locale);
+const placeholder = t('doc-search-placeholder');
+---
+
+<link rel="stylesheet" href="/pagefind/pagefind-component-ui.css" />
+<pagefind-searchbox
+    placeholder={placeholder}
+    debounce="300"
+    show-sub-results="true"
+    max-results="8"
+    hide-shortcut
+    data-pf-searchbox
+/>
+
+<script src="/pagefind/pagefind-component-ui.js" type="module"></script>
+<script>
+    document.addEventListener('astro:after-swap', () => {
+        const searchbox = document.querySelector('pagefind-searchbox');
+        if (searchbox?.instance) {
+            searchbox.instance.setLanguage(document.documentElement.lang);
+            searchbox.update();
+        }
+    });
+</script>
