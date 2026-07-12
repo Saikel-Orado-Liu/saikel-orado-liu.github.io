@@ -22,7 +22,7 @@ const closeLabel = t('doc-search-close');
         <input type="search" class="search-input" placeholder={placeholder} aria-label={placeholder} autocomplete="off" autocapitalize="none" enterkeyhint="search" />
     </div>
     <div class="search-dropdown card" hidden>
-        <div class="search-results groove" role="listbox" aria-label="Search results"></div>
+        <div class="search-results" role="listbox" aria-label="Search results"></div>
         <div class="search-footer" aria-hidden="true">
             <span class="search-footer-hint"><kbd>↑</kbd><kbd>↓</kbd> <span class="search-footer-label">{navLabel}</span></span>
             <span class="search-footer-hint"><kbd>↵</kbd> <span class="search-footer-label">{selLabel}</span></span>
@@ -58,6 +58,15 @@ const closeLabel = t('doc-search-close');
                 console.error('[DocSearch] Failed to load Pagefind:', err);
             });
         }
+
+        // --- Scroll mask for fade hints ---
+        function updateScrollMask() {
+            const atTop = resultsContainer.scrollTop <= 0;
+            const atBottom = resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 1;
+            resultsContainer.classList.toggle('at-top', atTop);
+            resultsContainer.classList.toggle('at-bottom', atBottom);
+        }
+        resultsContainer.addEventListener('scroll', updateScrollMask, { passive: true });
 
         // --- Input handler ---
         input.oninput = null;
@@ -133,6 +142,7 @@ const closeLabel = t('doc-search-close');
             dropdown.hidden = true;
             dropdown.classList.remove('open');
             resultsContainer.innerHTML = '';
+            resultsContainer.classList.remove('at-top', 'at-bottom');
             activeIndex = -1;
             resultElements = [];
         }
@@ -169,13 +179,6 @@ const closeLabel = t('doc-search-close');
                         ? data.content.substring(0, 120).replace(/\s+/g, ' ').trim() + '…'
                         : '');
 
-                console.log('[DocSearch] desc:', JSON.stringify(desc).substring(0, 200));
-                console.log('[DocSearch] excerpt/excerpt/plain/meta/content:',
-                    JSON.stringify(data.excerpt).substring(0,40),
-                    JSON.stringify(data.plain_excerpt).substring(0,40),
-                    JSON.stringify(data.meta),
-                    data.content?.length);
-
                 if (desc) {
                     const excerpt = document.createElement('div');
                     excerpt.className = 'search-result-excerpt';
@@ -191,6 +194,7 @@ const closeLabel = t('doc-search-close');
             resultElements = items;
             activeIndex = -1;
             openDropdown();
+            requestAnimationFrame(updateScrollMask);
         }
 
         function updateActive() {
