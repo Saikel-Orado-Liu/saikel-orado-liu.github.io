@@ -122,11 +122,11 @@
 
     /* 尺寸约束 */
     max-height: min(360px, 60vh);
-    display: flex;
-    flex-direction: column;
+    display: grid;
+    grid-template-rows: 1fr auto;
     gap: 10px;
 
-    /* 凹槽四周与卡片边缘留出 12px 间距 */
+    /* 间距 */
     padding: 8px;
 }
 
@@ -134,21 +134,24 @@
     display: none;
 }
 
-/* 结果列表 — 凹槽容器，噪点作为背景图随内容自然滚动
-   参数完整复制 .groove::before（暗色） */
-.navbar-search .search-results {
-    flex: 1;
-    overflow-y: auto;
-    overflow-x: visible;
-    scrollbar-width: none;
-    -ms-overflow-style: none;
+/* 防止 card 的伪元素层（噪点/渐变）遮盖结果卡片 */
+.navbar-search .search-dropdown.card::before,
+.navbar-search .search-dropdown.card::after {
+    z-index: -1 !important;
+}
+
+/* 凹槽底层 — grid 第 1 行，视觉层 */
+.navbar-search .search-results-groove {
+    grid-column: 1;
+    grid-row: 1;
     position: relative;
-    /* groove 基底颜色 */
-    background-color: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+    pointer-events: none;
+    z-index: 0;
     border-radius: calc(var(--shape-md) - 1px);
-    display: flex;
-    flex-direction: column;
-    /* 覆盖 .groove 的强 inset 阴影，改为更轻柔的凹槽边缘效果 */
+    background-color: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='srg' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.19' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23srg)' opacity='0.50'/%3E%3C/svg%3E");
+    background-size: 100px 100px;
+    background-blend-mode: overlay;
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 8%, transparent);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 8%, transparent);
     border-right: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
@@ -157,25 +160,53 @@
         2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
         inset 2px 2px 0 0 rgba(0, 0, 0, 0.12),
         inset -1px -2px 4px color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
-    background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 256 256%27%3E%3Cfilter id=%27srg%27 colorInterpolationFilters=%27sRGB%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.19%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix type=%27matrix%27 values=%270.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23srg)%27 opacity=%270.50%27/%3E%3C/svg%3E");
-    background-size: 100px 100px;
-    background-blend-mode: overlay;
+}
+
+/* 结果列表（滚动层）— grid 第 1 行，默认与凹槽重合，hover/active 时扩展 */
+.navbar-search .search-results {
+    grid-column: 1;
+    grid-row: 1;
+    z-index: 1;
+    overflow-y: auto;
+    overflow-x: hidden;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    border-radius: calc(var(--shape-md) + 1px);
+    margin: 0;
+    padding: 0;
+    transition: margin 0.15s ease, padding 0.15s ease;
+}
+
+.navbar-search .search-results::-webkit-scrollbar {
+    display: none;
+}
+
+/* 左侧扩展 — 任意卡片 hover/active 都生效 */
+.navbar-search .search-results:has(.search-result-item:hover),
+.navbar-search .search-results:has(.search-result-item.active) {
+    margin-left: -4px;
+    padding-left: 4px;
+}
+
+/* 顶部扩展 — 仅第一个卡片 hover/active */
+.navbar-search .search-results:has(.search-result-item:first-child:hover),
+.navbar-search .search-results:has(.search-result-item:first-child.active) {
+    margin-top: -4px;
+    padding-top: 4px;
 }
 
 /* 结果项之间的间距 */
 .navbar-search .search-result-item:first-child {
-    margin-top: 3px;
+    margin-top: 4px;
 }
 .navbar-search .search-result-item:last-child {
     margin-bottom: 6px;
 }
 .navbar-search .search-result-item + .search-result-item {
     margin-top: 8px;
-}
-
-/* WebKit 滚动条隐藏 */
-.navbar-search .search-results::-webkit-scrollbar {
-    display: none;
 }
 
 /* ── 顶部渐变淡出遮罩（sticky 固定在滚动视口顶部，到顶时隐藏） ── */
@@ -224,9 +255,9 @@
     opacity: 1;
 }
 
-/* 亮色噪点纹理 + 轻柔凹槽边框 */
-:root.light-style .navbar-search .search-results {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 256 256%27%3E%3Cfilter id=%27srg%27 colorInterpolationFilters=%27sRGB%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.21%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix type=%27matrix%27 values=%270.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0%27/%3E%3CfeColorMatrix type=%27matrix%27 values=%270.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23srg)%27/%3E%3C/svg%3E");
+/* 亮色凹槽底层 */
+:root.light-style .navbar-search .search-results-groove {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='srgl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23srgl)'/%3E%3C/svg%3E");
     background-size: 150px 150px;
     background-blend-mode: normal;
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
@@ -239,12 +270,6 @@
         inset -1px -2px 4px rgba(255, 255, 255, 0.50);
 }
 
-/* 防止 card 的伪元素层（噪点/渐变）遮盖结果卡片 */
-.navbar-search .search-dropdown.card::before,
-.navbar-search .search-dropdown.card::after {
-    z-index: -1 !important;
-}
-
 /* 结果项 — 磨砂亚克力板卡片样式（轻量版 .card，无 backdrop-filter）
    暗色：半透明基底 + 噪点纹理 + 漫反射渐变 + 亚克力边框/阴影 */
 .navbar-search .search-result-item {
@@ -253,7 +278,7 @@
     isolation: isolate;
     overflow: hidden;
     flex-shrink: 0;
-    margin: 0 6px 0 2px;
+    margin: 1px 6px 0 3px;
     padding: 10px;
     border-radius: 10px;
     text-decoration: none;
@@ -407,8 +432,10 @@
     color: var(--md-sys-color-on-surface-variant);
 }
 
-/* 底部键盘提示 — 凹槽已提供视觉分割，无需 border-top */
+/* 底部键盘提示 — grid 第 2 行，固定在底部 */
 .navbar-search .search-footer {
+    grid-column: 1;
+    grid-row: 2;
     display: flex;
     align-items: center;
     justify-content: flex-end;
@@ -431,7 +458,7 @@
     justify-content: center;
     min-width: 24px;
     height: 24px;
-    padding: 4px 5px 2px 6.5px;
+    padding: 4px 5px 1.5px 7px;
     font-size: var(--font-size-xs);
     font-weight: 500;
     font-family: var(--font-mono);

@@ -22,6 +22,7 @@ const closeLabel = t('doc-search-close');
         <input type="search" class="search-input" placeholder={placeholder} aria-label={placeholder} autocomplete="off" autocapitalize="none" enterkeyhint="search" />
     </div>
     <div class="search-dropdown card" hidden>
+        <div class="search-results-groove" aria-hidden="true"></div>
         <div class="search-results" role="listbox" aria-label="Search results"></div>
         <div class="search-footer" aria-hidden="true">
             <span class="search-footer-hint"><kbd>↑</kbd><kbd>↓</kbd> <span class="search-footer-label">{navLabel}</span></span>
