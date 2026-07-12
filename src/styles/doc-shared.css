@@ -38,6 +38,55 @@
     padding: var(--space-md);
 }
 
+/* ===== 分类选项卡卡片 ===== */
+.doc-tabs-card.card {
+    padding: var(--space-sm) var(--space-md);
+    margin-bottom: var(--space-md);
+}
+.doc-tabs-nav {
+    display: flex;
+    flex-direction: column;
+    gap: 1px;
+}
+.doc-tab-btn {
+    display: flex;
+    align-items: center;
+    gap: var(--space-sm);
+    width: 100%;
+    padding: var(--space-xs) var(--space-sm);
+    border: none;
+    border-radius: var(--shape-sm);
+    background: transparent;
+    color: var(--md-sys-color-on-surface-variant);
+    font-family: inherit;
+    font-size: var(--font-size-sm);
+    font-weight: var(--font-weight-medium);
+    cursor: pointer;
+    text-align: left;
+    transition: background 0.15s ease, color 0.15s ease;
+}
+.doc-tab-btn:hover {
+    background: color-mix(in srgb, var(--md-sys-color-primary) 8%, transparent);
+    color: var(--md-sys-color-on-surface);
+}
+.doc-tab-btn--active {
+    background: color-mix(in srgb, var(--md-sys-color-primary) 12%, transparent);
+    color: var(--md-sys-color-primary);
+}
+.doc-tab-icon {
+    font-size: 1.25rem;
+    width: 1.5rem;
+    text-align: center;
+    flex-shrink: 0;
+}
+
+/* ===== 章节目录卡片 ===== */
+.doc-chapters-card.card {
+    overflow: hidden auto;
+    max-height: calc(100vh - var(--header-height) - var(--space-2xl) - 240px);
+    padding: var(--space-md);
+}
+
 /* ===== 版本切换控件 ===== */
 .doc-version-card.card {
     max-height: calc(100vh - var(--header-height) - var(--space-2xl));
@@ -248,12 +297,6 @@
     color: var(--md-sys-color-primary);
     border-left-color: var(--md-sys-color-primary);
     font-weight: var(--font-weight-medium);
-}
-.doc-tree-link--index {
-    font-weight: var(--font-weight-bold);
-    margin-bottom: var(--space-md);
-    border-bottom: 1px solid var(--md-sys-color-outline-variant);
-    padding-bottom: var(--space-sm);
 }
 .doc-tree-chapter {
     margin-bottom: var(--space-sm);

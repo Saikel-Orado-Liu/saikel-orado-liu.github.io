@@ -1,45 +1,34 @@
 ---
-import { getRelativeLocaleUrl } from 'astro:i18n';
 import { useTranslations } from '../../i18n';
 import type { Locale } from '../../i18n';
 import LangSwitcher from './LangSwitcher.astro';
+import DocSearch from './DocSearch.astro';
+import '../../styles/doc-header.css';
 
-const locale = (Astro.currentLocale || 'zh-cn') as Locale;
+interface Props {
+    locale: Locale;
+    projectTitle: string;
+    projectIcon?: string;
+    projectHomeHref: string;
+}
+
+const { locale, projectTitle, projectIcon, projectHomeHref } = Astro.props;
 const t = useTranslations(locale);
-
-const navItems: { key: string; path: string }[] = [
-  { key: 'nav-home', path: '/' },
-  { key: 'nav-articles', path: '/blog/' },
-  { key: 'nav-tools', path: '/projects/' },
-  { key: 'nav-games', path: '/game/' },
-  { key: 'nav-about', path: '/about/' },
-  { key: 'nav-donate', path: '/donate/' },
-];
 ---
 
 <header class="navbar plate">
   <div class="navbar-inner">
     <div class="navbar-main">
-      <a href={getRelativeLocaleUrl(locale, '/')} class="navbar-brand" aria-label="Home">
-        <img class="navbar-logo" src="https://avatars.githubusercontent.com/u/88531138" alt="Logo" width="32" height="32" />
-        <span class="navbar-title">{locale === 'zh-cn' ? '游戏极客-Saikel' : 'GameGeek-Saikel'}</span>
+      <a href={projectHomeHref} class="navbar-brand" aria-label={projectTitle}>
+        {projectIcon && <img class="navbar-logo" src={projectIcon} alt="" width="32" height="32" />}
+        <span class="navbar-title">{projectTitle}</span>
+        {" "}<span class="doc-header-suffix">{t("doc-header-suffix")}</span>
       </a>
     </div>
 
-    <nav class="navbar-nav" aria-label="Main navigation">
-      <ul>
-        {navItems.map(item => (
-          <li>
-            <a href={getRelativeLocaleUrl(locale, item.path)}
-               class:list={{ active: item.path === '/'
-                  ? Astro.url.pathname === getRelativeLocaleUrl(locale, '/')
-                  : Astro.url.pathname.startsWith(getRelativeLocaleUrl(locale, item.path)) }}>
-              <span>{t(item.key)}</span>
-            </a>
-          </li>
-        ))}
-      </ul>
-    </nav>
+    <div class="navbar-search">
+      <DocSearch locale={locale} />
+    </div>
 
     <div class="navbar-widget">
       <button class="widget-item theme-toggle" aria-label="Toggle theme">
@@ -58,3 +47,4 @@ const navItems: { key: string; path: string }[] = [
     </div>
   </div>
 </header>
+

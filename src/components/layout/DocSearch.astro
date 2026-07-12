@@ -150,6 +150,7 @@ const closeLabel = t('doc-search-close');
         async function renderResults(results) {
             const items = await Promise.all(results.map(async (r) => {
                 const data = await r.data();
+
                 const a = document.createElement('a');
                 a.className = 'search-result-item';
                 a.href = data.url;
@@ -157,13 +158,28 @@ const closeLabel = t('doc-search-close');
 
                 const title = document.createElement('div');
                 title.className = 'search-result-title';
-                title.textContent = data.title || 'Untitled';
+                title.textContent = data.meta?.title || 'Untitled';
                 a.appendChild(title);
 
-                if (data.excerpt) {
+                // 四级兜底：excerpt → plain_excerpt → meta.description → content 截取
+                const desc = data.excerpt
+                    || data.plain_excerpt
+                    || data.meta?.description
+                    || (data.content
+                        ? data.content.substring(0, 120).replace(/\s+/g, ' ').trim() + '…'
+                        : '');
+
+                console.log('[DocSearch] desc:', JSON.stringify(desc).substring(0, 200));
+                console.log('[DocSearch] excerpt/excerpt/plain/meta/content:',
+                    JSON.stringify(data.excerpt).substring(0,40),
+                    JSON.stringify(data.plain_excerpt).substring(0,40),
+                    JSON.stringify(data.meta),
+                    data.content?.length);
+
+                if (desc) {
                     const excerpt = document.createElement('div');
                     excerpt.className = 'search-result-excerpt';
-                    excerpt.innerHTML = data.excerpt;
+                    excerpt.innerHTML = desc;
                     a.appendChild(excerpt);
                 }
 

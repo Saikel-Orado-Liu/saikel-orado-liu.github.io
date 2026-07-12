@@ -1,7 +1,7 @@
 ---
 import { render } from "astro:content";
 import { useTranslations, type Locale } from "../../i18n";
-import { buildDocRegistry, getAdjacentDocs, getDocEntry, buildTocGroups, getProjectVersions } from "../../utils/docs";
+import { buildDocRegistry, getAdjacentDocs, getDocEntry, buildTocGroups, getProjectVersions, getDocCategoryTabs, filterRegistryByCategory } from "../../utils/docs";
 import DocShell from "./DocShell.astro";
 
 interface Props {
@@ -25,6 +25,8 @@ const adj = getAdjacentDocs(registry.flatList, docId);
 const currentDoc = registry.flatList.find((d) => d.id === docId);
 const pageTitle = currentDoc?.title ?? docEntry.data.title;
 const pageDescription = docEntry.data.excerpt;
+// 文档标题取自项目首页 H1，不用手动写死
+const docTitle = projectSlug.charAt(0).toUpperCase() + projectSlug.slice(1);
 const docDescription = pageDescription || `${pageTitle} — Texturge Pro 文档页面`;
 
 const pager = {
@@ -33,6 +35,15 @@ const pager = {
 };
 
 const versionInfo = await getProjectVersions(projectSlug);
+
+// 分类选项卡
+const tabs = getDocCategoryTabs();
+const activeTab = 'guides';
+const allRegistries: Record<string, import("../../utils/docs").DocRegistry> = {};
+for (const tab of tabs) {
+    allRegistries[tab.slug] = filterRegistryByCategory(registry, tab.slug);
+}
+const filteredRegistry = allRegistries[activeTab] || registry;
 ---
 
 <DocShell
@@ -43,7 +54,11 @@ const versionInfo = await getProjectVersions(projectSlug);
     description={pageDescription}
     seoDescription={docDescription}
     ogImage={`/og-${projectSlug}.png`}
-    registry={registry}
+    registry={filteredRegistry}
+    allRegistries={allRegistries}
+    tabs={tabs}
+    activeTab={activeTab}
+    projectTitle={docTitle}
     tocGroups={tocGroups}
     activeDocId={docId}
     pager={pager}

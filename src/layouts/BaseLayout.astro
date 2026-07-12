@@ -4,6 +4,7 @@ import { supportedLocales, toOgLocale, toHreflangLocale, stripLocalePrefix, getL
 import type { Locale } from '../i18n';
 import { ClientRouter } from 'astro:transitions';
 import Header from '../components/layout/Header.astro';
+import DocHeader from '../components/layout/DocHeader.astro';
 import Footer from '../components/layout/Footer.astro';
 import '../styles/tokens.css';
 import '../styles/global.css';
@@ -27,6 +28,10 @@ export interface Props {
   articlePublishedTime?: string;
   articleModifiedTime?: string;
   articleTags?: string[];
+  docMode?: boolean;
+  docTitle?: string;
+  docIcon?: string;
+  docHomeHref?: string;
 }
 
 const {
@@ -43,6 +48,10 @@ const {
   articlePublishedTime,
   articleModifiedTime,
   articleTags,
+  docMode = false,
+  docTitle,
+  docIcon,
+  docHomeHref,
 } = Astro.props;
 
 const currentLocale = (locale || Astro.currentLocale || 'zh-cn') as Locale;
@@ -137,7 +146,7 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
     </script>
 
     <!-- JSON-LD 结构化数据 -->
-    <script type="application/ld+json" set:html={JSON.stringify(ogType === 'article' ? {
+    <script is:inline type="application/ld+json" set:html={JSON.stringify(ogType === 'article' ? {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
       headline: pageSeoTitle,
@@ -180,8 +189,12 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
       </defs>
     </svg>
 
-    <Header />
-    <main class="page-content">
+    {docMode && docTitle ? (
+      <DocHeader locale={currentLocale} projectTitle={docTitle} projectIcon={docIcon} projectHomeHref={docHomeHref || Astro.url.pathname} />
+    ) : (
+      <Header />
+    )}
+    <main class="page-content" data-pagefind-body>
       <slot />
     </main>
     <Footer />

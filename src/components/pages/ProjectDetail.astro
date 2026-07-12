@@ -1,7 +1,7 @@
 ---
 import { getCollection, render } from "astro:content";
 import { useTranslations, type Locale } from "../../i18n";
-import { buildDocRegistry, buildTocGroups, getProjectVersions } from "../../utils/docs";
+import { buildDocRegistry, buildTocGroups, getProjectVersions, getDocCategoryTabs, filterRegistryByCategory } from "../../utils/docs";
 import DocShell from "./DocShell.astro";
 
 interface Props {
@@ -37,12 +37,24 @@ const project =
 if (!project) return new Response(null, { status: 404 });
 const { Content, headings } = await render(project);
 const tocGroups = buildTocGroups(headings);
+// 文档标题取自 H1（如 # Texturge），不用 frontmatter title
+const projectTitle = headings.find(h => h.depth === 1)?.text ?? slug.charAt(0).toUpperCase() + slug.slice(1);
 
 // 2. 文档注册表
 const registry = await buildDocRegistry(slug, locale, version);
 
 // 3. 版本信息
 const versionInfo = await getProjectVersions(slug);
+
+// 4. 分类选项卡
+const tabs = getDocCategoryTabs();
+const activeTab = 'guides';
+// 为每个分类构建全量 registries
+const allRegistries: Record<string, import("../../utils/docs").DocRegistry> = {};
+for (const tab of tabs) {
+    allRegistries[tab.slug] = filterRegistryByCategory(registry, tab.slug);
+}
+const filteredRegistry = allRegistries[activeTab] || registry;
 ---
 
 <DocShell
@@ -52,7 +64,11 @@ const versionInfo = await getProjectVersions(slug);
     pageSeoTitle={`${project.data.title} — ${t('site-title')}`}
     description={project.data.excerpt}
     ogImage={`/og-${slug}.png`}
-    registry={registry}
+    registry={filteredRegistry}
+    allRegistries={allRegistries}
+    tabs={tabs}
+    activeTab={activeTab}
+    projectTitle={projectTitle}
     tocGroups={tocGroups}
     activeSidebarLink={slug}
     versions={versionInfo?.versions}

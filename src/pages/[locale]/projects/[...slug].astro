@@ -31,8 +31,11 @@ if (parts.length >= 2 && VERSION_RE.test(parts[1])) {
   if (verDir === latestDir) {
     const rest = parts.slice(2).join('/');
     const prefix = `/${locale}`;
-    const target = rest ? `${prefix}/projects/${projectSlug}/${rest}/` : `${prefix}/projects/${projectSlug}/`;
-    return Astro.redirect(target, 301);
+    const _target = rest ? `${prefix}/projects/${projectSlug}/${rest}/` : `${prefix}/projects/${projectSlug}/`;
+    return new Response(
+        `<!doctype html><html lang="${locale}" data-pagefind-ignore><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=${_target}"><link rel="canonical" href="https://saikel-orado-liu.github.io${_target}"><script>location.href=${JSON.stringify(_target)}</script></head><body><a href="${_target}">Redirecting to ${_target}</a></body></html>`,
+        { status: 200, headers: { 'Content-Type': 'text/html' } }
+    );
   }
 }
 ---

@@ -123,10 +123,10 @@
     max-height: min(360px, 60vh);
     display: flex;
     flex-direction: column;
-    gap: 14px;
+    gap: 10px;
 
     /* 凹槽四周与卡片边缘留出 12px 间距 */
-    padding: 12px;
+    padding: 8px;
 }
 
 .navbar-search .search-dropdown[hidden] {
@@ -140,6 +140,9 @@
     overflow-y: auto;
     padding: 4px;
     border-radius: calc(var(--shape-md) - 1px);
+    display: flex;
+    flex-direction: column;
+    gap: 8px;
     background-image: url("data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 viewBox=%270 0 256 256%27%3E%3Cfilter id=%27srg%27 colorInterpolationFilters=%27sRGB%27%3E%3CfeTurbulence type=%27fractalNoise%27 baseFrequency=%270.19%27 numOctaves=%273%27 stitchTiles=%27stitch%27/%3E%3CfeColorMatrix type=%27matrix%27 values=%270.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0%27/%3E%3C/filter%3E%3Crect width=%27100%25%27 height=%27100%25%27 filter=%27url(%23srg)%27 opacity=%270.50%27/%3E%3C/svg%3E");
     background-size: 100px 100px;
     background-blend-mode: overlay;
@@ -157,25 +160,93 @@
     content: none;
 }
 
-/* 结果项 */
+/* 结果项 — 磨砂亚克力板卡片样式（轻量版 .card，无 backdrop-filter）
+   暗色：半透明基底 + 噪点纹理 + 漫反射渐变 + 亚克力边框/阴影 */
 .navbar-search .search-result-item {
     display: block;
+    position: relative;
+    isolation: isolate;
+    overflow: hidden;
+    flex-shrink: 0;
     padding: 10px 10px;
     border-radius: 6px;
     text-decoration: none;
     color: inherit;
     cursor: pointer;
-    transition: background 0.1s;
+    font-style: normal;
+    background: color-mix(in srgb, var(--clr-primary-bg) calc(var(--frosted-opacity) * 100), transparent);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 14%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 6%, transparent);
+    box-shadow:
+        var(--frosted-plate-thickness) var(--frosted-plate-thickness) 0 0 color-mix(in srgb, var(--clr-primary-text) 15%, transparent),
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 3px 3px 4px 0 rgba(0, 0, 0, 0.25);
 }
 
-.navbar-search .search-result-item:hover,
-.navbar-search .search-result-item.active {
-    background: color-mix(in srgb, var(--clr-primary-bg) 80%, var(--md-sys-color-primary) 20%);
+/* 内容层提升到伪元素之上 */
+.navbar-search .search-result-item > * {
+    position: relative;
+    z-index: 3;
+}
+
+/* 噪点纹理 — 轻量版 .card::before */
+.navbar-search .search-result-item::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='srid' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.38' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23srid)' opacity='0.65'/%3E%3C/svg%3E");
+    background-size: 100px 100px;
+    opacity: 0.15;
+    filter: contrast(3.0);
+    mix-blend-mode: overlay;
+    pointer-events: none;
+    z-index: 1;
+}
+
+/* 漫反射渐变层 — 轻量版 .card::after */
+.navbar-search .search-result-item::after {
+    content: '';
+    position: absolute;
+    inset: 0;
+    border-radius: inherit;
+    background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--clr-primary-text) 5%, transparent) 0%,
+        color-mix(in srgb, var(--clr-primary-text) 1.5%, transparent) 35%,
+        transparent 50%,
+        color-mix(in srgb, var(--md-sys-color-shadow) 4%, transparent) 100%
+    );
+    pointer-events: none;
+    z-index: 0;
+}
+
+/* Hover — 板子抬起，叠加强调色光晕 */
+.navbar-search .search-result-item:hover {
+    background: color-mix(in srgb, var(--clr-primary-bg) calc(var(--frosted-opacity) * 100), var(--md-sys-color-primary) 12%);
     outline: none;
+    box-shadow:
+        3px 3px 0 0 color-mix(in srgb, var(--clr-primary-text) 22%, transparent),
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
 }
 
+/* Active — 选中项，强调色边框高亮 */
 .navbar-search .search-result-item.active {
-    box-shadow: inset 0 0 0 1.5px var(--md-sys-color-primary);
+    background: color-mix(in srgb, var(--clr-primary-bg) calc(var(--frosted-opacity) * 100), var(--md-sys-color-primary) 15%);
+    outline: none;
+    box-shadow:
+        3px 3px 0 0 color-mix(in srgb, var(--clr-primary-text) 22%, transparent),
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1.5px var(--md-sys-color-primary);
+}
+
+/* 注意：.navbar-search .search-result-item.active 覆盖 .search-result-item:hover */
+.navbar-search .search-result-item.active:hover {
+    box-shadow:
+        3px 3px 0 0 color-mix(in srgb, var(--clr-primary-text) 22%, transparent),
+        0 8px 32px rgba(0, 0, 0, 0.1),
+        inset 0 0 0 1.5px var(--md-sys-color-primary);
 }
 
 .navbar-search .search-result-title {
@@ -269,9 +340,50 @@
     box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
 }
 
-:root.light-style .navbar-search .search-result-item:hover,
+/* 亮色模式结果卡片 — 实色暖白基底 + 暖色噪点（参照 .light-style .card） */
+:root.light-style .navbar-search .search-result-item {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
+    box-shadow:
+        3px 3px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+        0 8px 32px rgba(0, 0, 0, 0.05),
+        inset 3px 3px 4px 0 rgba(0, 0, 0, 0.06);
+}
+
+:root.light-style .navbar-search .search-result-item::before {
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='sril' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.28' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.83 0.14 0 0 0 0.82 0.05 0 0 0 0.77 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23sril)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
+    opacity: 1;
+    filter: none;
+    mix-blend-mode: normal;
+    z-index: 2;
+}
+
+:root.light-style .navbar-search .search-result-item::after {
+    background: linear-gradient(
+        155deg,
+        color-mix(in srgb, var(--clr-primary-bg) 98%, var(--clr-primary-accent) 2%) 0%,
+        color-mix(in srgb, var(--clr-primary-bg) 96%, var(--clr-primary-accent) 4%) 30%,
+        color-mix(in srgb, var(--clr-primary-bg) 88%, var(--clr-primary-accent) 12%) 55%,
+        color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%) 100%
+    );
+}
+
+:root.light-style .navbar-search .search-result-item:hover {
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 12%);
+    box-shadow:
+        3px 3px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+        0 8px 32px rgba(0, 0, 0, 0.05),
+        inset 0 0 0 1px color-mix(in srgb, var(--clr-primary-accent) 40%, transparent);
+}
+
 :root.light-style .navbar-search .search-result-item.active {
-    background: color-mix(in srgb, var(--clr-primary-bg) 70%, #000 30%);
+    background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 15%);
+    box-shadow:
+        3px 3px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+        0 8px 32px rgba(0, 0, 0, 0.05),
+        inset 0 0 0 1.5px var(--clr-primary-accent);
 }
 
 :root.light-style .navbar-search .search-footer kbd {

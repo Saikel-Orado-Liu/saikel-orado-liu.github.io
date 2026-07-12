@@ -1,60 +1,122 @@
 ---
 import { useTranslations, type Locale } from "../../i18n";
-import type { DocRegistry } from "../../utils/docs";
+import type { DocRegistry, DocCategoryTab } from "../../utils/docs";
 
 interface Props {
     locale: Locale;
     projectSlug: string;
     activeVersion?: string;
+    /** 当前激活的分类下的 registry（已过滤） */
     registry: DocRegistry;
+    /** 所有分类对应的 registry 映射，key = category slug */
+    allRegistries: Record<string, DocRegistry>;
     activeDocId?: string;
     activeSidebarLink?: string;
+    /** 分类选项卡列表 */
+    tabs: DocCategoryTab[];
+    /** 当前激活的选项卡 slug */
+    activeTab: string;
 }
 
-const { locale, projectSlug, activeVersion, registry, activeDocId, activeSidebarLink } = Astro.props;
+const { locale, activeVersion: _activeVersion, registry, allRegistries, activeDocId, activeSidebarLink, tabs, activeTab } = Astro.props;
 const t = useTranslations(locale);
 const prefix = locale === "zh-cn" ? "" : `/${locale}`;
-const versionPrefix = activeVersion ? `/${activeVersion}` : '';
 ---
 
-<div class="doc-sidebar-inner card">
-    <nav class="doc-tree-nav">
-        <a
-            href={`${prefix}/projects/${projectSlug}${versionPrefix}/`}
-            class:list={[
-                "doc-tree-link doc-tree-link--index",
-                { "doc-tree-link--active": activeSidebarLink === "index" },
-            ]}
-        >
-            <i class="bx bx-book-open"></i>
-            {t("projects-docs-overview")}
-        </a>
-
-        {registry.chapters.map((ch) => (
-            <div class="doc-tree-chapter">
-                <p class="doc-tree-chapter-label">
-                    {t(ch.titleKey) !== ch.titleKey
-                        ? t(ch.titleKey)
-                        : ch.slug.replace(/-/g, " ")}
-                </p>
-                {ch.docs.map((doc) => {
-                    const docUrl = `${prefix}/projects/${doc.id}/`;
-                    const isActive = activeDocId
-                        ? doc.id === activeDocId
-                        : activeSidebarLink === doc.id;
-                    return (
-                        <a
-                            href={docUrl}
-                            class:list={[
-                                "doc-tree-link",
-                                { "doc-tree-link--active": isActive },
-                            ]}
-                        >
-                            {doc.title}
-                        </a>
-                    );
-                })}
-            </div>
+<div class="doc-tabs-card card">
+    <nav class="doc-tabs-nav" data-active-tab={activeTab}>
+        {tabs.map((tab) => (
+            <button
+                type="button"
+                class:list={[
+                    "doc-tab-btn",
+                    { "doc-tab-btn--active": tab.slug === activeTab },
+                ]}
+                data-tab={tab.slug}
+            >
+                <i class={`bx ${tab.icon} doc-tab-icon`}></i>
+                <span>{t(tab.titleKey)}</span>
+            </button>
         ))}
     </nav>
 </div>
+
+<div class="doc-chapters-card card" data-active-tab={activeTab}>
+    {/* 为每个分类预渲染章节列表，客户端通过 data-tab 控制显隐 */}
+    {tabs.map((tab) => {
+        const tabRegistry = allRegistries[tab.slug] || registry;
+        const isEmpty = tabRegistry.chapters.length === 0;
+        return (
+            <nav
+                class="doc-tree-nav"
+                data-tab={tab.slug}
+                class:list={{ "doc-tree-nav--hidden": tab.slug !== activeTab }}
+            >
+                {isEmpty ? (
+                    <p class="doc-tree-empty">{locale === 'zh-cn' ? '暂无内容' : 'No content yet'}</p>
+                ) : (
+                    tabRegistry.chapters.map((ch) => (
+                        <div class="doc-tree-chapter">
+                            <p class="doc-tree-chapter-label">
+                                {t(ch.titleKey) !== ch.titleKey
+                                    ? t(ch.titleKey)
+                                    : ch.slug.replace(/-/g, " ")}
+                            </p>
+                            {ch.docs.map((doc) => {
+                                const docUrl = `${prefix}/projects/${doc.id}/`;
+                                const isActive = activeDocId
+                                    ? doc.id === activeDocId
+                                    : activeSidebarLink === doc.id;
+                                return (
+                                    <a
+                                        href={docUrl}
+                                        class:list={[
+                                            "doc-tree-link",
+                                            { "doc-tree-link--active": isActive },
+                                        ]}
+                                    >
+                                        {doc.title}
+                                    </a>
+                                );
+                            })}
+                        </div>
+                    ))
+                )}
+            </nav>
+        );
+    })}
+</div>
+
+<script>
+    import { initDocTabs } from '../../scripts/doc-tabs';
+
+    function init() {
+        // 根据当前激活的标签页初始化状态
+        const tabsCard = document.querySelector<HTMLElement>('.doc-tabs-card');
+        const chaptersCard = document.querySelector<HTMLElement>('.doc-chapters-card');
+        if (!tabsCard || !chaptersCard) return;
+
+        // 从 cards 的 data-active-tab 获取初始状态
+        const initialTab = tabsCard.querySelector<HTMLElement>('.doc-tab-btn--active')?.dataset.tab || 'guides';
+        initDocTabs(tabsCard, chaptersCard, initialTab);
+    }
+
+    document.addEventListener('astro:page-load', init);
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', init);
+    } else {
+        init();
+    }
+</script>
+
+<style>
+    .doc-tree-nav--hidden {
+        display: none;
+    }
+    .doc-tree-empty {
+        font-size: var(--font-size-sm);
+        color: var(--md-sys-color-outline-variant);
+        text-align: center;
+        padding: var(--space-lg) var(--space-md);
+    }
+</style>

@@ -37,6 +37,39 @@ export interface DocRegistry {
   flatList: DocNode[];
 }
 
+// ── 分类选项卡 ──────────────────────────────────────────
+
+export interface DocCategoryTab {
+  slug: string;
+  titleKey: string;
+  icon: string;
+}
+
+const CATEGORY_TABS: DocCategoryTab[] = [
+  { slug: 'tutorial',   titleKey: 'doc-category-tutorial',   icon: 'bx-graduation' },
+  { slug: 'guides',     titleKey: 'doc-category-guides',     icon: 'bx-compass' },
+  { slug: 'reference',  titleKey: 'doc-category-reference',  icon: 'bx-code-block' },
+  { slug: 'api',        titleKey: 'doc-category-api',        icon: 'bx-cog' },
+];
+
+/** 返回所有选项卡定义 */
+export function getDocCategoryTabs(): DocCategoryTab[] {
+  return CATEGORY_TABS;
+}
+
+/** 从 DocRegistry 中筛选属于指定分类的章节（目前所有章节默认属于 guides） */
+export function filterRegistryByCategory(
+  registry: DocRegistry,
+  categorySlug: string,
+): DocRegistry {
+  if (categorySlug !== 'guides') {
+    // 其他分类暂无内容，返回空注册表
+    return { projectSlug: registry.projectSlug, version: registry.version, chapters: [], flatList: [] };
+  }
+  // guides 包含全部章节
+  return registry;
+}
+
 // ── 版本与 ID 解析 ──────────────────────────────────────
 
 const CHAPTER_RE = /^(\d{2})\.?([^/]+)/;
@@ -347,7 +380,6 @@ export async function getProjectPaths(_locale: string) {
           paths.push({ params: { slug: alphaSlug } });
         }
         // 也处理 alpha/ 下的文档路径
-        const docPrefix = slug + '/alpha/';
         for (const docEntry of allEntries) {
           const docSlug = toUrlSlug(docEntry.id);
           if (docSlug.startsWith(slug + '/') && !docSlug.includes('/v')) {
