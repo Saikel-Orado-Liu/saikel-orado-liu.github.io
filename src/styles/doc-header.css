@@ -35,27 +35,51 @@
 /* 搜索图标 */
 .navbar-search .search-icon {
     position: absolute;
-    inset-inline-start: 10px;
+    inset-inline-start: 16px;
+    top: 50%;
+    transform: translateY(calc(-50% + 2px));
     color: var(--md-sys-color-on-surface-variant);
     opacity: 0.5;
     pointer-events: none;
     z-index: 1;
 }
 
+/* 快捷键标识 */
+.navbar-search .pf-trigger-shortcut {
+    position: absolute;
+    inset-inline-end: 8px;
+    top: 50%;
+    transform: translateY(calc(-50% + 2px));
+    pointer-events: none;
+    padding: 2px 6px;
+    font-size: var(--font-size-sm);
+    font-weight: 500;
+    color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 50%, transparent);
+    background: transparent;
+    border-radius: var(--shape-full);
+}
+
 /* 搜索输入框 */
 .navbar-search .search-input {
     width: 100%;
-    height: 32px;
-    padding: 0 12px 0 32px;
+    height: 47px;
+    padding: 4px 12px 0 42px;
     font-family: var(--pf-font, inherit);
-    font-size: 14px;
+    font-size: var(--font-size-base);
     color: var(--md-sys-color-on-surface);
-    background: color-mix(in srgb, var(--clr-primary-bg) 96%, transparent);
-    border: 1px solid color-mix(in srgb, var(--md-sys-color-outline-variant) 50%, transparent);
-    border-radius: var(--shape-md);
+    background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+    border-right: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+    border-bottom: 1px solid color-mix(in srgb, var(--clr-primary-text) 15%, transparent);
+    border-radius: var(--shape-full);
     outline: none;
     box-sizing: border-box;
-    transition: border-color 0.15s, box-shadow 0.15s;
+    box-shadow:
+        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+        inset 4px 6px 0 0 rgba(0, 0, 0, 0.45),
+        inset -2px -3px 8px color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
+    transition: box-shadow 0.15s;
 }
 
 .navbar-search .search-input::placeholder {
@@ -63,8 +87,11 @@
 }
 
 .navbar-search .search-input:focus {
-    border-color: var(--md-sys-color-primary);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 25%, transparent);
+    box-shadow:
+        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
+        inset 4px 6px 0 0 rgba(0, 0, 0, 0.45),
+        inset -2px -3px 8px color-mix(in srgb, var(--clr-primary-text) 10%, transparent),
+        0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 25%, transparent);
 }
 
 /* 隐藏浏览器原生搜索清除按钮 */
@@ -484,13 +511,23 @@
 
 /* 亮色主题微调 */
 :root.light-style .navbar-search .search-input {
-    background: color-mix(in srgb, var(--clr-primary-bg) 92%, #000 8%);
-    border-color: var(--md-sys-color-outline-variant);
+    background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 33%);
+    border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
+    border-right: 1px solid rgba(255, 255, 255, 1.00);
+    border-bottom: 1px solid rgba(255, 255, 255, 1.00);
+    box-shadow:
+        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+        inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+        inset -4px -6px 8px rgba(255, 255, 255, 0.80);
 }
 
 :root.light-style .navbar-search .search-input:focus {
-    border-color: var(--md-sys-color-primary);
-    box-shadow: 0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
+    box-shadow:
+        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+        inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
+        inset -4px -6px 8px rgba(255, 255, 255, 0.80),
+        0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
 }
 
 /* 亮色模式结果卡片 — 实色暖白基底 + 暖色噪点（参照 .light-style .card） */
