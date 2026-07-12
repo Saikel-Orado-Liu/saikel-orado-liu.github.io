@@ -68,6 +68,27 @@ const closeLabel = t('doc-search-close');
         }
         resultsContainer.addEventListener('scroll', updateScrollMask, { passive: true });
 
+        // --- Scroll-to-reveal helper ---
+        function scrollToReveal(el) {
+            const maskSize = 24;
+            const elTop = el.offsetTop;
+            const elBottom = elTop + el.offsetHeight;
+            const viewTop = resultsContainer.scrollTop;
+            const viewBottom = viewTop + resultsContainer.clientHeight;
+
+            if (elTop < viewTop + maskSize) {
+                resultsContainer.scrollTo({ top: Math.max(0, elTop - maskSize), behavior: 'smooth' });
+            } else if (elBottom > viewBottom - maskSize) {
+                resultsContainer.scrollTo({ top: elBottom + maskSize - resultsContainer.clientHeight, behavior: 'smooth' });
+            }
+        }
+
+        // --- Hover scroll reveal ---
+        resultsContainer.addEventListener('mouseover', (e) => {
+            const item = e.target.closest('.search-result-item');
+            if (item) scrollToReveal(item);
+        });
+
         // --- Input handler ---
         input.oninput = null;
         input.addEventListener('input', handleInput);
@@ -203,7 +224,7 @@ const closeLabel = t('doc-search-close');
                 el.setAttribute('aria-selected', String(i === activeIndex));
             });
             if (activeIndex >= 0 && resultElements[activeIndex]) {
-                resultElements[activeIndex].scrollIntoView({ block: 'nearest' });
+                scrollToReveal(resultElements[activeIndex]);
             }
         }
     }
