@@ -14,16 +14,22 @@ interface Props {
 
 const { locale, projectTitle, projectIcon, projectHomeHref } = Astro.props;
 const t = useTranslations(locale);
+const prefix = locale === "zh-cn" ? "" : `/${locale}`;
+const projectsHref = `${prefix}/projects`;
 ---
 
 <header class="navbar plate">
   <div class="navbar-inner">
     <div class="navbar-main">
-      <a href={projectHomeHref} class="navbar-brand" aria-label={projectTitle}>
-        {projectIcon && <img class="navbar-logo" src={projectIcon} alt="" width="32" height="32" />}
-        <span class="navbar-title">{projectTitle}</span>
-        {" "}<span class="doc-header-suffix">{t("doc-header-suffix")}</span>
-      </a>
+      <div class="navbar-brand-group">
+        <a href={projectsHref} class="navbar-brand" aria-label={projectTitle}>
+          {projectIcon && <img class="navbar-logo" src={projectIcon} alt="" width="32" height="32" />}
+          <span class="navbar-title">{projectTitle}</span>
+        </a>
+        <a href={projectHomeHref} class="navbar-brand" aria-label={t("doc-header-suffix")}>
+          <span class="doc-header-suffix">{t("doc-header-suffix")}</span>
+        </a>
+      </div>
     </div>
 
     <div class="navbar-search">

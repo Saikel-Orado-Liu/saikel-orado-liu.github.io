@@ -707,7 +707,7 @@
     position: absolute;
     left: var(--space-xs);
     width: calc(100% - var(--space-xs) * 2);
-    border-radius: var(--shape-full);
+    border-radius: calc((var(--shape-md) + var(--shape-lg)) / 2);
     z-index: 2;
     pointer-events: none;
     isolation: isolate;

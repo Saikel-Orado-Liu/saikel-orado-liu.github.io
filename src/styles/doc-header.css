@@ -1,8 +1,21 @@
 .doc-header-suffix {
-    font-size: var(--font-size-sm);
-    font-weight: var(--font-weight-medium);
+    font-size: var(--font-size-xl);
+    font-weight: var(--font-weight-bold);
+    color: var(--md-sys-color-primary);
+    position: relative;
+    top: 2px;
+    transition: color 0.15s ease;
+}
+
+.navbar-brand-group {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+}
+
+.navbar-brand:hover .doc-header-suffix,
+.navbar-brand:focus-visible .doc-header-suffix {
     color: var(--md-sys-color-on-surface-variant);
-    opacity: 0.65;
 }
 
 /* ===== DocSearch — 自定义搜索栏 ===== */
