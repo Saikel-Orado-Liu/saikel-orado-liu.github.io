@@ -86,15 +86,6 @@
     color: color-mix(in srgb, var(--md-sys-color-on-surface-variant) 60%, transparent);
 }
 
-.navbar-search .search-input:focus {
-    box-shadow:
-        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
-        inset 4px 6px 0 0 rgba(0, 0, 0, 0.45),
-        inset -2px -3px 8px color-mix(in srgb, var(--clr-primary-text) 10%, transparent),
-        0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 25%, transparent);
-}
-
-/* 隐藏浏览器原生搜索清除按钮 */
 .navbar-search .search-input::-webkit-search-decoration,
 .navbar-search .search-input::-webkit-search-cancel-button,
 .navbar-search .search-input::-webkit-search-results-button,
@@ -522,15 +513,6 @@
         inset -4px -6px 8px rgba(255, 255, 255, 0.80);
 }
 
-:root.light-style .navbar-search .search-input:focus {
-    box-shadow:
-        2px 4px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
-        inset 4px 6px 0 0 color-mix(in srgb, var(--clr-primary-accent), rgba(255, 255, 255, 0.10)),
-        inset -4px -6px 8px rgba(255, 255, 255, 0.80),
-        0 0 0 2px color-mix(in srgb, var(--md-sys-color-primary) 20%, transparent);
-}
-
-/* 亮色模式结果卡片 — 实色暖白基底 + 暖色噪点（参照 .light-style .card） */
 :root.light-style .navbar-search .search-result-item {
     background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);

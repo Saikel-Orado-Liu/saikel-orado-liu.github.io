@@ -34,7 +34,7 @@
 /* 侧边栏容器覆盖 */
 .doc-sidebar-inner.card {
     overflow: hidden auto;
-    max-height: calc(100vh - var(--header-height) - var(--space-2xl));
+    max-height: calc(100vh - var(--header-height) - var(--space-2xl) - 40px);
     padding: var(--space-md);
 }
 
@@ -83,7 +83,7 @@
 /* ===== 章节目录卡片 ===== */
 .doc-chapters-card.card {
     overflow: hidden auto;
-    max-height: calc(100vh - var(--header-height) - var(--space-2xl) - 240px);
+    max-height: calc(100vh - var(--header-height) - var(--space-2xl) - 198px);
     padding: var(--space-md);
 }
 
@@ -538,8 +538,8 @@
 .doc-toc-group {
     position: relative;
     isolation: isolate;
-    padding: var(--space-xs);
-    border-radius: calc(var(--shape-md) + 3px);
+    padding: calc(var(--space-xs) + 2px) var(--space-xs) var(--space-xs) calc(var(--space-xs) + 2px);
+    border-radius: calc(var(--shape-lg));
     background: color-mix(in srgb, var(--clr-primary-bg), var(--clr-base-bg) 50%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 10%, transparent);
@@ -707,7 +707,7 @@
     position: absolute;
     left: var(--space-xs);
     width: calc(100% - var(--space-xs) * 2);
-    border-radius: var(--shape-md);
+    border-radius: var(--shape-full);
     z-index: 2;
     pointer-events: none;
     isolation: isolate;
