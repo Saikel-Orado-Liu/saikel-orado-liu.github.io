@@ -24,6 +24,7 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
 ---
 
 <div class="doc-tabs-card card">
+  <div class="doc-tabs-groove">
     <nav class="doc-tabs-nav" data-active-tab={activeTab}>
         {tabs.map((tab) => (
             <button
@@ -39,6 +40,10 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
             </button>
         ))}
     </nav>
+    <div class="doc-tabs-slider" aria-hidden="true">
+        <div class="doc-tabs-slider-highlight"></div>
+    </div>
+</div>
 </div>
 
 <div class="doc-chapters-card card" data-active-tab={activeTab}>
@@ -89,16 +94,16 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
 
 <script>
     import { initDocTabs } from '../../scripts/doc-tabs';
+    import { initTabsSlider } from '../../scripts/tabs-slider';
 
     function init() {
-        // 根据当前激活的标签页初始化状态
-        const tabsCard = document.querySelector<HTMLElement>('.doc-tabs-card');
+        const tabsGroove = document.querySelector<HTMLElement>('.doc-tabs-groove');
         const chaptersCard = document.querySelector<HTMLElement>('.doc-chapters-card');
-        if (!tabsCard || !chaptersCard) return;
+        if (!tabsGroove || !chaptersCard) return;
 
-        // 从 cards 的 data-active-tab 获取初始状态
-        const initialTab = tabsCard.querySelector<HTMLElement>('.doc-tab-btn--active')?.dataset.tab || 'guides';
-        initDocTabs(tabsCard, chaptersCard, initialTab);
+        const initialTab = tabsGroove.querySelector<HTMLElement>('.doc-tab-btn--active')?.dataset.tab || 'guides';
+        initDocTabs(tabsGroove, chaptersCard, initialTab);
+        initTabsSlider();
     }
 
     document.addEventListener('astro:page-load', init);

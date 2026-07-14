@@ -15,6 +15,8 @@ export function initDocTabs(
     if (tab === activeTab) return;
     activeTab = tab;
     applyTab(tab);
+    // 通知 tabs-slider 刷新内部状态
+    tabsCard.dispatchEvent(new CustomEvent('tabs-slider:refresh'));
   }
 
   function applyTab(tab: string): void {
@@ -32,6 +34,26 @@ export function initDocTabs(
     });
 
     chaptersCard.dataset.activeTab = tab;
+
+    // 重定位 tabs 滑块
+    const slider = tabsCard.querySelector<HTMLElement>('.doc-tabs-slider');
+    if (slider) {
+      const activeBtn = tabsCard.querySelector<HTMLElement>('.doc-tab-btn--active');
+      if (activeBtn) {
+        const groove = slider.parentElement!;
+        // 使用 offsetTop/offsetHeight（不受 CSS transform 影响，相对 padding edge）
+        let top = 0;
+        let el: HTMLElement | null = activeBtn;
+        while (el && el !== groove) {
+          top += el.offsetTop;
+          el = el.offsetParent as HTMLElement | null;
+        }
+        slider.style.transition = 'none';
+        slider.style.top = `${top}px`;
+        void slider.offsetHeight;
+        slider.style.transition = '';
+      }
+    }
   }
 
   // 绑定选项卡点击
@@ -41,6 +63,9 @@ export function initDocTabs(
       if (tab) switchTab(tab);
     });
   });
+
+  // 初始定位滑块
+  applyTab(activeTab);
 
   // 添加 aria 属性
   tabsCard.setAttribute('role', 'tablist');

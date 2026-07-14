@@ -46,7 +46,7 @@ export interface DocCategoryTab {
 }
 
 const CATEGORY_TABS: DocCategoryTab[] = [
-  { slug: 'tutorial',   titleKey: 'doc-category-tutorial',   icon: 'bx-graduation' },
+  { slug: 'tutorial',   titleKey: 'doc-category-tutorial',   icon: 'bx-rocket' },
   { slug: 'guides',     titleKey: 'doc-category-guides',     icon: 'bx-compass' },
   { slug: 'reference',  titleKey: 'doc-category-reference',  icon: 'bx-code-block' },
   { slug: 'api',        titleKey: 'doc-category-api',        icon: 'bx-cog' },
