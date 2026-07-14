@@ -12,15 +12,17 @@ const placeholder = t('doc-search-placeholder');
 const navLabel = t('doc-search-navigate');
 const selLabel = t('doc-search-select');
 const closeLabel = t('doc-search-close');
+const searchingLabel = t('doc-search-searching');
+const emptyLabel = t('doc-search-empty');
 ---
 
-<div class="search-container" data-search-container>
+<div class="search-container" data-search-container data-search-searching={searchingLabel} data-search-empty={emptyLabel}>
     <div class="search-input-wrapper">
         <svg class="search-icon" viewBox="0 0 18 18" width="16" height="16" fill="none" aria-hidden="true">
             <path d="M12.755 11.255h-.79l-.28-.27A6.471 6.471 0 0 0 13.255 6.76a6.5 6.5 0 1 0-6.5 6.5 6.471 6.471 0 0 0 4.23-1.53l.27.28v.79l5 4.99 1.49-1.49-4.99-5Zm-6 0a4.5 4.5 0 1 1 0-9 4.5 4.5 0 0 1 0 9Z" fill="currentColor"/>
         </svg>
         <input type="search" class="search-input" placeholder={placeholder} aria-label={placeholder} autocomplete="off" autocapitalize="none" enterkeyhint="search" />
-        <span class="pf-trigger-shortcut" aria-hidden="true">Ctrl+K</span>
+        <span class="pf-trigger-shortcut" aria-hidden="true">Ctrl + K</span>
     </div>
     <div class="search-dropdown card" hidden>
         <div class="search-results-groove" aria-hidden="true"></div>
@@ -34,112 +36,142 @@ const closeLabel = t('doc-search-close');
 </div>
 
 <script is:inline>
-(() => {
+(function() {
     'use strict';
 
-    let pagefindInstance = null;
-    let currentSearch = 0;
-    let activeIndex = -1;
-    let resultElements = [];
+    var LOG = function() { var args=['[DocSearch]']; for (var i=0; i<arguments.length; i++) args.push(arguments[i]); console.log.apply(console, args); };
 
-    function init() {
-        const container = document.querySelector('[data-search-container]');
-        if (!container) return;
+    var DS = window.__docSearchShared || {};
 
-        const input = container.querySelector('.search-input');
-        const dropdown = container.querySelector('.search-dropdown');
-        const resultsContainer = container.querySelector('.search-results');
+    function ensurePagefindForLocale(locale) {
+        if (DS.pagefind && DS.pagefindLocale === locale) {
+            return DS.pagefindPromise;
+        }
+        LOG('ensurePagefindForLocale: switching from', DS.pagefindLocale, 'to', locale);
+        // destroy() 是 async 的，必须等它完成再 import，否则新模块拿到已终止的 worker
+        var oldPf = DS.pagefind;
+        DS.pagefind = null;
+        DS.pagefindLocale = locale;
+        DS.pagefindPromise = (oldPf ? oldPf.destroy().catch(function(){}) : Promise.resolve())
+            .then(function() { return import('/pagefind/pagefind.js'); })
+            .then(function(pf) {
+                DS.pagefind = pf;
+                LOG('ensurePagefindForLocale: Pagefind ready for', locale);
+                return pf;
+            }).catch(function(err) {
+                console.error('[DocSearch] load error:', err);
+                DS.pagefindPromise = null;
+            });
+        return DS.pagefindPromise;
+    }
 
-        if (!input || !dropdown || !resultsContainer) return;
-
-        // --- Ctrl+K / Cmd+K 全局快捷键打开搜索 ---
-        document.addEventListener('keydown', (e) => {
+    if (!DS.ctrlKBound) {
+        DS.ctrlKBound = true;
+        document.addEventListener('keydown', function(e) {
             if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
                 e.preventDefault();
-                input.focus();
-                input.select();
+                var inp = document.querySelector('[data-search-container] .search-input');
+                if (inp) { inp.focus(); inp.select(); }
             }
         });
+    }
 
-        // --- Pagefind lazy init ---
-        if (!pagefindInstance) {
-            import('/pagefind/pagefind.js').then(pf => {
-                pagefindInstance = pf;
-            }).catch(err => {
-                console.error('[DocSearch] Failed to load Pagefind:', err);
-            });
+    window.__docSearchShared = DS;
+
+    var currentSearch = 0;
+    var activeIndex = -1;
+    var resultElements = [];
+
+    function getCurrentLocale() {
+        var p = window.location.pathname;
+        var PF = ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'];
+        for (var i = 0; i < PF.length; i++) {
+            var l = PF[i];
+            if (p.indexOf('/' + l + '/') === 0 || p === '/' + l) return l;
         }
+        return 'zh-cn';
+    }
 
-        // --- Scroll mask for fade hints ---
+    function localizeUrl(url) {
+        var locale = getCurrentLocale();
+        if (locale === 'zh-cn') return url;
+        var PF = ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'];
+        var u = url;
+        try { u = new URL(url).pathname; } catch(e) {}
+        if (u.charAt(0) !== '/') u = '/' + u;
+        for (var j = 0; j < PF.length; j++) {
+            if (u.indexOf('/' + PF[j] + '/') === 0) return url;
+        }
+        return '/' + locale + u;
+    }
+
+    function init() {
+        var container = document.querySelector('[data-search-container]');
+        if (!container) return;
+        if (container.dataset.searchInit === 'true') return;
+        container.dataset.searchInit = 'true';
+        LOG('init: locale=' + getCurrentLocale() + ' hasPagefind=' + !!DS.pagefind + ' pagefindLocale=' + (DS.pagefindLocale||'none'));
+
+        var input = container.querySelector('.search-input');
+        var dropdown = container.querySelector('.search-dropdown');
+        var resultsContainer = container.querySelector('.search-results');
+        if (!input || !dropdown || !resultsContainer) return;
+
         function updateScrollMask() {
-            const atTop = resultsContainer.scrollTop <= 0;
-            const atBottom = resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 1;
+            var atTop = resultsContainer.scrollTop <= 0;
+            var atBottom = resultsContainer.scrollTop + resultsContainer.clientHeight >= resultsContainer.scrollHeight - 1;
             resultsContainer.classList.toggle('at-top', atTop);
             resultsContainer.classList.toggle('at-bottom', atBottom);
         }
         resultsContainer.addEventListener('scroll', updateScrollMask, { passive: true });
 
-        // --- Scroll-to-reveal helper ---
         function scrollToReveal(el) {
-            const maskSize = 24;
-            const elTop = el.offsetTop;
-            const elBottom = elTop + el.offsetHeight;
-            const viewTop = resultsContainer.scrollTop;
-            const viewBottom = viewTop + resultsContainer.clientHeight;
-
+            var maskSize = 24;
+            var elTop = el.offsetTop, elBottom = elTop + el.offsetHeight;
+            var viewTop = resultsContainer.scrollTop, viewBottom = viewTop + resultsContainer.clientHeight;
             if (elTop < viewTop + maskSize) {
                 resultsContainer.scrollTo({ top: Math.max(0, elTop - maskSize), behavior: 'smooth' });
             } else if (elBottom > viewBottom - maskSize) {
                 resultsContainer.scrollTo({ top: elBottom + maskSize - resultsContainer.clientHeight, behavior: 'smooth' });
             }
         }
-
-        // --- Hover scroll reveal ---
-        resultsContainer.addEventListener('mouseover', (e) => {
-            const item = e.target.closest('.search-result-item');
+        resultsContainer.addEventListener('mouseover', function(e) {
+            var item = e.target.closest('.search-result-item');
             if (item) scrollToReveal(item);
         });
 
-        // --- Input handler ---
         input.oninput = null;
         input.addEventListener('input', handleInput);
-
-        // --- Keyboard navigation ---
         input.onkeydown = null;
         input.addEventListener('keydown', handleKeydown);
 
         function handleInput() {
-            const term = input.value.trim();
-            const searchId = ++currentSearch;
-
-            if (!term) {
-                closeDropdown();
-                return;
-            }
-
-            if (!pagefindInstance) return;
-
+            var term = input.value.trim();
+            var searchId = ++currentSearch;
+            if (!term) { closeDropdown(); return; }
             showLoading();
 
-            pagefindInstance.debouncedSearch(term, {}, 300).then(result => {
+            var locale = getCurrentLocale();
+            LOG('handleInput: term="'+term+'" locale='+locale+' pagefindLocale='+(DS.pagefindLocale||'none'));
+            ensurePagefindForLocale(locale).then(function() {
                 if (searchId !== currentSearch) return;
-                if (!result) return;
+                var pf = DS.pagefind;
+                if (!pf) return;
 
-                if (result.results.length === 0) {
-                    showEmpty();
-                    return;
-                }
-
-                renderResults(result.results.slice(0, 8));
+                pf.debouncedSearch(term, {}, 300).then(function(result) {
+                    if (searchId !== currentSearch) return;
+                    if (!result) return;
+                    LOG('handleInput: got '+result.results.length+' results');
+                    if (result.results.length === 0) { showEmpty(); return; }
+                    renderResults(result.results.slice(0, 8));
+                }).catch(function(err) {
+                    console.error('[DocSearch] search error:', err);
+                });
             });
         }
 
         function handleKeydown(e) {
-            if (e.key === 'Escape') {
-                closeDropdown();
-                input.blur();
-                return;
-            }
+            if (e.key === 'Escape') { closeDropdown(); input.blur(); return; }
             if (e.key === 'ArrowDown') {
                 e.preventDefault();
                 if (!dropdown.hidden && resultElements.length > 0) {
@@ -165,64 +197,40 @@ const closeLabel = t('doc-search-close');
             }
         }
 
-        function openDropdown() {
-            dropdown.hidden = false;
-            dropdown.classList.add('open');
-        }
-
+        function openDropdown() { dropdown.hidden = false; dropdown.classList.add('open'); }
         function closeDropdown() {
-            dropdown.hidden = true;
-            dropdown.classList.remove('open');
-            resultsContainer.innerHTML = '';
-            resultsContainer.classList.remove('at-top', 'at-bottom');
-            activeIndex = -1;
-            resultElements = [];
+            dropdown.hidden = true; dropdown.classList.remove('open');
+            resultsContainer.innerHTML = ''; resultsContainer.classList.remove('at-top', 'at-bottom');
+            activeIndex = -1; resultElements = [];
         }
-
-        function showLoading() {
-            dropdown.hidden = false;
-            resultsContainer.innerHTML = '<div class="search-status search-loading">Searching\u2026</div>';
-        }
-
-        function showEmpty() {
-            dropdown.hidden = false;
-            resultsContainer.innerHTML = '<div class="search-status search-empty">No results found</div>';
-        }
+        function showLoading() { dropdown.hidden = false; resultsContainer.innerHTML = '<div class="search-status search-loading">'+container.dataset.searchSearching+'</div>'; }
+        function showEmpty() { dropdown.hidden = false; resultsContainer.innerHTML = '<div class="search-status search-empty">'+container.dataset.searchEmpty+'</div>'; }
 
         async function renderResults(results) {
-            const items = await Promise.all(results.map(async (r) => {
+            const items = await Promise.all(results.map(async function(r, idx) {
                 const data = await r.data();
-
-                const a = document.createElement('a');
+                var a = document.createElement('a');
                 a.className = 'search-result-item';
-                a.href = data.url;
+                a.href = localizeUrl(data.url);
                 a.setAttribute('role', 'option');
-
-                const title = document.createElement('div');
+                var title = document.createElement('div');
                 title.className = 'search-result-title';
-                title.textContent = data.meta?.title || 'Untitled';
+                title.textContent = (data.meta && data.meta.title) || 'Untitled';
                 a.appendChild(title);
-
-                // 四级兜底：excerpt → plain_excerpt → meta.description → content 截取
-                const desc = data.excerpt
-                    || data.plain_excerpt
-                    || data.meta?.description
-                    || (data.content
-                        ? data.content.substring(0, 120).replace(/\s+/g, ' ').trim() + '…'
-                        : '');
-
+                var desc = data.excerpt || data.plain_excerpt || (data.meta && data.meta.description)
+                    || (data.content ? data.content.substring(0, 120).replace(/\s+/g, ' ').trim() + '\u2026' : '');
                 if (desc) {
-                    const excerpt = document.createElement('div');
+                    var excerpt = document.createElement('div');
                     excerpt.className = 'search-result-excerpt';
                     excerpt.innerHTML = desc;
                     a.appendChild(excerpt);
                 }
-
+                if (idx === 0) LOG('renderResults: first title="'+title.textContent+'" url='+a.href);
                 return a;
             }));
-
+            LOG('renderResults: showing '+items.length+' items');
             resultsContainer.innerHTML = '';
-            items.forEach(el => resultsContainer.appendChild(el));
+            items.forEach(function(el) { resultsContainer.appendChild(el); });
             resultElements = items;
             activeIndex = -1;
             openDropdown();
@@ -230,7 +238,7 @@ const closeLabel = t('doc-search-close');
         }
 
         function updateActive() {
-            resultElements.forEach((el, i) => {
+            resultElements.forEach(function(el, i) {
                 el.classList.toggle('active', i === activeIndex);
                 el.setAttribute('aria-selected', String(i === activeIndex));
             });
@@ -240,16 +248,17 @@ const closeLabel = t('doc-search-close');
         }
     }
 
-    // Run on initial load
     if (document.readyState === 'loading') {
         document.addEventListener('DOMContentLoaded', init);
     } else {
         init();
     }
 
-    // Re-run after Astro SPA navigation (header may be re-rendered)
-    document.addEventListener('astro:after-swap', () => {
-        setTimeout(init, 0);
+    document.addEventListener('astro:after-swap', function() {
+        LOG('astro:after-swap locale='+getCurrentLocale()+' pagefindLocale='+(DS.pagefindLocale||'none'));
+        var container = document.querySelector('[data-search-container]');
+        if (container) { delete container.dataset.searchInit; }
+        requestAnimationFrame(function() { init(); });
     });
 })();
 </script>
