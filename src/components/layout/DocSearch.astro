@@ -206,37 +206,35 @@ const emptyLabel = t('doc-search-empty');
         function showLoading() { dropdown.hidden = false; resultsContainer.innerHTML = '<div class="search-status search-loading">'+container.dataset.searchSearching+'</div>'; }
         function showEmpty() { dropdown.hidden = false; resultsContainer.innerHTML = '<div class="search-status search-empty">'+container.dataset.searchEmpty+'</div>'; }
 
-        function renderResults(results) {
-            return Promise.all(results.map(function(r, idx) {
-                return r.data().then(function(data) {
-                    var a = document.createElement('a');
-                    a.className = 'search-result-item';
-                    a.href = localizeUrl(data.url);
-                    a.setAttribute('role', 'option');
-                    var title = document.createElement('div');
-                    title.className = 'search-result-title';
-                    title.textContent = (data.meta && data.meta.title) || 'Untitled';
-                    a.appendChild(title);
-                    var desc = data.excerpt || data.plain_excerpt || (data.meta && data.meta.description)
-                        || (data.content ? data.content.substring(0, 120).replace(/\s+/g, ' ').trim() + '\u2026' : '');
-                    if (desc) {
-                        var excerpt = document.createElement('div');
-                        excerpt.className = 'search-result-excerpt';
-                        excerpt.innerHTML = desc;
-                        a.appendChild(excerpt);
-                    }
-                    if (idx === 0) LOG('renderResults: first title="'+title.textContent+'" url='+a.href);
-                    return a;
-                });
-            })).then(function(items) {
-                LOG('renderResults: showing '+items.length+' items');
-                resultsContainer.innerHTML = '';
-                items.forEach(function(el) { resultsContainer.appendChild(el); });
-                resultElements = items;
-                activeIndex = -1;
-                openDropdown();
-                requestAnimationFrame(updateScrollMask);
-            });
+        async function renderResults(results) {
+            const items = await Promise.all(results.map(async function(r, idx) {
+                const data = await r.data();
+                var a = document.createElement('a');
+                a.className = 'search-result-item';
+                a.href = localizeUrl(data.url);
+                a.setAttribute('role', 'option');
+                var title = document.createElement('div');
+                title.className = 'search-result-title';
+                title.textContent = (data.meta && data.meta.title) || 'Untitled';
+                a.appendChild(title);
+                var desc = data.excerpt || data.plain_excerpt || (data.meta && data.meta.description)
+                    || (data.content ? data.content.substring(0, 120).replace(/\s+/g, ' ').trim() + '\u2026' : '');
+                if (desc) {
+                    var excerpt = document.createElement('div');
+                    excerpt.className = 'search-result-excerpt';
+                    excerpt.innerHTML = desc;
+                    a.appendChild(excerpt);
+                }
+                if (idx === 0) LOG('renderResults: first title="'+title.textContent+'" url='+a.href);
+                return a;
+            }));
+            LOG('renderResults: showing '+items.length+' items');
+            resultsContainer.innerHTML = '';
+            items.forEach(function(el) { resultsContainer.appendChild(el); });
+            resultElements = items;
+            activeIndex = -1;
+            openDropdown();
+            requestAnimationFrame(updateScrollMask);
         }
 
         function updateActive() {
