@@ -133,11 +133,11 @@
                 color 0.2s ease;
 }
 .doc-tab-btn.tab-pressed {
-    transform: translate(1px, 0);
+    transform: translate(1px, 2px);
     transition: transform 0.08s ease, color 0.08s ease;
 }
 .doc-tab-btn.tab-pressed.instant-press {
-    transform: translate(1px, 0px);
+    transform: translate(1px, 1px);
     transition: transform 0.08s ease, color 0.08s ease;
 }
 .doc-tab-icon {
