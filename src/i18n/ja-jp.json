@@ -78,5 +78,7 @@
   "doc-search-placeholder": "ドキュメントを検索…",
   "doc-search-navigate": "移動",
   "doc-search-select": "選択",
-  "doc-search-close": "閉じる"
+  "doc-search-close": "閉じる",
+  "doc-search-searching": "検索中…",
+  "doc-search-empty": "結果が見つかりません"
 }

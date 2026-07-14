@@ -78,5 +78,7 @@
   "doc-search-placeholder": "문서 검색…",
   "doc-search-navigate": "탐색",
   "doc-search-select": "선택",
-  "doc-search-close": "닫기"
+  "doc-search-close": "닫기",
+  "doc-search-searching": "검색 중…",
+  "doc-search-empty": "결과를 찾을 수 없습니다"
 }

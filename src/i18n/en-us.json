@@ -85,5 +85,7 @@
   "doc-search-navigate": "Navigate",
   "doc-search-select": "Select",
   "doc-search-close": "Close",
+  "doc-search-searching": "Searching…",
+  "doc-search-empty": "No results found",
   "doc-header-suffix": "Docs"
 }

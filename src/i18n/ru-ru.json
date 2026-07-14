@@ -78,5 +78,7 @@
   "doc-search-placeholder": "Поиск по документации…",
   "doc-search-navigate": "Навигация",
   "doc-search-select": "Выбрать",
-  "doc-search-close": "Закрыть"
+  "doc-search-close": "Закрыть",
+  "doc-search-searching": "Поиск…",
+  "doc-search-empty": "Результатов не найдено"
 }

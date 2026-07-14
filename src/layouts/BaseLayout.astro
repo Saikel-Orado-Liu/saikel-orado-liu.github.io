@@ -271,6 +271,20 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
       root.classList.remove('light-style', 'dark-style');
       if (theme === 'light') root.classList.add('light-style');
       root.setAttribute('data-theme', theme);
+
+      // SPA 导航后同步 html lang 和 dir，确保依赖这些属性的代码正确工作
+      var pathname = window.location.pathname;
+      var PREFIXED_LOCALES = ['en-us','ja-jp','ko-kr','ar-sa','es-es','fr-fr','pt-pt','ru-ru','de-de'];
+      var detectedLocale = 'zh-cn';
+      for (var i = 0; i < PREFIXED_LOCALES.length; i++) {
+        var l = PREFIXED_LOCALES[i];
+        if (pathname.startsWith('/' + l + '/') || pathname === '/' + l) {
+          detectedLocale = l;
+          break;
+        }
+      }
+      root.setAttribute('lang', detectedLocale);
+      root.setAttribute('dir', detectedLocale === 'ar-sa' ? 'rtl' : 'ltr');
     } catch(e) {}
   });
 

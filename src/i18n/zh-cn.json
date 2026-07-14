@@ -85,5 +85,7 @@
   "doc-search-navigate": "导航",
   "doc-search-select": "选择",
   "doc-search-close": "关闭",
+  "doc-search-searching": "搜索中…",
+  "doc-search-empty": "未找到结果",
   "doc-header-suffix": "文档"
 }

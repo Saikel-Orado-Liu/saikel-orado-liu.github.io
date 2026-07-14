@@ -78,5 +78,7 @@
   "doc-search-placeholder": "Buscar documentos…",
   "doc-search-navigate": "Navegar",
   "doc-search-select": "Seleccionar",
-  "doc-search-close": "Cerrar"
+  "doc-search-close": "Cerrar",
+  "doc-search-searching": "Buscando…",
+  "doc-search-empty": "No se encontraron resultados"
 }

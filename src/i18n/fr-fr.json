@@ -78,5 +78,7 @@
   "doc-search-placeholder": "Rechercher dans la documentation…",
   "doc-search-navigate": "Naviguer",
   "doc-search-select": "Sélectionner",
-  "doc-search-close": "Fermer"
+  "doc-search-close": "Fermer",
+  "doc-search-searching": "Recherche…",
+  "doc-search-empty": "Aucun résultat"
 }

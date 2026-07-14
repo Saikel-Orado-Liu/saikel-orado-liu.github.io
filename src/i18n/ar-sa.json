@@ -78,5 +78,7 @@
   "doc-search-placeholder": "بحث في المستندات…",
   "doc-search-navigate": "تنقل",
   "doc-search-select": "تحديد",
-  "doc-search-close": "إغلاق"
+  "doc-search-close": "إغلاق",
+  "doc-search-searching": "جارٍ البحث…",
+  "doc-search-empty": "لا توجد نتائج"
 }
