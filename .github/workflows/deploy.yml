@@ -36,6 +36,9 @@ jobs:
       - name: Build
         run: pnpm run build
 
+      - name: Submit URLs to IndexNow
+        run: node scripts/submit-indexnow.mjs
+
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
         with:
