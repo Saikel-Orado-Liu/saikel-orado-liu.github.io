@@ -1,9 +1,0 @@
-[
-  {
-    "fingerprint": "the-system-cannot-find-the-path-specified-find-windows-f-69fcf66e",
-    "summary": "之前的 \"The system cannot find the path specified\" 错误来自构建脚本中的 `find` 命令——Windows 上 `find.exe` 是文本搜索工具而非 Unix",
-    "first_seen_iteration": 1,
-    "last_seen_iteration": 1,
-    "count": 1
-  }
-]

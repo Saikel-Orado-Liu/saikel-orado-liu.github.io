@@ -1,9 +1,0 @@
-{
-  "status": "complete",
-  "iteration": 1,
-  "current_direction": "之前的 \"The system cannot find the path specified\" 错误来自构建脚本中的 `find` 命令——Windows 上 `find.exe` 是文本搜索工具而非 Unix",
-  "stale_count": 1,
-  "pivot_count": 0,
-  "blocked_reason": "",
-  "updated_at": "2026-07-12T07:29:21.5226935Z"
-}
