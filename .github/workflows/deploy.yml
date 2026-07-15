@@ -33,12 +33,26 @@ jobs:
       - name: Install dependencies
         run: pnpm install --frozen-lockfile
 
+      - name: Restore previous URL list
+        id: cache-restore
+        uses: actions/cache/restore@v4
+        with:
+          path: /tmp/indexnow-urls.json
+          key: indexnow-urls-${{ github.ref_name }}
+
       - name: Build
         run: pnpm run build
 
       - name: Submit URLs to IndexNow
         continue-on-error: true
-        run: node scripts/submit-indexnow.mjs
+        run: node scripts/submit-indexnow.mjs --previous-urls /tmp/indexnow-urls.json --save-urls /tmp/indexnow-urls.json
+
+      - name: Save current URL list
+        if: always()
+        uses: actions/cache/save@v4
+        with:
+          path: /tmp/indexnow-urls.json
+          key: indexnow-urls-${{ github.ref_name }}
 
       - name: Upload artifact
         uses: actions/upload-pages-artifact@v5
