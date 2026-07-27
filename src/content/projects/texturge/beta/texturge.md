@@ -23,38 +23,39 @@ date: 2026-07-24
 
 逐步引导，从零开始掌握 Texturge Beta。
 
-- **[快速入门 →](tutorials/quick-start)** — 10 分钟搭建你的第一个打字机动画
-- **[多格式文本动画 →](tutorials/rich-text-animation)** — 使用多格式文本标签实现多动画混合
-- **[对话系统 →](tutorials/dialog-system)** — 构建完整的 RPG 风格对话界面
-- **[自定义 Blueprint 动画逻辑 →](tutorials/custom-blueprint-logic)** — 覆盖 `BuildDefaultAnimation` 实现独特效果
+- **[快速入门 →](tutorials/quick-start/setup)** — 安装配置并验证 Texturge 插件
+- **[创建第一个动画 →](tutorials/quick-start/create-animation)** — 使用 `UTextAnimationBlueprint` 创建动画
+- **[多格式文本动画 →](tutorials/rich-text-animation/basic-tags)** — 使用 `UTextAnimationDataAsset` 实现标签动画
+- **[对话系统 →](tutorials/dialog-system/overview)** — 构建 RPG 风格对话界面
+- **[自定义 Blueprint 逻辑 →](tutorials/custom-blueprint-logic/nodes)** — 覆盖 `BuildDefaultAnimation` 与 Blueprint 节点
 
 ### 指南
 
 深入理解 Texturge Beta 的架构与设计。
 
-- **[架构深入解析 →](guides/architecture-deep-dive)** — 模块结构、数据流与核心设计决策
-- **[烘焙管线 →](guides/bake-pipeline)** — 编译期动画烘焙与指纹缓存机制
-- **[多层动画合成 →](guides/multi-layer-animation)** — 理解图层的叠加模式与独立求值
-- **[本地化指南 →](guides/localization-guide)** — 语义锚点与跨语言文本定位
-- **[性能优化 →](guides/performance-optimization)** — 最大化运行时帧率与内存效率
-- **[从 Alpha 迁移 →](guides/migration-from-alpha)** — Alpha 用户升级到 Beta 的完整步骤
+- **[架构总览 →](guides/architecture/overview)** — 两模块结构、数据流与核心设计决策
+- **[烘焙管线 →](guides/bake-pipeline/pipeline)** — `FAnimationCompiler` 编译期动画烘焙与指纹缓存
+- **[多层动画 →](guides/multi-layer/setup)** — 理解图层的叠加模式与 `UGlyphAnimationFactory`
+- **[本地化 →](guides/localization/setup)** — `ULocalizationSubsystem` 语义锚点与跨语言文本定位
+- **[性能优化 →](guides/performance/profiling)** — 最大化运行时帧率与内存效率
+- **[从 Alpha 迁移 →](guides/migration/from-alpha)** — Alpha 用户升级到 Beta 的完整步骤
 
 ### 参考
 
 配置项、轨道类型与标签语法的完整参考。
 
-- **[配置参考 →](reference/configuration-reference)** — 全部项目设置与默认值
-- **[动画轨道类型 →](reference/track-types-reference)** — 10 种轨道类型的参数与值域
-- **[混合模式 →](reference/blend-modes-reference)** — Additive / Override / Multiply / CrossFade 详解
-- **[字形调度参考 →](reference/schedule-reference)** — 调度参数与字形分类系统
-- **[多格式文本标签 →](reference/rich-text-tags-reference)** — 自定义标签语法与嵌套规则
-- **[Blueprint 节点参考 →](reference/blueprint-nodes-reference)** — 全部 Blueprint 可调用节点清单
+- **[配置参考 →](reference/configuration/settings)** — `UTexturgeSettings` 与动画资产配置
+- **[动画轨道类型 →](reference/track-types/overview)** — Sequencer 轨道类型与 21 通道属性
+- **[混合模式 →](reference/blend-modes/modes)** — `ETextAnimationBlendMode` 四种模式详解
+- **[字形调度参考 →](reference/schedule/reference)** — `FGlyphScheduleInfo` 参数与字形分类
+- **[多格式文本标签 →](reference/rich-text-tags/tag-syntax)** — `FTagParser` 语法与 `FAnimationEntry`
+- **[Blueprint 节点参考 →](reference/blueprint-nodes/nodes)** — `SetBlueprintVariable` 与参数覆写系统
 
 ### API
 
 C++ 与 Blueprint API 的完整技术文档。
 
-- **[Runtime API →](api/runtime-api)** — Texturge 运行时模块的 C++ 类与接口
-- **[Editor API →](api/editor-api)** — TexturgeEditor 模块的扩展点与工具类
-- **[Blueprint API →](api/blueprint-api)** — 所有 BlueprintType 类的公开方法签名
-- **[数据结构参考 →](api/data-structures)** — USTRUCT 与非 UObject 数据结构完整定义
+- **[Runtime API →](api/runtime/overview)** — `UTextAnimationStageController`、`UTextAnimator` 等 C++ 类
+- **[Editor API →](api/editor/tools)** — `FTextAnimationBlueprintEditor` 与设计视口扩展
+- **[Blueprint API →](api/blueprint/nodes)** — `SetBlueprintVariable` 与播放控制的方法签名
+- **[数据结构参考 →](api/data-structures/types)** — `FBakedAnimation`、`FGlyphAnimationState` 等完整结构定义

@@ -48,6 +48,7 @@
   "ue5-description": "UE5 Plugins und Dokumentation",
   "ue5-empty": "Noch keine Plugins",
   "ue5-version": "Version",
+  "docs-version": "Version",
   "ue5-docs": "Dokumentation anzeigen",
   "game-title": "Spiele & Mods",
   "game-seo-description": "Anleitungen zu Spieledesign und -entwicklung — vom Konzept zur Umsetzung. Tutorials zu Spielmechaniken, Level-Design und Unreal Engine 5 Workflows",
@@ -81,7 +82,7 @@
   "doc-category-guides": "Anleitungen",
   "doc-category-reference": "Referenz",
   "doc-category-api": "API",
-  "doc-category-label": "Dokumentkategorien",
+  "doc-category-label": "Kategorien",
   "texturge-advanced-features": "Erweiterte Funktionen",
   "texturge-editor-guide": "Editor-Anleitung",
   "doc-search-placeholder": "Dokumentation durchsuchen…",
@@ -89,5 +90,6 @@
   "doc-search-select": "Auswählen",
   "doc-search-close": "Schließen",
   "doc-search-searching": "Suche…",
-  "doc-search-empty": "Keine Ergebnisse gefunden"
+  "doc-search-empty": "Keine Ergebnisse gefunden",
+  "doc-header-suffix": "Docs"
 }

@@ -48,6 +48,7 @@
   "ue5-description": "إضافات Unreal Engine 5 ووثائق",
   "ue5-empty": "لا توجد إضافات بعد",
   "ue5-version": "الإصدار",
+  "docs-version": "الإصدار",
   "ue5-docs": "عرض الوثائق",
   "game-title": "الألعاب والتعديلات",
   "game-seo-description": "أدلة تصميم وتطوير الألعاب — من الفكرة إلى التنفيذ. دروس حول ميكانيكا الألعاب وتصميم المستويات وسير العمل في Unreal Engine 5",
@@ -81,7 +82,7 @@
   "doc-category-guides": "أدلة",
   "doc-category-reference": "مرجع",
   "doc-category-api": "API",
-  "doc-category-label": "فئات المستندات",
+  "doc-category-label": "الفئات",
   "texturge-advanced-features": "ميزات متقدمة",
   "texturge-editor-guide": "دليل المحرر",
   "doc-search-placeholder": "بحث في المستندات…",
@@ -89,5 +90,6 @@
   "doc-search-select": "تحديد",
   "doc-search-close": "إغلاق",
   "doc-search-searching": "جارٍ البحث…",
-  "doc-search-empty": "لا توجد نتائج"
+  "doc-search-empty": "لا توجد نتائج",
+  "doc-header-suffix": "مستندات"
 }

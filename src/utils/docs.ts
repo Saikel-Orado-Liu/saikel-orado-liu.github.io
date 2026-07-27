@@ -14,6 +14,8 @@ export interface DocNode {
   /** 版本标识（如 "v1.0"），null 表示最新版 */
   version: string | null;
   isIndex: boolean;
+  /** 文档所属分类（tutorials/guides/reference/api），null 表示无分类 */
+  category: string | null;
   chapterOrder: number;
   chapterSlug: string;
   docOrder: number;
@@ -26,6 +28,8 @@ export interface ChapterGroup {
   order: number;
   slug: string;
   titleKey: string;
+  /** 章节所属分类 */
+  category: string | null;
   docs: DocNode[];
 }
 
@@ -57,17 +61,32 @@ export function getDocCategoryTabs(): DocCategoryTab[] {
   return CATEGORY_TABS;
 }
 
-/** 从 DocRegistry 中筛选属于指定分类的章节（目前所有章节默认属于 guides） */
+/** 分类文件夹 slug 列表（对应四个文档分类标签） */
+const CATEGORY_SLUGS = ['tutorials', 'guides', 'reference', 'api'];
+
+/** 从 DocRegistry 中筛选属于指定分类的章节 */
 export function filterRegistryByCategory(
   registry: DocRegistry,
   categorySlug: string,
 ): DocRegistry {
-  if (categorySlug !== 'guides') {
-    // 其他分类暂无内容，返回空注册表
-    return { projectSlug: registry.projectSlug, version: registry.version, chapters: [], flatList: [] };
+  // 检查 registry 中是否有按类别组织的章节（category 字段非 null）
+  const hasCategories = registry.chapters.some(ch => ch.category !== null);
+
+  if (!hasCategories) {
+    // 旧版结构（如 alpha）：所有章节归入 guides
+    if (categorySlug !== 'guides') {
+      return { projectSlug: registry.projectSlug, version: registry.version, chapters: [], flatList: [] };
+    }
+    return registry;
   }
-  // guides 包含全部章节
-  return registry;
+
+  // 新版结构：按 category 字段筛选
+  const targetCategory = categorySlug;
+  // 兼容 tab slug 'tutorial' 与文件夹名 'tutorials' 的差异
+  const targetCategoryPlural = targetCategory === 'tutorial' ? 'tutorials' : targetCategory;
+  const chapters = registry.chapters.filter(ch => ch.category === targetCategoryPlural);
+  const flatList = registry.flatList.filter(doc => doc.category === targetCategoryPlural);
+  return { projectSlug: registry.projectSlug, version: registry.version, chapters, flatList };
 }
 
 // ── 版本与 ID 解析 ──────────────────────────────────────
@@ -96,12 +115,16 @@ export function parseProjectVersion(entryId: string): {
 
 /**
  * 从 collection entry id 解析文档树节点元信息。
- * 版本感知：跳过 ID 中的 v{X.Y} 段后再解析章节/文档。
+ * 版本感知：跳过 ID 中的 alpha/beta/v{X.Y} 段后再解析。
+ * 支持两种路径格式：
+ *   - 分类式（3级）：tutorials/01.quick-start/01.overview → category=tutorials chapter=quick-start doc=overview
+ *   - 传统式（2级）：01.getting-started/01.overview → category=null chapter=getting-started doc=overview
  */
 function parseDocId(id: string): {
   projectSlug: string;
   version: string | null;
   isIndex: boolean;
+  category: string | null;
   chapterOrder: number;
   chapterSlug: string;
   docOrder: number;
@@ -113,27 +136,42 @@ function parseDocId(id: string): {
   const projectSlug = parts[0];
   let rest = parts.slice(1);
 
-  // 提取版本段
   let version: string | null = null;
   if (rest.length >= 1 && VERSION_RE.test(rest[0])) {
     version = rest[0];
     rest = rest.slice(1);
   }
 
-  // 项目首页：文件名与项目 slug 同名
+  // 项目首页
   if (rest.length === 1 && (rest[0] === projectSlug || rest[0] === 'index')) {
-    return { projectSlug, version, isIndex: true, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: projectSlug };
+    return { projectSlug, version, isIndex: true, category: null, chapterOrder: 0, chapterSlug: '', docOrder: 0, docSlug: projectSlug };
   }
 
-  // chapter/doc
+  // 分类式（3级）：tutorials / 01.quick-start / 01.overview
+  if (rest.length === 3) {
+    const catSlug = rest[0];
+    const chMatch = rest[1].match(CHAPTER_RE);
+    const docMatch = rest[2].match(DOC_RE);
+    if (chMatch && docMatch && CATEGORY_SLUGS.includes(catSlug)) {
+      return {
+        projectSlug, version, isIndex: false,
+        category: catSlug,
+        chapterOrder: parseInt(chMatch[1], 10),
+        chapterSlug: chMatch[2],
+        docOrder: parseInt(docMatch[1], 10),
+        docSlug: docMatch[2],
+      };
+    }
+  }
+
+  // 传统式（2级）：01.getting-started / 01.overview
   if (rest.length === 2) {
     const chMatch = rest[0].match(CHAPTER_RE);
     const docMatch = rest[1].match(DOC_RE);
     if (chMatch && docMatch) {
       return {
-        projectSlug,
-        version,
-        isIndex: false,
+        projectSlug, version, isIndex: false,
+        category: null,
         chapterOrder: parseInt(chMatch[1], 10),
         chapterSlug: chMatch[2],
         docOrder: parseInt(docMatch[1], 10),
@@ -203,6 +241,7 @@ export async function getLocalizedDocEntries(
         projectSlug: parsed.projectSlug,
         version: parsed.version,
         isIndex: parsed.isIndex,
+        category: parsed.category,
         chapterOrder: parsed.chapterOrder,
         chapterSlug: parsed.chapterSlug,
         docOrder: parsed.docOrder,
@@ -231,12 +270,12 @@ export async function buildDocRegistry(
 ): Promise<DocRegistry> {
   const flatList = await getLocalizedDocEntries(projectSlug, locale, version);
 
-  const chapterMap = new Map<string, { order: number; slug: string; docs: DocNode[] }>();
+  const chapterMap = new Map<string, { order: number; slug: string; category: string | null; docs: DocNode[] }>();
   for (const doc of flatList) {
     if (doc.isIndex) continue;
-    const key = `${doc.chapterOrder}-${doc.chapterSlug}`;
+    const key = `${doc.category ?? ''}-${doc.chapterOrder}-${doc.chapterSlug}`;
     if (!chapterMap.has(key)) {
-      chapterMap.set(key, { order: doc.chapterOrder, slug: doc.chapterSlug, docs: [] });
+      chapterMap.set(key, { order: doc.chapterOrder, slug: doc.chapterSlug, category: doc.category, docs: [] });
     }
     chapterMap.get(key)!.docs.push(doc);
   }
@@ -247,6 +286,7 @@ export async function buildDocRegistry(
       order: ch.order,
       slug: ch.slug,
       titleKey: `${projectSlug}-${ch.slug}`,
+      category: ch.category,
       docs: ch.docs,
     }));
 

@@ -19,13 +19,25 @@ const registry = await buildDocRegistry(projectSlug, locale, version);
 const docEntry = await getDocEntry(docId, locale);
 if (!docEntry) return new Response('Not Found', { status: 404 });
 
+// 根别名路径（如 /projects/texturge/tutorials/...）下，registry 中的 doc.id 包含版本段
+// （如 texturge/beta/tutorials/...），但 URL 中的 docId 不含版本段。归一化 registry
+// 中的 ID 使其匹配根别名的 URL 格式，避免侧边栏链接 302 跳转和分类选项卡回退。
+const versionInfo = await getProjectVersions(projectSlug);
+if (!version && versionInfo) {
+    const verPrefix = `${projectSlug}/${versionInfo.currentVersion}/`;
+    const rootPrefix = `${projectSlug}/`;
+    registry.chapters.forEach(ch => {
+        ch.docs.forEach(doc => { doc.id = doc.id.replace(verPrefix, rootPrefix); });
+    });
+    registry.flatList.forEach(doc => { doc.id = doc.id.replace(verPrefix, rootPrefix); });
+}
+
 const { Content, headings } = await render(docEntry);
 const tocGroups = buildTocGroups(headings);
 const adj = getAdjacentDocs(registry.flatList, docId);
 const currentDoc = registry.flatList.find((d) => d.id === docId);
 const pageTitle = currentDoc?.title ?? docEntry.data.title;
 const pageDescription = docEntry.data.excerpt;
-// 文档标题取自项目首页 H1，不用手动写死
 const docTitle = projectSlug.charAt(0).toUpperCase() + projectSlug.slice(1);
 const docDescription = pageDescription || `${pageTitle} — Texturge Pro 文档页面`;
 
@@ -34,11 +46,10 @@ const pager = {
     next: adj.next ? { id: adj.next.id, title: adj.next.title } : null,
 };
 
-const versionInfo = await getProjectVersions(projectSlug);
-
 // 分类选项卡
 const tabs = getDocCategoryTabs();
-const activeTab = 'guides';
+const activeTabRaw = currentDoc?.category || 'guides';
+const activeTab = activeTabRaw === 'tutorials' ? 'tutorial' : activeTabRaw;
 const allRegistries: Record<string, import("../../utils/docs").DocRegistry> = {};
 for (const tab of tabs) {
     allRegistries[tab.slug] = filterRegistryByCategory(registry, tab.slug);

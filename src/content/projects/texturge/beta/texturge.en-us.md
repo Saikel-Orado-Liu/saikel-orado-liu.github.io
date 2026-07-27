@@ -24,38 +24,39 @@ locale: en-us
 
 Step-by-step guides to mastering Texturge Beta from scratch.
 
-- **[Quick Start →](tutorials/quick-start)** — Build your first typewriter animation in 10 minutes
-- **[Rich Text Animation →](tutorials/rich-text-animation)** — Multi-animation blending with rich text tags
-- **[Dialog System →](tutorials/dialog-system)** — Build a complete RPG-style dialog interface
-- **[Custom Blueprint Animation Logic →](tutorials/custom-blueprint-logic)** — Override `BuildDefaultAnimation` for unique effects
+- **[Quick Start →](tutorials/quick-start/setup)** — Install and verify the Texturge plugin
+- **[Create Your First Animation →](tutorials/quick-start/create-animation)** — Create animations with `UTextAnimationBlueprint`
+- **[Rich Text Animation →](tutorials/rich-text-animation/basic-tags)** — Tag-based animation with `UTextAnimationDataAsset`
+- **[Dialog System →](tutorials/dialog-system/overview)** — Build an RPG-style dialog interface
+- **[Custom Blueprint Logic →](tutorials/custom-blueprint-logic/nodes)** — Override `BuildDefaultAnimation` and Blueprint nodes
 
 ### Guides
 
 Deep dives into Texturge Beta's architecture and design.
 
-- **[Architecture Deep Dive →](guides/architecture-deep-dive)** — Module structure, data flow, and core design decisions
-- **[Bake Pipeline →](guides/bake-pipeline)** — Compile-time animation baking and fingerprint caching
-- **[Multi-Layer Animation →](guides/multi-layer-animation)** — Understanding layer blend modes and independent evaluation
-- **[Localization Guide →](guides/localization-guide)** — Semantic anchors and cross-language text positioning
-- **[Performance Optimization →](guides/performance-optimization)** — Maximizing runtime frame rate and memory efficiency
-- **[Migration from Alpha →](guides/migration-from-alpha)** — Complete steps for Alpha users upgrading to Beta
+- **[Architecture Overview →](guides/architecture/overview)** — Two-module structure, data flow, and core decisions
+- **[Bake Pipeline →](guides/bake-pipeline/pipeline)** — `FAnimationCompiler` compile-time animation baking
+- **[Multi-Layer Animation →](guides/multi-layer/setup)** — Layer blend modes and `UGlyphAnimationFactory`
+- **[Localization →](guides/localization/setup)** — `ULocalizationSubsystem` semantic anchors
+- **[Performance →](guides/performance/profiling)** — Maximize runtime frame rate and memory efficiency
+- **[Migration from Alpha →](guides/migration/from-alpha)** — Complete steps for upgrading to Beta
 
 ### Reference
 
 Complete reference for configuration, track types, and tag syntax.
 
-- **[Configuration Reference →](reference/configuration-reference)** — All project settings and defaults
-- **[Animation Track Types →](reference/track-types-reference)** — Parameters and value ranges for 10 track types
-- **[Blend Modes →](reference/blend-modes-reference)** — Additive / Override / Multiply / CrossFade in detail
-- **[Glyph Schedule Reference →](reference/schedule-reference)** — Scheduling parameters and glyph classification system
-- **[Rich Text Tags →](reference/rich-text-tags-reference)** — Custom tag syntax and nesting rules
-- **[Blueprint Nodes Reference →](reference/blueprint-nodes-reference)** — Complete Blueprint-callable node catalog
+- **[Configuration Reference →](reference/configuration/settings)** — `UTexturgeSettings` and animation asset configuration
+- **[Track Types →](reference/track-types/overview)** — Sequencer tracks and 21 animation channels
+- **[Blend Modes →](reference/blend-modes/modes)** — `ETextAnimationBlendMode`: Additive / Override / Multiply / CrossFade
+- **[Glyph Schedule →](reference/schedule/reference)** — `FGlyphScheduleInfo` parameters and glyph classification
+- **[Rich Text Tags →](reference/rich-text-tags/tag-syntax)** — `FTagParser` syntax and `FAnimationEntry` structure
+- **[Blueprint Nodes →](reference/blueprint-nodes/nodes)** — `SetBlueprintVariable` and parameter override system
 
 ### API
 
 Complete technical documentation for C++ and Blueprint APIs.
 
-- **[Runtime API →](api/runtime-api)** — C++ classes and interfaces in the Texturge runtime module
-- **[Editor API →](api/editor-api)** — Extension points and utility classes in TexturgeEditor
-- **[Blueprint API →](api/blueprint-api)** — Public method signatures for all BlueprintType classes
-- **[Data Structures Reference →](api/data-structures)** — Complete USTRUCT and non-UObject data structure definitions
+- **[Runtime API →](api/runtime/overview)** — `UTextAnimationStageController`, `UTextAnimator`, and core C++ classes
+- **[Editor API →](api/editor/tools)** — `FTextAnimationBlueprintEditor` and designer viewport extensions
+- **[Blueprint API →](api/blueprint/nodes)** — `SetBlueprintVariable` and playback control method signatures
+- **[Data Structures →](api/data-structures/types)** — `FBakedAnimation`, `FGlyphAnimationState`, and complete struct definitions

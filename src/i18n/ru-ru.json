@@ -48,6 +48,7 @@
   "ue5-description": "Плагины и документация UE5",
   "ue5-empty": "Пока нет плагинов",
   "ue5-version": "Версия",
+  "docs-version": "Версия",
   "ue5-docs": "Смотреть документацию",
   "game-title": "Игры и Моды",
   "game-seo-description": "Руководства по геймдизайну и разработке — от концепции до реализации. Уроки по игровым механикам, дизайну уровней и рабочим процессам в Unreal Engine 5",
@@ -81,7 +82,7 @@
   "doc-category-guides": "Руководства",
   "doc-category-reference": "Справочник",
   "doc-category-api": "API",
-  "doc-category-label": "Категории документов",
+  "doc-category-label": "Категории",
   "texturge-advanced-features": "Расширенные функции",
   "texturge-editor-guide": "Руководство редактора",
   "doc-search-placeholder": "Поиск по документации…",
@@ -89,5 +90,6 @@
   "doc-search-select": "Выбрать",
   "doc-search-close": "Закрыть",
   "doc-search-searching": "Поиск…",
-  "doc-search-empty": "Результатов не найдено"
+  "doc-search-empty": "Результатов не найдено",
+  "doc-header-suffix": "Docs"
 }

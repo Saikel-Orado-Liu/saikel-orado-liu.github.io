@@ -48,6 +48,7 @@
   "ue5-description": "Unreal Engine 5 プラグインとドキュメント",
   "ue5-empty": "まだプラグインがありません",
   "ue5-version": "バージョン",
+  "docs-version": "バージョン",
   "ue5-docs": "ドキュメントを見る",
   "game-title": "ゲーム＆Mod",
   "game-seo-description": "ゲームデザイン & 開発ガイド — コンセプトから実装まで。ゲームメカニクス、レベルデザイン、Unreal Engine 5 開発ワークフローのチュートリアル",
@@ -89,5 +90,6 @@
   "doc-search-select": "選択",
   "doc-search-close": "閉じる",
   "doc-search-searching": "検索中…",
-  "doc-search-empty": "結果が見つかりません"
+  "doc-search-empty": "結果が見つかりません",
+  "doc-header-suffix": "ドキュメント"
 }

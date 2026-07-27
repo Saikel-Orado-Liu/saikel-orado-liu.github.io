@@ -68,34 +68,40 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
                                     ? t(ch.titleKey)
                                     : ch.slug.replace(/-/g, " ")}
                             </p>
-                            {ch.docs.map((doc) => {
-                                const docUrl = `${prefix}/projects/${doc.id}/`;
-                                const isActive = activeDocId
-                                    ? doc.id === activeDocId
-                                    : activeSidebarLink === doc.id;
-                                return (
-                                    <a
-                                        href={docUrl}
-                                        class:list={[
-                                            "doc-tree-link",
-                                            { "doc-tree-link--active": isActive },
-                                        ]}
-                                    >
-                                        {doc.title}
-                                    </a>
-                                );
-                            })}
+                            <div class="doc-tree-chapter-groove">
+                                {ch.docs.map((doc) => {
+                                    const docUrl = `${prefix}/projects/${doc.id}/`;
+                                    const isActive = activeDocId
+                                        ? doc.id === activeDocId
+                                        : activeSidebarLink === doc.id;
+                                    return (
+                                        <a
+                                            href={docUrl}
+                                            class:list={[
+                                                "doc-tree-link",
+                                                { "doc-tree-link--active": isActive },
+                                            ]}
+                                        >
+                                            {doc.title}
+                                        </a>
+                                    );
+                                })}
+                            </div>
                         </div>
                     ))
                 )}
             </nav>
         );
     })}
+    <div class="doc-chapters-slider" aria-hidden="true">
+        <div class="doc-chapters-slider-highlight"></div>
+    </div>
 </div>
 
 <script>
     import { initDocTabs } from '../../scripts/doc-tabs';
     import { initTabsSlider } from '../../scripts/tabs-slider';
+    import { initChaptersSlider } from '../../scripts/chapters-slider';
 
     function init() {
         const tabsGroove = document.querySelector<HTMLElement>('.doc-tabs-groove');
@@ -105,6 +111,7 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
         const initialTab = tabsGroove.querySelector<HTMLElement>('.doc-tab-btn--active')?.dataset.tab || 'guides';
         initDocTabs(tabsGroove, chaptersCard, initialTab);
         initTabsSlider();
+        initChaptersSlider();
     }
 
     let docTreeInitialized = false;

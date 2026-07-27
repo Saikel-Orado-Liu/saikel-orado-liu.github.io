@@ -38,6 +38,16 @@ const projectTitle = headings.find(h => h.depth === 1)?.text ?? slug.charAt(0).t
 // 2. 文档注册表
 const registry = await buildDocRegistry(slug, locale, version);
 
+// 根别名路径下归一化 registry doc ID
+if (!version && versionInfo) {
+    const verPrefix = `${slug}/${versionInfo.currentVersion}/`;
+    const rootPrefix = `${slug}/`;
+    registry.chapters.forEach(ch => {
+        ch.docs.forEach(doc => { doc.id = doc.id.replace(verPrefix, rootPrefix); });
+    });
+    registry.flatList.forEach(doc => { doc.id = doc.id.replace(verPrefix, rootPrefix); });
+}
+
 // 3. 分类选项卡
 const tabs = getDocCategoryTabs();
 const activeTab = 'guides';

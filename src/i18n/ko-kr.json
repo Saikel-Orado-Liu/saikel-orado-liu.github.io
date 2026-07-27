@@ -48,6 +48,7 @@
   "ue5-description": "Unreal Engine 5 플러그인 및 문서",
   "ue5-empty": "아직 플러그인이 없습니다",
   "ue5-version": "버전",
+  "docs-version": "버전",
   "ue5-docs": "문서 보기",
   "game-title": "게임 & 모드",
   "game-seo-description": "게임 디자인 & 개발 가이드 — 컨셉부터 구현까지. 게임 메카닉, 레벨 디자인, Unreal Engine 5 개발 워크플로우 튜토리얼",
@@ -89,5 +90,6 @@
   "doc-search-select": "선택",
   "doc-search-close": "닫기",
   "doc-search-searching": "검색 중…",
-  "doc-search-empty": "결과를 찾을 수 없습니다"
+  "doc-search-empty": "결과를 찾을 수 없습니다",
+  "doc-header-suffix": "문서"
 }
