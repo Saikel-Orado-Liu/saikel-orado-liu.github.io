@@ -457,18 +457,6 @@ export async function getProjectPaths(_locale: string) {
         paths.push({ params: { slug: rootSlug } });
       }
     }
-    // 生成 /latest/ 别名路径
-    for (const entry of allEntries) {
-      const pv = parseProjectVersion(entry.id);
-      if (pv.projectSlug !== projectSlug) continue;
-      if (pv.version !== cfg.current) continue;
-      const versionedSlug = toUrlSlug(entry.id);
-      const latestSlug = versionedSlug.replace(new RegExp(`^(${projectSlug})/${cfg.current}/`), '$1/latest/');
-      if (!seen.has(latestSlug)) {
-        seen.add(latestSlug);
-        paths.push({ params: { slug: latestSlug } });
-      }
-    }
   }
 
   return paths;

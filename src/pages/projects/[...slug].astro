@@ -14,8 +14,10 @@ if (parts.length >= 2 && VERSION_RE.test(parts[1])) {
   const versionInfo = await getProjectVersions(parts[0]);
   if (versionInfo && parts[1].toLowerCase() === versionInfo.currentVersion.toLowerCase()) {
     const rest = parts.slice(2).join('/');
-    const redirectUrl = rest ? `/projects/${parts[0]}/${rest}/` : `/projects/${parts[0]}/`;
-    return Astro.redirect(redirectUrl);
+    if (rest) {
+      return Astro.redirect(`/projects/${parts[0]}/${rest}/`);
+    }
+    return Astro.redirect(`/projects/${parts[0]}/`);
   }
 }
 ---
