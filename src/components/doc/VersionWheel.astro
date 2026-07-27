@@ -4,32 +4,39 @@ import { useTranslations, type Locale } from "../../i18n";
 interface Props {
     locale: Locale;
     versions: string[];
+    versionNames?: Record<string, string>;
     currentVersion: string;
     activeVersion?: string;
     projectSlug: string;
     prefix: string;
 }
 
-const { locale, versions, currentVersion, activeVersion, projectSlug, prefix } = Astro.props;
+const { locale, versions, versionNames, currentVersion, activeVersion, projectSlug, prefix } = Astro.props;
 const t = useTranslations(locale);
 
+function displayName(v: string): string {
+    return versionNames?.[v] || v.charAt(0).toUpperCase() + v.slice(1);
+}
+
 const activeVer = activeVersion || currentVersion || versions[0];
-const activeIdx = versions.indexOf(activeVer);
+const activeIdx = versions.findIndex(v => v.toLowerCase() === activeVer.toLowerCase());
+const normalizedActiveIdx = activeIdx >= 0 ? activeIdx : versions.findIndex(v => v.toLowerCase() === (currentVersion || '').toLowerCase());
+const safeActiveIdx = normalizedActiveIdx >= 0 ? normalizedActiveIdx : 0;
 const total = versions.length;
-const ppIdx = ((activeIdx - 2) + total) % total;
-const prevIdx = ((activeIdx - 1) + total) % total;
-const nextIdx = (activeIdx + 1) % total;
-const nnIdx = (activeIdx + 2) % total;
+const ppIdx = ((safeActiveIdx - 2) + total) % total;
+const prevIdx = ((safeActiveIdx - 1) + total) % total;
+const nextIdx = (safeActiveIdx + 1) % total;
+const nnIdx = (safeActiveIdx + 2) % total;
 const ordered = [
     { v: versions[ppIdx], i: ppIdx, pos: 'pp' },
     { v: versions[prevIdx], i: prevIdx, pos: 'prev' },
-    { v: versions[activeIdx], i: activeIdx, pos: 'center' },
+    { v: versions[safeActiveIdx], i: safeActiveIdx, pos: 'center' },
     { v: versions[nextIdx], i: nextIdx, pos: 'next' },
     { v: versions[nnIdx], i: nnIdx, pos: 'nn' },
 ];
 ---
 
-<div class="doc-version-card card" data-versions={JSON.stringify(versions)} data-project={projectSlug} data-prefix={prefix}>
+<div class="doc-version-card card" data-versions={JSON.stringify(versions)} data-version-names={JSON.stringify(versionNames || {})} data-current-version={currentVersion} data-active-idx={safeActiveIdx} data-project={projectSlug} data-prefix={prefix}>
     <p class="doc-version-card-label">{t('docs-version')}</p>
     <div class="doc-version-wheel">
         <div class="doc-version-accent"></div>
@@ -44,15 +51,16 @@ const ordered = [
                 const weight = pos === 'center' ? '700' : '500';
                 return (
                     <text class="doc-version-text" data-pos={pos} fill={fill} font-size={size} font-weight={weight}>
-                        <textPath href="#version-arc" startOffset={offset} text-anchor="middle">{v}</textPath>
+                        <textPath href="#version-arc" startOffset={offset} text-anchor="middle">{displayName(v)}</textPath>
                     </text>
                 );
             })}
         </svg>
         <div class="doc-version-links">
             {ordered.filter(({ pos }) => pos === 'prev' || pos === 'center' || pos === 'next').map(({ v, i, pos }) => {
-                const href = `${prefix}/projects/${projectSlug}/${v === 'Alpha' ? '' : v === 'Beta' ? 'beta/' : 'v1/'}`;
-                return <div class="doc-version-link" data-pos={pos} data-idx={i} data-href={href}></div>;
+                const isCurrent = v.toLowerCase() === (currentVersion || '').toLowerCase();
+                const href = isCurrent ? `${prefix}/projects/${projectSlug}/` : `${prefix}/projects/${projectSlug}/${v}/`;
+                return <a class="doc-version-link" data-pos={pos} data-idx={i} href={href}></a>;
             })}
         </div>
     </div>
@@ -66,15 +74,31 @@ const ordered = [
     if (!group) return;
 
     const versions: string[] = JSON.parse(card.dataset.versions || '[]');
+    const versionNames: Record<string, string> = JSON.parse(card.dataset.versionNames || '{}');
+    const currentVersion = card.dataset.currentVersion || '';
     const project = card.dataset.project || '';
     const prefix = card.dataset.prefix || '';
     const total = versions.length;
     if (total <= 1) return;
 
-    let current = parseInt(card.querySelector<HTMLElement>('[data-pos="center"]')?.dataset.idx || '0', 10);
+    function displayName(v: string): string {
+      return versionNames[v] || v.charAt(0).toUpperCase() + v.slice(1);
+    }
+
+    function versionHref(v: string): string {
+      if (v.toLowerCase() === currentVersion.toLowerCase()) {
+        return `${prefix}/projects/${project}/`;
+      }
+      return `${prefix}/projects/${project}/${v}/`;
+    }
+
+    let current = parseInt(card.dataset.activeIdx || card.querySelector<HTMLElement>('[data-pos="center"]')?.dataset.idx || '0', 10);
     const accent = group.querySelector<HTMLElement>('.doc-version-accent');
 
-    const DIR_MAP: Record<string, string> = { 'Alpha': '', 'Beta': 'beta/', 'v1.0': 'v1/' };
+    const DIR_MAP: Record<string, string> = {};
+    for (const v of versions) {
+      DIR_MAP[v] = versionHref(v);
+    }
     const OFFSETS = ['-26%', '12%', '50%', '88%', '126%'];
 
     function styleText(el: SVGTextElement, pos: string): void {
@@ -108,20 +132,20 @@ const ordered = [
           if (texts[idx]) {
             texts[idx].dataset.pos = item.pos;
             const tp = texts[idx].querySelector('textPath');
-            if (tp) tp.textContent = item.v;
+            if (tp) tp.textContent = displayName(item.v);
             if (tp) tp.setAttribute('startOffset', OFFSETS[idx]);
             styleText(texts[idx], item.pos);
           }
         });
       }
 
-      const links = group!.querySelectorAll<HTMLElement>('.doc-version-link');
+      const links = group!.querySelectorAll<HTMLAnchorElement>('.doc-version-link');
       const visibleItems = items.filter(it => it.pos === 'prev' || it.pos === 'center' || it.pos === 'next');
       visibleItems.forEach((item, idx) => {
         if (links[idx]) {
           links[idx].dataset.pos = item.pos;
           links[idx].dataset.idx = String(item.i);
-          links[idx].dataset.href = `${prefix}/projects/${project}/${DIR_MAP[item.v] ?? ''}`;
+          links[idx].href = DIR_MAP[item.v] ?? `${prefix}/projects/${project}/${item.v}/`;
         }
       });
     }
@@ -198,18 +222,17 @@ const ordered = [
     }
 
     group!.addEventListener('click', (e: MouseEvent) => {
-      const target = (e.target as HTMLElement).closest<HTMLElement>('[data-pos]');
-      if (!target) return;
-      const pos = target.dataset.pos;
+      const link = (e.target as HTMLElement).closest<HTMLAnchorElement>('.doc-version-link');
+      if (!link) return;
+      const pos = link.dataset.pos;
       if (pos === 'prev' || pos === 'next') {
+        e.preventDefault();
         const dir = pos === 'next' ? 1 : -1;
-        const href = target.dataset.href;
         current = ((current + dir) + total) % total;
+        const href = link.href;
         animateSwitch(dir, () => { if (href) window.location.href = href; });
-      } else if (pos === 'center') {
-        const href = target.dataset.href;
-        if (href) window.location.href = href;
       }
+      // 'center' click: let <a> navigate naturally with Astro view transitions
     });
 
     group!.addEventListener('wheel', (e: WheelEvent) => {
@@ -234,10 +257,16 @@ const ordered = [
     }, { passive: true });
   }
 
-  document.addEventListener('astro:page-load', initVersionWheel);
-  if (document.readyState === 'loading') {
-    document.addEventListener('DOMContentLoaded', initVersionWheel);
-  } else {
+  let wheelInitialized = false;
+  function initVersionWheelOnce(): void {
+    if (wheelInitialized) return;
+    wheelInitialized = true;
     initVersionWheel();
+  }
+  document.addEventListener('astro:page-load', () => { wheelInitialized = false; initVersionWheelOnce(); });
+  if (document.readyState === 'loading') {
+    document.addEventListener('DOMContentLoaded', initVersionWheelOnce, { once: true });
+  } else {
+    initVersionWheelOnce();
   }
 </script>

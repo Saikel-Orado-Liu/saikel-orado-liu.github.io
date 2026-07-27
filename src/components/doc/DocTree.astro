@@ -24,6 +24,7 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
 ---
 
 <div class="doc-tabs-card card">
+  <p class="doc-tabs-label">{t("doc-category-label")}</p>
   <div class="doc-tabs-groove">
     <nav class="doc-tabs-nav" data-active-tab={activeTab}>
         {tabs.map((tab) => (
@@ -106,11 +107,19 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
         initTabsSlider();
     }
 
-    document.addEventListener('astro:page-load', init);
-    if (document.readyState === 'loading') {
-        document.addEventListener('DOMContentLoaded', init);
-    } else {
+    let docTreeInitialized = false;
+    function initOnce(): void {
+        if (docTreeInitialized) return;
+        docTreeInitialized = true;
         init();
+    }
+    document.addEventListener('astro:page-load', () => { docTreeInitialized = false; initOnce(); });
+    // 在视图过渡捕获新页面前初始化滑块，防止闪烁和跳变
+    document.addEventListener('astro:after-swap', () => { initTabsSlider(); });
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initOnce, { once: true });
+    } else {
+        initOnce();
     }
 </script>
 

@@ -28,6 +28,7 @@ interface Props {
   emptyPrevText?: string;
   emptyNextText?: string;
   versions?: string[];
+  versionNames?: Record<string, string>;
   currentVersion?: string;
   activeVersion?: string;
 }
@@ -52,6 +53,7 @@ const {
   emptyPrevText = "已是最前",
   emptyNextText = "已是最后",
   versions,
+  versionNames,
   currentVersion,
   activeVersion,
 } = Astro.props;
@@ -96,7 +98,7 @@ const docHomeHref = prefix + "/projects/" + projectSlug + homeSeg + "/";
 
         {(showWheel || tocGroups.length > 0) && (
             <aside class="doc-sidebar doc-sidebar-right">
-                {showWheel && <VersionWheel locale={locale} versions={versions!} currentVersion={currentVersion!} activeVersion={activeVersion} projectSlug={projectSlug} prefix={prefix} />}
+                {showWheel && <VersionWheel locale={locale} versions={versions!} versionNames={versionNames} currentVersion={currentVersion!} activeVersion={activeVersion} projectSlug={projectSlug} prefix={prefix} />}
                 <TocCard locale={locale} tocGroups={tocGroups} />
             </aside>
         )}

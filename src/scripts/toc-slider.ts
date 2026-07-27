@@ -17,14 +17,9 @@ export function initTocSlider(): void {
     const h2Link = group.querySelector('.doc-toc-depth-2') as HTMLAnchorElement | null;
     if (!h2Link) return;
 
-    // ── 创建滑块 ──
-    const slider = document.createElement('div');
-    slider.className = 'doc-toc-slider';
-    group.appendChild(slider);
-
-    const highlight = document.createElement('div');
-    highlight.className = 'doc-toc-slider-highlight';
-    slider.appendChild(highlight);
+    // ── 复用预渲染滑块 ──
+    const slider = group.querySelector('.doc-toc-slider') as HTMLElement;
+    const highlight = slider.querySelector('.doc-toc-slider-highlight') as HTMLElement;
 
     group.classList.add('has-toc-slider');
 
@@ -87,6 +82,9 @@ export function initTocSlider(): void {
     void group.offsetHeight;
     positionAt(h2Link, false);
     slider.style.transform = 'translateY(0)';
+    requestAnimationFrame(() => {
+      slider.style.visibility = 'visible';
+    });
     h2Link.style.setProperty('transition', 'none', 'important');
     lift(h2Link);
     void h2Link.offsetHeight;

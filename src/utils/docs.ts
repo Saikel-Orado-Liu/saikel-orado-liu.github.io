@@ -74,7 +74,7 @@ export function filterRegistryByCategory(
 
 const CHAPTER_RE = /^(\d{2})\.?([^/]+)/;
 const DOC_RE     = /(\d{2})\.?([^./]+)$/;
-const VERSION_RE = /^v[^/]+$/;
+const VERSION_RE = /^(v[^/]+|alpha|beta)$/i;
 
 /**
  * 从 entry ID 中提取项目 slug 和版本号。
@@ -159,11 +159,18 @@ export async function getLocalizedDocEntries(
   const all = await getCollection('projects', ({ data }: any) => !data.draft);
   if (!all.length) return [];
 
+  // 如果没有指定版本（root/latest），解析到 currentVersion
+  let resolvedVersion = version;
+  if (!resolvedVersion || resolvedVersion === 'latest') {
+    const cfg = await getProjectVersions(projectSlug);
+    resolvedVersion = cfg?.currentVersion || version;
+  }
+
   // 筛选当前项目 + 版本
   const projectEntries = all.filter(e => {
     if (!e.id.startsWith(projectSlug + '/')) return false;
     const pv = parseProjectVersion(e.id);
-    if (version) return pv.version === version;
+    if (resolvedVersion) return pv.version === resolvedVersion;
     return pv.version === null;
   });
 
@@ -253,6 +260,7 @@ export async function buildDocRegistry(
  */
 export async function getProjectVersions(projectSlug: string): Promise<{
   versions: string[];
+  versionNames: Record<string, string>;
   currentVersion: string;
 } | null> {
   const all = await getCollection('projects');
@@ -263,9 +271,16 @@ export async function getProjectVersions(projectSlug: string): Promise<{
     return parsed?.isIndex;
   });
   if (!index) return null;
-  const { versions, currentVersion } = index.data as any;
+  const { versions, currentVersion, versionNames } = index.data as any;
   if (!versions?.length || !currentVersion) return null;
-  return { versions, currentVersion };
+  return { versions, versionNames: versionNames || {}, currentVersion };
+}
+
+/**
+ * 解析版本友好显示名称。优先使用 versionNames，回退到首字母大写。
+ */
+export function getVersionDisplayName(verDir: string, versionNames?: Record<string, string>): string {
+  return versionNames?.[verDir] || verDir.charAt(0).toUpperCase() + verDir.slice(1);
 }
 
 /**
@@ -347,7 +362,8 @@ export function buildBreadcrumbs(registry: DocRegistry, currentId: string) {
 export function toUrlSlug(entryId: string): string {
   const clean = entryId
     .replace(/(\.|)(en-us|ja-jp|ko-kr|ar-sa|es-es|fr-fr|pt-pt|ru-ru|de-de)$/, '')
-    .replace(/^([^/]+)\/(?:index|\1)$/, '$1');
+    .replace(/^([^/]+)\/(?:index|\1)$/, '$1')
+    .replace(/^([^/]+)\/([^/]+)\/\1$/, '$1/$2');
 
   return clean.split('/').map((seg, i) => {
     if (i === 0) return seg;
@@ -364,32 +380,53 @@ export async function getProjectPaths(_locale: string) {
   const seen = new Set<string>();
   const paths: { params: { slug: string } }[] = [];
 
+  // 第一步：收集每个项目的 currentVersion 信息
+  const projectConfigs = new Map<string, { current: string; versions: string[] }>();
+  for (const entry of allEntries) {
+    const pv = parseProjectVersion(entry.id);
+    if (pv.version !== null) continue;
+    if (projectConfigs.has(pv.projectSlug)) continue;
+    const parsed = parseDocId(entry.id);
+    if (!parsed?.isIndex) continue;
+    const data = entry.data as any;
+    if (data.currentVersion && data.versions) {
+      projectConfigs.set(pv.projectSlug, { current: data.currentVersion, versions: data.versions });
+    }
+  }
+
+  // 第二步：生成所有内容路径
   for (const entry of allEntries) {
     const slug = toUrlSlug(entry.id);
     if (seen.has(slug)) continue;
     seen.add(slug);
     paths.push({ params: { slug } });
+  }
 
-    // 为最新版生成 alpha/ 别名路径（用于重定向）
-    if (entry.data.currentVersion) {
-      const verDir = entry.data.currentVersion.toLowerCase();
-      if (verDir === 'alpha' && !slug.includes('/')) {
-        const alphaSlug = slug + '/alpha';
-        if (!seen.has(alphaSlug)) {
-          seen.add(alphaSlug);
-          paths.push({ params: { slug: alphaSlug } });
-        }
-        // 也处理 alpha/ 下的文档路径
-        for (const docEntry of allEntries) {
-          const docSlug = toUrlSlug(docEntry.id);
-          if (docSlug.startsWith(slug + '/') && !docSlug.includes('/v')) {
-            const alphaDocSlug = slug + '/alpha/' + docSlug.split('/').slice(1).join('/');
-            if (!seen.has(alphaDocSlug)) {
-              seen.add(alphaDocSlug);
-              paths.push({ params: { slug: alphaDocSlug } });
-            }
-          }
-        }
+  // 第三步：为根层级生成别名路径（指向 currentVersion 的内容）
+  for (const [projectSlug, cfg] of projectConfigs) {
+    // 为每个有版本的文档生成根层级别名
+    for (const entry of allEntries) {
+      const pv = parseProjectVersion(entry.id);
+      if (pv.projectSlug !== projectSlug) continue;
+      if (pv.version !== cfg.current) continue;
+      const versionedSlug = toUrlSlug(entry.id);
+      // 去掉版本段，生成根层级路径
+      const rootSlug = versionedSlug.replace(new RegExp(`^(${projectSlug})/${cfg.current}/`), '$1/');
+      if (!seen.has(rootSlug)) {
+        seen.add(rootSlug);
+        paths.push({ params: { slug: rootSlug } });
+      }
+    }
+    // 生成 /latest/ 别名路径
+    for (const entry of allEntries) {
+      const pv = parseProjectVersion(entry.id);
+      if (pv.projectSlug !== projectSlug) continue;
+      if (pv.version !== cfg.current) continue;
+      const versionedSlug = toUrlSlug(entry.id);
+      const latestSlug = versionedSlug.replace(new RegExp(`^(${projectSlug})/${cfg.current}/`), '$1/latest/');
+      if (!seen.has(latestSlug)) {
+        seen.add(latestSlug);
+        paths.push({ params: { slug: latestSlug } });
       }
     }
   }
@@ -402,12 +439,46 @@ export async function getProjectPaths(_locale: string) {
  */
 export async function getDocEntry(urlSlug: string, locale: Locale) {
   const allDocs = await getCollection('projects');
+
+  // 解析是否需要将根路径重定向到当前版本
+  // 例如 texturge/getting-started/overview → texturge/beta/getting-started/overview
+  let lookupSlug = urlSlug;
+  const parts = urlSlug.split('/');
+  if (parts.length >= 2) {
+    const projectSlug = parts[0];
+    const secondSeg = parts[1];
+    // 如果第二段不是版本目录（alpha/beta/v*/latest），尝试用 currentVersion 解析
+    const VERSION_RE = /^(v\d+|alpha|beta|latest)$/i;
+    if (!VERSION_RE.test(secondSeg)) {
+      // 根路径文档 —— 映射到 currentVersion
+      const cfg = await getProjectVersions(projectSlug);
+      if (cfg) {
+        lookupSlug = urlSlug === projectSlug
+          ? `${projectSlug}/${cfg.currentVersion}/${projectSlug}`
+          : urlSlug.replace(new RegExp(`^${projectSlug}/`), `${projectSlug}/${cfg.currentVersion}/`);
+      }
+    } else if (secondSeg.toLowerCase() === 'latest') {
+      // /latest/ 别名 —— 映射到 currentVersion
+      const cfg = await getProjectVersions(projectSlug);
+      if (cfg) {
+        lookupSlug = urlSlug.replace(new RegExp(`^${projectSlug}/latest`), `${projectSlug}/${cfg.currentVersion}`);
+      }
+    }
+  }
+
+  // 索引页归一化：texturge/beta/texturge → texturge/beta
+  lookupSlug = lookupSlug.replace(/^([^/]+)\/([^/]+)\/\1$/, '$1/$2');
+
   const localeMatch = allDocs.find(e => {
-    if (toUrlSlug(e.id) !== urlSlug) return false;
+    const entrySlug = toUrlSlug(e.id).replace(/^([^/]+)\/([^/]+)\/\1$/, '$1/$2');
+    if (entrySlug !== lookupSlug) return false;
     return e.id.endsWith(`.${locale}`) || e.id.endsWith(locale);
   });
   if (localeMatch) return localeMatch;
-  return allDocs.find(e => toUrlSlug(e.id) === urlSlug) ?? null;
+  return allDocs.find(e => {
+    const entrySlug = toUrlSlug(e.id).replace(/^([^/]+)\/([^/]+)\/\1$/, '$1/$2');
+    return entrySlug === lookupSlug;
+  }) ?? null;
 }
 
 export function buildTocGroups(headings: { depth: number; slug: string; text: string }[]) {

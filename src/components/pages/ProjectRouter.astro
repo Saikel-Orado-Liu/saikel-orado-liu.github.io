@@ -7,11 +7,12 @@ interface Props { slug: string; locale: Locale; }
 const { slug, locale } = Astro.props;
 
 const parts = slug.split('/');
-const VERSION_RE = /^(v\d+|alpha|beta)$/i;
+const VERSION_RE = /^(v\d+|alpha|beta|latest)$/i;
 const hasVersion = parts.length >= 2 && VERSION_RE.test(parts[1]);
 
 const projectSlug = parts[0];
-const version = hasVersion ? parts[1] : undefined;
+const rawVersion = hasVersion ? parts[1] : undefined;
+const version = rawVersion?.toLowerCase() === 'latest' ? undefined : rawVersion;
 const restParts = hasVersion ? parts.slice(2) : parts.slice(1);
 const isDoc = restParts.length > 0;
 const docId = isDoc ? slug : undefined;

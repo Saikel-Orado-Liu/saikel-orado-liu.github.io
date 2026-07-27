@@ -17,8 +17,6 @@ export function initNavSlider(): void {
   highlight.className = 'nav-slider-highlight';
   slider.appendChild(highlight);
 
-  groove.classList.add('has-slider');
-
   const grooveEl = groove;
   const activeLink = grooveEl.querySelector('a.active') as HTMLAnchorElement | null;
 
@@ -85,9 +83,12 @@ export function initNavSlider(): void {
     positionAt(activeLink, false);
     slider.style.transform = 'translateY(-2px)';
     activeLink.style.setProperty('transition', 'none', 'important');
+    grooveEl.classList.add('has-slider');
     lift(activeLink);
     void activeLink.offsetHeight;
     activeLink.style.removeProperty('transition');
+  } else {
+    grooveEl.classList.add('has-slider');
   }
 
   // ── hover ───────────────────────────────────────────
@@ -238,8 +239,6 @@ function _ensureLangSlider(): {
   highlight.className = 'lang-slider-highlight';
   slider.appendChild(highlight);
 
-  groove.classList.add('has-lang-slider');
-
   return {
     grooveEl: groove,
     links,
@@ -317,6 +316,7 @@ export function initLangSlider(): void {
     positionAt(activeLink, false);
     slider.style.transform = 'translateY(-2px)';
     activeLink.style.setProperty('transition', 'none', 'important');
+    grooveEl.classList.add('has-lang-slider');
     lift(activeLink);
     void activeLink.offsetHeight;
     activeLink.style.removeProperty('transition');

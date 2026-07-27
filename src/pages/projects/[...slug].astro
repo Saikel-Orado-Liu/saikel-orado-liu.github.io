@@ -8,24 +8,14 @@ export async function getStaticPaths() {
 
 const { slug } = Astro.params;
 const parts = slug!.split('/');
-const projectSlug = parts[0];
-
-// 检测是否为最新版本路径，生成重定向
 const VERSION_RE = /^(v\d+|alpha|beta)$/i;
-if (parts.length >= 2 && VERSION_RE.test(parts[1])) {
-  const verDir = parts[1].toLowerCase();
-  const versionInfo = await getProjectVersions(projectSlug);
-  const currentVersion = versionInfo?.currentVersion?.toLowerCase();
-  const latestDir = currentVersion === 'alpha' ? 'alpha' : currentVersion === 'beta' ? 'beta' : currentVersion ? `v${currentVersion.replace(/\./, '')}` : '';
 
-  if (verDir === latestDir) {
+if (parts.length >= 2 && VERSION_RE.test(parts[1])) {
+  const versionInfo = await getProjectVersions(parts[0]);
+  if (versionInfo && parts[1].toLowerCase() === versionInfo.currentVersion.toLowerCase()) {
     const rest = parts.slice(2).join('/');
-    const redirectUrl = rest ? `/projects/${projectSlug}/${rest}/` : `/projects/${projectSlug}/`;
-    void redirectUrl;
-    return new Response(
-        `<!doctype html><html lang="zh-cn" data-pagefind-ignore><head><meta charset="UTF-8"><meta http-equiv="refresh" content="0;url=${redirectUrl}"><link rel="canonical" href="https://saikel-orado-liu.github.io${redirectUrl}"><script>location.href=${JSON.stringify(redirectUrl)}</script></head><body><a href="${redirectUrl}">Redirecting to ${redirectUrl}</a></body></html>`,
-        { status: 200, headers: { 'Content-Type': 'text/html' } }
-    );
+    const redirectUrl = rest ? `/projects/${parts[0]}/${rest}/` : `/projects/${parts[0]}/`;
+    return Astro.redirect(redirectUrl);
   }
 }
 ---

@@ -13,11 +13,11 @@ interface Props {
 const { slug: projectSlug, docId, locale, version } = Astro.props;
 const t = useTranslations(locale);
 const prefix = locale === "zh-cn" ? "" : `/${locale}`;
-const versionPrefix = version ? `/${version}` : '';
+const versionPrefix = version && version !== 'alpha' ? `/${version}` : '';
 
 const registry = await buildDocRegistry(projectSlug, locale, version);
 const docEntry = await getDocEntry(docId, locale);
-if (!docEntry) return new Response(null, { status: 404 });
+if (!docEntry) return new Response('Not Found', { status: 404 });
 
 const { Content, headings } = await render(docEntry);
 const tocGroups = buildTocGroups(headings);
@@ -63,6 +63,7 @@ const filteredRegistry = allRegistries[activeTab] || registry;
     activeDocId={docId}
     pager={pager}
     versions={versionInfo?.versions}
+    versionNames={versionInfo?.versionNames}
     currentVersion={versionInfo?.currentVersion}
     activeVersion={version}
 >
@@ -90,4 +91,6 @@ const filteredRegistry = allRegistries[activeTab] || registry;
   }
 
   document.addEventListener('astro:page-load', init);
+  // 在视图过渡捕获新页面前初始化 TOC 滑块，防止闪烁和跳变
+  document.addEventListener('astro:after-swap', () => { initTocSlider(); });
 </script>

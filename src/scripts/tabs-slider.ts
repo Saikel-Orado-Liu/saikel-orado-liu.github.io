@@ -6,6 +6,8 @@
 export function initTabsSlider(): void {
   const groove = document.querySelector<HTMLElement>('.doc-tabs-groove');
   if (!groove) return;
+  if (groove.dataset.tabsSliderReady) return;
+  groove.dataset.tabsSliderReady = 'true';
 
   const slider = groove.querySelector<HTMLElement>('.doc-tabs-slider');
   const highlight = groove.querySelector<HTMLElement>('.doc-tabs-slider-highlight');
@@ -63,14 +65,13 @@ export function initTabsSlider(): void {
     lifted.classList.toggle('instant-hover', on && instant && !returning);
     lifted.classList.toggle('instant-return', on && instant && !!returning);
     instantMode = on && !!instant;
+    lifted.style.transition = '';
     if (on) {
       const t = instant && !returning ? 'translate(-1px, -6px)'
         : instant && returning ? 'translate(-3px, -6px)'
         : 'translate(-1px, -5px)';
-      lifted.style.transition = 'transform 0.2s 0.05s cubic-bezier(0.34, 1.3, 0.64, 1)';
       lifted.style.transform = t;
     } else {
-      lifted.style.transition = 'transform 0.2s 0.05s cubic-bezier(0.34, 1.3, 0.64, 1)';
       lifted.style.transform = '';
     }
   }

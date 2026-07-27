@@ -287,6 +287,11 @@ const canonical = canonicalURL || new URL(Astro.url.pathname, Astro.site).href;
       root.setAttribute('lang', detectedLocale);
       root.setAttribute('dir', detectedLocale === 'ar-sa' ? 'rtl' : 'ltr');
     } catch(e) {}
+
+    // 在视图过渡捕获新页面前初始化滑块和背景，防止闪烁和跳变
+    initHilbert();
+    initNavSlider();
+    initLangSlider();
   });
 
   if (document.readyState === 'loading') {

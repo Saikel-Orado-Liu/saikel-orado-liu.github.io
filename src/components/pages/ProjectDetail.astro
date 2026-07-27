@@ -12,29 +12,24 @@ interface Props {
 const { locale, slug, version } = Astro.props;
 const t = useTranslations(locale);
 
+// 版本解析：root → currentVersion
+const versionInfo = await getProjectVersions(slug);
+const currentVer = versionInfo?.currentVersion;
+const resolvedVersion = version || currentVer;
+
 // 1. Project metadata — match by locale + version
 const projects = await getCollection("projects", ({ data }: any) => !data.draft);
 
-const project =
+let project =
     projects.find((p) => {
-        if (version) {
-            // 旧版：匹配 slug/v1.0/slug 或 slug/v1.0/index
-            if (locale !== "zh-cn") {
-                return p.id === `${slug}/${version}/${slug}.${locale}` || p.id === `${slug}/${version}/${slug}${locale}`
-                    || p.id === `${slug}/${version}/index.${locale}` || p.id === `${slug}/${version}/index${locale}`;
-            }
-            return p.id === `${slug}/${version}/${slug}` || p.id === `${slug}/${version}/index`;
-        }
-        // 最新版
-        if (locale !== "zh-cn") {
-            return p.id === `${slug}/${slug}.${locale}` || p.id === `${slug}/${slug}${locale}`
-                || p.id === `${slug}/index.${locale}` || p.id === `${slug}/index${locale}`;
-        }
-        return p.id === `${slug}/${slug}` || p.id === `${slug}/index` || p.id === slug;
+        return p.id === `${slug}/${resolvedVersion}/${slug}` || p.id === `${slug}/${resolvedVersion}/${slug}.${locale}` || p.id === `${slug}/${resolvedVersion}/index` || p.id === `${slug}/${resolvedVersion}/index.${locale}`;
     }) ??
-    projects.find((p) => p.id === slug) ??
-    projects.find((p) => p.id === `${slug}/${slug}` || p.id === `${slug}/index`);
-if (!project) return new Response(null, { status: 404 });
+    projects.find((p) => {
+        return p.id === `${slug}/${slug}` || p.id === `${slug}/${slug}.${locale}` || p.id === `${slug}/index` || p.id === `${slug}/index.${locale}`;
+    });
+if (!project) project = projects.find((p) => p.id === `${slug}/${slug}` || p.id === `${slug}/index`);
+if (!project) project = projects[0];
+if (!project) throw new Error(`No project found for slug: ${slug}`);
 const { Content, headings } = await render(project);
 const tocGroups = buildTocGroups(headings);
 // 文档标题取自 H1（如 # Texturge），不用 frontmatter title
@@ -43,10 +38,7 @@ const projectTitle = headings.find(h => h.depth === 1)?.text ?? slug.charAt(0).t
 // 2. 文档注册表
 const registry = await buildDocRegistry(slug, locale, version);
 
-// 3. 版本信息
-const versionInfo = await getProjectVersions(slug);
-
-// 4. 分类选项卡
+// 3. 分类选项卡
 const tabs = getDocCategoryTabs();
 const activeTab = 'guides';
 // 为每个分类构建全量 registries
@@ -72,6 +64,7 @@ const filteredRegistry = allRegistries[activeTab] || registry;
     tocGroups={tocGroups}
     activeSidebarLink={slug}
     versions={versionInfo?.versions}
+    versionNames={versionInfo?.versionNames}
     currentVersion={versionInfo?.currentVersion}
     activeVersion={version}
 >
@@ -109,4 +102,6 @@ const filteredRegistry = allRegistries[activeTab] || registry;
   }
 
   document.addEventListener('astro:page-load', init);
+  // 在视图过渡捕获新页面前初始化 TOC 滑块，防止闪烁和跳变
+  document.addEventListener('astro:after-swap', () => { initTocSlider(); });
 </script>
