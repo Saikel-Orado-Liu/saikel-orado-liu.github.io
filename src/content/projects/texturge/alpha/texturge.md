@@ -1,11 +1,20 @@
 ---
-title: Texturge Alpha — UE5 逐字文本动画引擎
+title: Texturge Pro — UE5 逐字文本动画引擎
 date: 2026-06-06
+excerpt: Texturge Pro — Unreal Engine 5 高性能模块化字形处理与文本动画引擎，为 UE5 补全专业逐字动画工作流。
+featured: true
+versions:
+  - "Alpha"
+currentVersion: "Alpha"
 ---
 
-# Texturge Alpha
+# Texturge
 
-**Texturge Alpha** 是插件的经典稳定版本。以轨道驱动的动画系统和 RichText 多动画混合为核心能力。
+![Texturge Pro 展示页面](images/Texturge%20Pro%20Page.avif)
+
+**Texturge Pro**（Glyph Processing & Text Animation Engine）是面向 Unreal Engine 5.7+ 的高性能模块化字形处理与文本动画引擎。它为 UE5 的 UMG UI 系统补全了缺失的专业文本动画工作流——以可视化编辑器、关键帧时间轴和逐字符渲染管线，实现从简单的打字机效果到复杂的多格式文本逐字动画。
+
+Texturge 提供了一套完整的资产管线：**文本动画蓝图**（对标 Widget Blueprint）用于配置动画、**动画实例**在运行时编译求值、**动画器**驱动逐帧逐字符的变形与色彩效果，并通过自定义 Slate 控件在渲染层逐字形应用动画数据。
 
 ## 快速导航
 
@@ -23,5 +32,3 @@ date: 2026-06-06
 - **[动画蓝图编辑器 →](editor-guide/animation-editor)** — 可视化编辑环境详解
 - **[配置参考 →](configuration/settings-reference)** — 全部配置项列表
 - **[常见问题 →](faq/common-issues)** — 常见问题解答
-
-> 新版本 **[Texturge Beta →](/projects/texturge/beta/)** 带来了多层动画合成、烘焙管线与阶段控制器等全新功能。

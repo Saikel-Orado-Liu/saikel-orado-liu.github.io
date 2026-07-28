@@ -1,9 +1,13 @@
 ---
-title: Texturge Beta — UE5 逐字文本动画引擎
+title: Texturge Pro — UE5 逐字文本动画引擎
 date: 2026-07-24
+excerpt: Texturge Pro — Unreal Engine 5 高性能模块化字形处理与文本动画引擎，为 UE5 补全专业逐字动画工作流。
+featured: true
 ---
 
-# Texturge Beta
+# Texturge
+
+![Texturge Pro 展示页面](images/Texturge%20Pro%20Page.avif)
 
 **Texturge Beta** 是对插件架构的全面重构版本。在 Alpha 版本稳定基础上，Beta 引入了全新的**多层动画合成系统**、**阶段性动画烘焙编译管线**、**运行时阶段控制器**以及完整的**Blueprint 与 C++ API**，为专业文本动画制作提供了前所未有的灵活性与性能。
 

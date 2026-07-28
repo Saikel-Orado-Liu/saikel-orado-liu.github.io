@@ -1,10 +1,14 @@
 ---
-title: Texturge Beta — Text Animation Engine for Unreal Engine 5
+title: Texturge Pro — Text Animation Engine for Unreal Engine 5
 date: 2026-07-24
 locale: en-us
+excerpt: Texturge Pro — A high-performance modular glyph processing and text animation engine for Unreal Engine 5, filling the professional per-character animation workflow gap in UE5.
+featured: true
 ---
 
-# Texturge Beta
+# Texturge
+
+![Texturge Pro 展示页面](images/Texturge%20Pro%20Page.avif)
 
 **Texturge Beta** is a comprehensive architectural rebuild of the plugin. Building on the stable Alpha foundation, Beta introduces a brand-new **multi-layer animation composition system**, **stage-based animation bake compilation pipeline**, **runtime stage controller**, and a complete **Blueprint & C++ API**, delivering unprecedented flexibility and performance for professional text animation production.
 

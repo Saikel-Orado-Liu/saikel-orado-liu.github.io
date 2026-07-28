@@ -1,12 +1,21 @@
 ---
-title: Texturge Alpha — Text Animation Engine for Unreal Engine 5
+title: Texturge Pro — Text Animation Engine for Unreal Engine 5
 date: 2026-06-06
 locale: en-us
+excerpt: Texturge Pro — A high-performance modular glyph processing and text animation engine for Unreal Engine 5, filling the professional per-character animation workflow gap in UE5.
+featured: true
+versions:
+  - "Alpha"
+currentVersion: "Alpha"
 ---
 
-# Texturge Alpha
+# Texturge
 
-**Texturge Alpha** is the classic stable version of the plugin, centered on a track-driven animation system and RichText multi-animation blending.
+![Texturge Pro 展示页面](images/Texturge%20Pro%20Page.avif)
+
+**Texturge Pro** (Glyph Processing & Text Animation Engine) is a high-performance modular glyph processing and text animation engine for Unreal Engine 5.7+. It fills the missing professional text animation workflow in UE5's UMG UI system — delivering everything from simple typewriter effects to complex rich-text per-character animations through a visual editor, keyframe timeline, and per-glyph rendering pipeline.
+
+Texturge provides a complete asset pipeline: **Text Animation Blueprints** (analogous to Widget Blueprints) for configuring animations, **Animation Instances** for runtime compilation and evaluation, and **Animators** that drive per-frame, per-character transformations and color effects, applied at the Slate rendering layer for each individual glyph.
 
 ## Quick Navigation
 
@@ -24,5 +33,3 @@ locale: en-us
 - **[Animation Blueprint Editor →](editor-guide/animation-editor)** — Visual editing environment guide
 - **[Configuration Reference →](configuration/settings-reference)** — Complete settings reference
 - **[FAQ →](faq/common-issues)** — Frequently asked questions
-
-> New version **[Texturge Beta →](/projects/texturge/beta/)** brings multi-layer animation composition, bake pipeline and stage controller.
