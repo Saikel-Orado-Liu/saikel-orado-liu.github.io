@@ -11,6 +11,7 @@ const t = useTranslations(locale);
 ---
 
 {tocGroups.length > 0 && (
+    <div class="doc-scroll-wrapper">
     <div class="doc-sidebar-inner card">
         <p class="doc-toc-label">{t("projects-on-this-page")}</p>
         <nav class="doc-toc-nav">
@@ -24,5 +25,6 @@ const t = useTranslations(locale);
                 </div>
             ))}
         </nav>
+    </div>
     </div>
 )}

@@ -39,11 +39,15 @@
     .doc-sidebar-left { display: none; }
 }
 
-/* ===== 侧边栏 ===== */
+/* ===== 侧边栏 — flex 列布局，上层固定 + 下层滚动 ===== */
 .doc-sidebar {
     position: sticky;
     top: var(--space-lg);
     align-self: start;
+    display: flex;
+    flex-direction: column;
+    /* max-height 由 JS 根据页头可见性动态计算 */
+    gap: var(--space-lg);
 }
 .doc-sidebar-inner {
     display: flex;
@@ -51,11 +55,37 @@
     gap: var(--space-sm);
 }
 
-/* 侧边栏容器覆盖 */
+/* 侧边栏容器 — 文档卡片禁用内部滚动 */
 .doc-sidebar-inner.card {
-    overflow: hidden auto;
-    max-height: calc(100vh - var(--header-height) - var(--space-2xl) - 40px);
+    margin-bottom: 20px;
     padding: var(--space-md);
+}
+
+/* ===== 文档卡片滚动容器 — flex:1 填充剩余空间，自身滚动 + 透明渐变遮罩 ===== */
+.doc-scroll-wrapper {
+    flex: 1;
+    min-height: 0;
+    overflow-y: auto;
+    overflow-x: clip;
+    scrollbar-width: none;
+    -ms-overflow-style: none;
+    padding: 0 var(--space-xl);
+    margin: 0 calc(0px - var(--space-xl));
+}
+.doc-scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+/* mask 由 JS 根据滚动位置动态设置，不再用静态 class */
+.doc-scroll-wrapper::-webkit-scrollbar {
+    display: none;
+}
+.doc-scroll-wrapper::before,
+.doc-scroll-wrapper::after {
+    display: none;
+}
+.doc-scroll-wrapper:not(.at-top)::before,
+.doc-scroll-wrapper:not(.at-bottom)::after {
+    display: none;
 }
 
 /* ===== 分类选项卡卡片 ===== */
@@ -65,7 +95,7 @@
     flex-direction: column;
     gap: 8px;
     padding: var(--space-md);
-    margin-bottom: var(--space-md);
+    flex-shrink: 0;
 }
 .doc-tabs-label {
     font-size: var(--font-size-lg);
@@ -354,10 +384,9 @@
     color: var(--md-sys-color-on-surface-variant);
 }
 
-/* ===== 章节目录卡片 ===== */
+/* ===== 章节目录卡片 — 文档卡片禁用内部滚动 ===== */
 .doc-chapters-card.card {
-    overflow: hidden auto;
-    max-height: calc(100vh - var(--header-height) - var(--space-2xl) - 198px);
+    margin-bottom: 20px;
     padding: var(--space-md);
 }
 
@@ -373,7 +402,7 @@
 .doc-version-card.card {
     max-height: calc(100vh - var(--header-height) - var(--space-2xl));
     padding: 16px !important;
-    margin-bottom: var(--space-md);
+    flex-shrink: 0;
 }
 .doc-version-card-label {
     font-size: var(--font-size-lg);
@@ -533,6 +562,7 @@
 .doc-sidebar-nav {
     display: flex;
     flex-direction: column;
+    gap: var(--space-lg);
 }
 .doc-sidebar-link {
     display: block;

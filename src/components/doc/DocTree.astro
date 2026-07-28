@@ -47,6 +47,7 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
 </div>
 </div>
 
+<div class="doc-scroll-wrapper">
 <div class="doc-chapters-card card" data-active-tab={activeTab}>
     {/* 为每个分类预渲染章节列表，客户端通过 data-tab 控制显隐 */}
     {tabs.map((tab) => {
@@ -96,6 +97,7 @@ const prefix = locale === "zh-cn" ? "" : `/${locale}`;
     <div class="doc-chapters-slider" aria-hidden="true">
         <div class="doc-chapters-slider-highlight"></div>
     </div>
+</div>
 </div>
 
 <script>

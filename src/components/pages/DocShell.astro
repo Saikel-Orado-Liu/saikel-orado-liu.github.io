@@ -104,3 +104,65 @@ const docHomeHref = prefix + "/projects/" + projectSlug + homeSeg + "/";
         )}
     </div>
 </BaseLayout>
+
+<script>
+    function updateSidebarHeight() {
+        document.querySelectorAll('.doc-sidebar').forEach(function(s) {
+            s.style.maxHeight = 'calc(100vh - ' + s.getBoundingClientRect().top + 'px - var(--space-lg))';
+        });
+    }
+
+    function initScrollOverflowMask() {
+        document.querySelectorAll('.doc-scroll-wrapper').forEach(function(w) {
+            if (w.dataset.maskReady === 'true') return;
+            w.dataset.maskReady = 'true';
+
+            function update() {
+                var hasOverflow = w.scrollHeight > w.clientHeight + 1;
+                if (!hasOverflow) {
+                    w.style.webkitMaskImage = 'none';
+                    w.style.maskImage = 'none';
+                    return;
+                }
+                var topDist = Math.min(w.scrollTop, 30);
+                var bottomDist = Math.min(w.scrollHeight - w.scrollTop - w.clientHeight, 30);
+                var mask;
+                if (topDist <= 0 && bottomDist <= 0) {
+                    mask = 'none';
+                } else {
+                    mask = 'linear-gradient(to bottom, transparent 0%, black ' + topDist + 'px, black calc(100% - ' + bottomDist + 'px), transparent 100%)';
+                }
+                w.style.webkitMaskImage = mask;
+                w.style.maskImage = mask;
+            }
+
+            w.addEventListener('scroll', update, { passive: true });
+            update();
+        });
+    }
+
+    function initAll() {
+        initScrollOverflowMask();
+        updateSidebarHeight();
+    }
+
+    window.addEventListener('scroll', updateSidebarHeight, { passive: true });
+    window.addEventListener('resize', function() {
+        updateSidebarHeight();
+        document.querySelectorAll('.doc-scroll-wrapper').forEach(function(w) {
+            w.dispatchEvent(new Event('scroll'));
+        });
+    }, { passive: true });
+
+    if (document.readyState === 'loading') {
+        document.addEventListener('DOMContentLoaded', initAll, { once: true });
+    } else {
+        initAll();
+    }
+    document.addEventListener('astro:page-load', function() {
+        document.querySelectorAll('.doc-scroll-wrapper').forEach(function(w) {
+            delete w.dataset.maskReady;
+        });
+        initAll();
+    });
+</script>
