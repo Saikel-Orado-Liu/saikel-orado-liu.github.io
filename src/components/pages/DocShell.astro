@@ -107,7 +107,7 @@ const docHomeHref = prefix + "/projects/" + projectSlug + homeSeg + "/";
 
 <script>
     function updateSidebarHeight() {
-        document.querySelectorAll('.doc-sidebar').forEach(function(s: HTMLElement) {
+        document.querySelectorAll<HTMLElement>('.doc-sidebar').forEach(function(s) {
             s.style.maxHeight = 'calc(100vh - ' + s.getBoundingClientRect().top + 'px - var(--space-lg))';
         });
     }
@@ -136,7 +136,7 @@ const docHomeHref = prefix + "/projects/" + projectSlug + homeSeg + "/";
     }
 
     function initScrollOverflowMask() {
-        document.querySelectorAll('.doc-scroll-wrapper').forEach(function(w: HTMLElement) {
+        document.querySelectorAll<HTMLElement>('.doc-scroll-wrapper').forEach(function(w) {
             if (w.dataset.maskReady === 'true') return;
             w.dataset.maskReady = 'true';
 
@@ -160,7 +160,7 @@ const docHomeHref = prefix + "/projects/" + projectSlug + homeSeg + "/";
         initAll();
     }
     document.addEventListener('astro:page-load', function() {
-        document.querySelectorAll('.doc-scroll-wrapper').forEach(function(w: HTMLElement) {
+        document.querySelectorAll<HTMLElement>('.doc-scroll-wrapper').forEach(function(w) {
             delete w.dataset.maskReady;
         });
         initAll();
