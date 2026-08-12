@@ -115,7 +115,7 @@ const docHomeHref = prefix + "/projects/" + projectSlug + homeSeg + "/";
     function updateMask(w: HTMLElement) {
         var hasOverflow = w.scrollHeight > w.clientHeight + 1;
         if (!hasOverflow) {
-            w.style.webkitMaskImage = 'none';
+            w.style.setProperty('-webkit-mask-image', 'none');
             w.style.maskImage = 'none';
             return;
         }
@@ -131,7 +131,7 @@ const docHomeHref = prefix + "/projects/" + projectSlug + homeSeg + "/";
         } else {
             mask = 'linear-gradient(to bottom, transparent 0%, black ' + topDist + 'px, black calc(100% - ' + bottomDist + 'px), transparent 100%)';
         }
-        w.style.webkitMaskImage = mask;
+        w.style.setProperty('-webkit-mask-image', mask);
         w.style.maskImage = mask;
     }
 
