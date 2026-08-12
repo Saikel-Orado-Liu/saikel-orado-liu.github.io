@@ -24,7 +24,7 @@
 .doc-layout {
     display: grid;
     grid-template-columns: minmax(0, 250px) 1fr minmax(0, 250px);
-    gap: 30px;
+    gap: var(--space-lg);
     max-width: var(--header-max-width);
     width: calc(100% - var(--space-lg) * 2);
     margin: 0 auto;
@@ -57,7 +57,6 @@
 
 /* 侧边栏容器 — 文档卡片禁用内部滚动 */
 .doc-sidebar-inner.card {
-    margin-bottom: 20px;
     padding: var(--space-md);
 }
 
@@ -69,7 +68,7 @@
     overflow-x: clip;
     scrollbar-width: none;
     -ms-overflow-style: none;
-    padding: 0 var(--space-xl);
+    padding: 0 var(--space-xl) var(--space-md);
     margin: 0 calc(0px - var(--space-xl));
 }
 .doc-scroll-wrapper::-webkit-scrollbar {
@@ -386,7 +385,6 @@
 
 /* ===== 章节目录卡片 — 文档卡片禁用内部滚动 ===== */
 .doc-chapters-card.card {
-    margin-bottom: 20px;
     padding: var(--space-md);
 }
 
@@ -758,7 +756,7 @@
 .doc-breadcrumb-sep { color: var(--md-sys-color-outline-variant); }
 
 /* ===== 主内容区 ===== */
-.doc-main { min-width: 0; }
+.doc-main { min-width: 0; padding-bottom: var(--space-md); }
 .doc-main .article-content {
     max-width: var(--content-narrow);
     margin: 0 auto;

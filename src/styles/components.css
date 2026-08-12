@@ -466,7 +466,7 @@
 
 /* ===== Article Content ===== */
 .article-content h1 {
-  margin: 0 0 var(--space-lg);
+  margin: var(--space-lg) 0 var(--space-lg);
   font-size: var(--font-size-5xl);
   font-weight: var(--font-weight-bold);
   color: var(--md-sys-color-on-background);
