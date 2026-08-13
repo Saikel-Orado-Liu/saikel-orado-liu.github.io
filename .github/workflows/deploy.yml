@@ -35,7 +35,7 @@ jobs:
 
       - name: Restore previous URL list
         id: cache-restore
-        uses: actions/cache/restore@v4
+        uses: actions/cache/restore@v6
         with:
           path: /tmp/indexnow-urls.json
           key: indexnow-urls-${{ github.ref_name }}
@@ -49,7 +49,7 @@ jobs:
 
       - name: Save current URL list
         if: always()
-        uses: actions/cache/save@v4
+        uses: actions/cache/save@v6
         with:
           path: /tmp/indexnow-urls.json
           key: indexnow-urls-${{ github.ref_name }}
