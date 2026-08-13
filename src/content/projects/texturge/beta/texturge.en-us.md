@@ -21,7 +21,7 @@ featured: true
 - **Glyph Scheduling** — `FGlyphScheduleInfo` provides independent scheduling per glyph (delay, skip, classification) with `Index = -1` global semantics
 - **BlueprintNativeEvent Custom Logic** — `BuildDefaultAnimation` lets designers override the default animation generation logic in Blueprint
 - **Animation Clipping** — Layer / Factory-level `SetAnimationClipAt` front/back trimming (playback axis, 0.3.0)
-- **PBM Physical Pigment Tinting** — tinting uses the **Pigment-Based Mixing (PBM)** algorithm: real-time pigment mixing built on Kubelka–Munk two-flux theory — yellow + blue makes green, complementary pairs mix into muddy colors, deep colors lightened with white stay saturated, matching real paint intuition; no look-up tables, O(1) constant time (`Texturge::GlyphRender::ApplyTint`, [Apache 2.0 open source](https://github.com/Saikel-Orado-Liu/pigment-based-mixing))
+- **PBM Physical Pigment Tinting** — tinting uses the **Pigment-Based Mixing (PBM)** algorithm: real-time pigment mixing built on Kubelka–Munk two-flux theory — yellow + blue makes green, complementary pairs mix into muddy colors, deep colors lightened with white stay saturated, matching real paint intuition; no look-up tables, O(1) constant time (`Texturge::GlyphRender::ApplyTint`, [MIT open source](https://github.com/Saikel-Orado-Liu/pigment-based-mixing))
 - **21-Channel Per-Layer Curve Storage** — `FPerLayerCurves` stores each layer's complete curve data independently, eliminating curve merge errors
 
 ## Documentation Navigation

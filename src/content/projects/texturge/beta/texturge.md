@@ -20,7 +20,7 @@ featured: true
 - **字形调度** — `FGlyphScheduleInfo` 为每个字形提供独立调度（延迟、跳过、分类），`Index = -1` 全局语义
 - **BlueprintNativeEvent 自定义逻辑** — `BuildDefaultAnimation` 允许设计师在蓝图中覆盖默认动画生成逻辑
 - **动画剪切** — Layer / Factory 级 `SetAnimationClipAt` 前端/末端裁剪（播放轴口径，0.3.0）
-- **PBM 物理颜料混色** — 染色采用 **Pigment-Based Mixing（PBM）** 算法：基于 Kubelka–Munk 双流理论的实时颜料混色，黄+蓝变绿、互补色混合产生泥色、深色加白得到饱和浅色，贴合真实颜料直觉；无查找表、O(1) 常数时间（`Texturge::GlyphRender::ApplyTint`，[Apache 2.0 开源](https://github.com/Saikel-Orado-Liu/pigment-based-mixing)）
+- **PBM 物理颜料混色** — 染色采用 **Pigment-Based Mixing（PBM）** 算法：基于 Kubelka–Munk 双流理论的实时颜料混色，黄+蓝变绿、互补色混合产生泥色、深色加白得到饱和浅色，贴合真实颜料直觉；无查找表、O(1) 常数时间（`Texturge::GlyphRender::ApplyTint`，[MIT 协议开源](https://github.com/Saikel-Orado-Liu/pigment-based-mixing)）
 - **21 通道逐层曲线存储** — `FPerLayerCurves` 独立存储每层完整曲线数据，消除曲线合并误差
 
 ## 文档导航
