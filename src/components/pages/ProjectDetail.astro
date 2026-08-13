@@ -20,14 +20,14 @@ const resolvedVersion = version || currentVer;
 // 1. Project metadata — match by locale + version
 const projects = await getCollection("projects", ({ data }: any) => !data.draft);
 
+// 优先匹配 locale 特定条目（如 texturge/beta/texturgeen-us 或 texturge/beta/texturge.en-us），
+// 再回退到无 locale 条目（zh-cn）。注意：必须分多次 find——
+// 若在同一 find 内用 || 连接，无 locale 条目会先命中兜底模式。
 let project =
-    projects.find((p) => {
-        return p.id === `${slug}/${resolvedVersion}/${slug}` || p.id === `${slug}/${resolvedVersion}/${slug}.${locale}` || p.id === `${slug}/${resolvedVersion}/index` || p.id === `${slug}/${resolvedVersion}/index.${locale}`;
-    }) ??
-    projects.find((p) => {
-        return p.id === `${slug}/${slug}` || p.id === `${slug}/${slug}.${locale}` || p.id === `${slug}/index` || p.id === `${slug}/index.${locale}`;
-    });
-if (!project) project = projects.find((p) => p.id === `${slug}/${slug}` || p.id === `${slug}/index`);
+    projects.find((p) => p.id === `${slug}/${resolvedVersion}/${slug}${locale}` || p.id === `${slug}/${resolvedVersion}/${slug}.${locale}` || p.id === `${slug}/${resolvedVersion}/index${locale}` || p.id === `${slug}/${resolvedVersion}/index.${locale}`) ??
+    projects.find((p) => p.id === `${slug}/${resolvedVersion}/${slug}` || p.id === `${slug}/${resolvedVersion}/index`) ??
+    projects.find((p) => p.id === `${slug}/${slug}${locale}` || p.id === `${slug}/${slug}.${locale}` || p.id === `${slug}/index${locale}` || p.id === `${slug}/index.${locale}`) ??
+    projects.find((p) => p.id === `${slug}/${slug}` || p.id === `${slug}/index`);
 if (!project) project = projects[0];
 if (!project) throw new Error(`No project found for slug: ${slug}`);
 const { Content, headings } = await render(project);
