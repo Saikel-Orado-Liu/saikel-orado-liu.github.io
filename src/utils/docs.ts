@@ -64,6 +64,20 @@ export function getDocCategoryTabs(): DocCategoryTab[] {
 /** 分类文件夹 slug 列表（对应四个文档分类标签） */
 const CATEGORY_SLUGS = ['tutorials', 'guides', 'reference', 'api'];
 
+/** 分类展示顺序：教程 → 指南 → 参考 → API（与分类选项卡一致） */
+const CATEGORY_ORDER: Record<string, number> = {
+  tutorials: 0,
+  guides: 1,
+  reference: 2,
+  api: 3,
+};
+
+/** 分类排序权重；无分类（旧版 2 级结构）归入 guides */
+function categoryOrder(category: string | null): number {
+  if (!category) return CATEGORY_ORDER.guides;
+  return CATEGORY_ORDER[category] ?? 99;
+}
+
 /** 从 DocRegistry 中筛选属于指定分类的章节 */
 export function filterRegistryByCategory(
   registry: DocRegistry,
@@ -254,6 +268,9 @@ export async function getLocalizedDocEntries(
 
   result.sort((a, b) => {
     if (a.isIndex !== b.isIndex) return a.isIndex ? -1 : 1;
+    const catA = categoryOrder(a.category);
+    const catB = categoryOrder(b.category);
+    if (catA !== catB) return catA - catB;
     if (a.chapterOrder !== b.chapterOrder) return a.chapterOrder - b.chapterOrder;
     return a.docOrder - b.docOrder;
   });
@@ -364,6 +381,20 @@ export interface AdjacentDocs {
 export function getAdjacentDocs(flatList: DocNode[], currentId: string): AdjacentDocs {
   const idx = flatList.findIndex(d => d.id === currentId);
   if (idx === -1) return { prev: null, next: null };
+  const current = flatList[idx];
+
+  // 分类感知：非索引文档只在所属分类内取上一篇/下一篇，
+  // 不跨分类跳转（教程 → 指南 → 参考 → API 各自独立成流）。
+  if (!current.isIndex && current.category) {
+    const catList = flatList.filter(d => !d.isIndex && d.category === current.category);
+    const catIdx = catList.findIndex(d => d.id === currentId);
+    return {
+      prev: catIdx > 0 ? catList[catIdx - 1] : null,
+      next: catIdx < catList.length - 1 ? catList[catIdx + 1] : null,
+    };
+  }
+
+  // 索引页 / 旧版无分类结构：按整表顺序取相邻文档
   return {
     prev: idx > 0 ? flatList[idx - 1] : null,
     next: idx < flatList.length - 1 ? flatList[idx + 1] : null,
