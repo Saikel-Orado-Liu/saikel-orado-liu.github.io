@@ -17,6 +17,9 @@ const DIST = path.resolve('dist');
 /** 禁止出现在公开产物中的路径（相对 dist/） */
 const FORBIDDEN = ['spec', 'spec/index.html', 'spec/components/index.html', 'gosper-test.html'];
 
+/** 禁止出现在 dist 根目录的命名前缀：`__` 前缀约定为本地临时页（探针/引导页），绝不可上线 */
+const FORBIDDEN_PREFIX = '__';
+
 const found = FORBIDDEN.filter((rel) => existsSync(path.join(DIST, rel)));
 
 if (!existsSync(DIST)) {
@@ -25,7 +28,16 @@ if (!existsSync(DIST)) {
 }
 
 // 附带体检：dist 根目录的 .html 清单，便于人工复核是否有新的内部页混入
-const rootHtml = readdirSync(DIST).filter((f) => f.endsWith('.html'));
+const rootEntries = readdirSync(DIST);
+const rootHtml = rootEntries.filter((f) => f.endsWith('.html'));
+const prefixed = rootEntries.filter((f) => f.startsWith(FORBIDDEN_PREFIX));
+
+if (prefixed.length > 0) {
+  console.error('[verify-public-output] ✗ dist 根目录存在 `__` 前缀的临时页（约定禁止上线）：');
+  for (const f of prefixed) console.error(`    dist/${f}`);
+  console.error('  临时探针/引导页请放在 public/ 之外，或构建前删除。');
+  process.exit(1);
+}
 
 if (found.length > 0) {
   console.error('[verify-public-output] ✗ 内部内容泄漏到公开产物：');
