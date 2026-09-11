@@ -18,6 +18,9 @@ body {
   color: var(--text-color);
   background-color: var(--background-main-color);
   min-height: 100vh;
+  /* 防御性兜底：任何子元素横向溢出都不允许撑出横向滚动条
+     （根因修复见 响应式规范 — 组件级 wrap/min-width 治理） */
+  overflow-x: clip;
 }
 
 /* 页面背景微纹理 — 为磨砂亚克力 backdrop-blur 提供可模糊的底层细节 */
@@ -126,7 +129,7 @@ code {
   background-size: 100% 100%, 70px 70px;
   background-repeat: no-repeat, repeat;
   background-blend-mode: normal, normal;
-  color: var(--clr-primary-accent);
+  color: var(--link-color);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
   box-shadow:
@@ -239,8 +242,21 @@ hr {
 
 /* ===== Focus ===== */
 :focus-visible {
-  outline: 2px solid var(--clr-secondary-accent);
-  outline-offset: 2px;
+  outline: var(--focus-ring-width) solid var(--focus-ring);
+  outline-offset: var(--focus-ring-offset);
+  border-radius: 2px; /* 让 outline 跟随圆角，避免直角方框破坏拟物语感 */
+}
+
+/* ===== Reduced Motion — 用户偏好减弱动效时全局降级 ===== */
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
 }
 
 /* ===== Utility ===== */

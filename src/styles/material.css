@@ -70,7 +70,7 @@
 .plate-accent {
   position: relative;
   isolation: isolate;
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   box-shadow:
@@ -124,7 +124,7 @@
 /* 亮色模式 */
 .light-style .plate-accent {
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:

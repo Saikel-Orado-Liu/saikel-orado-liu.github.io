@@ -363,7 +363,7 @@
 
 /* Hover — 强调色卡片 + 白色文本 + 悬浮抬起 */
 .navbar-search .search-result-item:hover {
-    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+    background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
     outline: none;
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
@@ -376,7 +376,7 @@
 
 /* Active — 选中项（悬浮抬起） */
 .navbar-search .search-result-item.active {
-    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+    background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
     outline: none;
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
@@ -572,6 +572,18 @@
         4px 4px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
         10px 8px 6px 1px rgba(0, 0, 0, 0.20),
         inset 5px 5px 3px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, rgba(0, 0, 0, 0.60));
+}
+
+/* 亮色：hover/active 为橙面，白字 2.26:1 不达标 → 黑字 */
+:root.light-style .navbar-search .search-result-item:hover .search-result-title,
+:root.light-style .navbar-search .search-result-item.active .search-result-title,
+:root.light-style .navbar-search .search-result-item:hover .search-result-excerpt mark,
+:root.light-style .navbar-search .search-result-item.active .search-result-excerpt mark {
+    color: var(--on-accent);
+}
+:root.light-style .navbar-search .search-result-item:hover .search-result-excerpt,
+:root.light-style .navbar-search .search-result-item.active .search-result-excerpt {
+    color: color-mix(in srgb, var(--on-accent) 70%, transparent);
 }
 
 :root.light-style .navbar-search .search-footer kbd {

@@ -186,7 +186,7 @@ body {
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.4s ease,
     border-color 0.4s ease;
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   box-shadow:
@@ -272,7 +272,7 @@ body {
     transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
     box-shadow 0.4s ease,
     border-color 0.4s ease;
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   box-shadow:
@@ -424,10 +424,10 @@ body {
 
 /* 亮色 — 抬起/文字颜色 */
 :root.light-style .navbar .navbar-nav a.nav-lift {
-  color: #F5F5F5;
+  color: var(--on-accent);
 }
 :root.light-style .navbar .navbar-nav a.nav-hover {
-  color: #F5F5F5;
+  color: var(--on-accent);
 }
 :root.light-style .navbar .navbar-nav a.active.nav-dim {
   color: var(--md-sys-color-on-surface-variant);
@@ -437,7 +437,7 @@ body {
   z-index: 20;
   isolation: isolate;
   margin: -5px 0 0 0;
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   color: var(--clr-primary-text);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
@@ -505,7 +505,7 @@ body {
   isolation: isolate;
   margin: -5px 0 0 0;
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -636,7 +636,7 @@ body {
   font-weight: var(--font-weight-bold);
   color: var(--clr-primary-text);
   cursor: pointer;
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   box-shadow:
@@ -670,7 +670,7 @@ body {
   font-weight: var(--font-weight-bold);
   color: var(--clr-primary-text);
   cursor: pointer;
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   box-shadow:
@@ -738,7 +738,7 @@ body {
 /* 亮色 */
 :root.light-style .navbar .theme-toggle {
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -748,7 +748,7 @@ body {
 }
 :root.light-style .navbar .lang-trigger {
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -874,7 +874,7 @@ body {
   overflow: hidden;
   margin: -5px 0 0 0;
   font-weight: var(--font-weight-bold);
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   color: var(--clr-primary-text);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
@@ -946,7 +946,7 @@ body {
    ================================================================ */
 :root.light-style .navbar .theme-toggle {
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -1024,7 +1024,7 @@ body {
   overflow: hidden;
   margin: -5px 0 0 0;
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -1040,7 +1040,7 @@ body {
 }
 :root.light-style .navbar .lang-switcher .lang-dropdown a.lang-lift,
 :root.light-style .navbar .lang-switcher .lang-dropdown a.lang-hover-lift {
-  color: #F5F5F5;
+  color: var(--on-accent);
 }
 :root.light-style .navbar .lang-switcher .lang-dropdown a.lang-dim {
   color: var(--md-sys-color-on-surface-variant);
@@ -1114,7 +1114,7 @@ footer.footer > .footer-inner {
 
 /* btn-primary 暗色 */
 .btn-primary {
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   color: var(--clr-primary-text);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
@@ -1270,7 +1270,7 @@ footer.footer > .footer-inner {
   box-shadow:
     4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
     10px 8px 6px 1px rgba(0, 0, 0, 0.10),
-    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+    inset 5px 5px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
 }
 :root.light-style .card::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='nl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23nl)'/%3E%3C/svg%3E");
@@ -1286,7 +1286,7 @@ footer.footer > .footer-inner {
 /* 亮色 btn-primary */
 :root.light-style .btn-primary {
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -1333,7 +1333,7 @@ footer.footer > .footer-inner {
 /* 亮色 btn-outline */
 :root.light-style .btn-outline {
   background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
-  color: var(--alert-color, var(--clr-primary-accent));
+  color: var(--alert-color, var(--link-color));
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
   box-shadow:
@@ -1629,7 +1629,7 @@ blockquote:not(.markdown-alert) code {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='cacl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.28' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23cacl)'/%3E%3C/svg%3E");
   background-size: 150px 150px;
   background-blend-mode: normal;
-  color: var(--alert-color, var(--clr-primary-accent));
+  color: var(--alert-color, var(--link-color));
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg), var(--clr-primary-accent) 20%);
   border-right: 1px solid rgba(255, 255, 255, 1.00);
@@ -1651,9 +1651,9 @@ blockquote:not(.markdown-alert) code {
   flex-direction: column;
   align-items: center;
   justify-content: center;
-  min-height: 60vh;
+  min-height: 48vh;
   text-align: center;
-  padding: var(--space-4xl) 0 var(--space-2xl);
+  padding: var(--space-3xl) 0 var(--space-xl);
 }
 .hero-actions {
   display: flex;
@@ -1663,7 +1663,7 @@ blockquote:not(.markdown-alert) code {
 }
 
 .section {
-  padding: var(--space-4xl) 0;
+  padding: var(--space-3xl) 0;
 }
 .section-title {
   margin-bottom: var(--space-lg);
@@ -1852,7 +1852,7 @@ blockquote:not(.markdown-alert) code {
    文本链接
    ================================================================ */
 a {
-  color: var(--clr-primary-accent);
+  color: var(--link-color);
   text-decoration: none;
   transition: color 150ms;
 }
@@ -1886,8 +1886,13 @@ a:not(.btn):hover {
 
 
 @media (max-width: 640px) {
+  /* 移动端：导航凹槽为纵向列表，JS 滑块几何失效 → 隐藏，
+     选中态由 a.active 自身的强调色亚克力板承担 */
+  .navbar .navbar-nav .nav-slider {
+    display: none;
+  }
   .hero .heading-xl {
-    font-size: var(--font-size-4xl);
+    font-size: clamp(var(--font-size-2xl), 7.5vw, var(--font-size-4xl));
   }
   .notice-banner {
     font-size: var(--font-size-xs);
@@ -1969,7 +1974,7 @@ a:not(.btn):hover {
   color: var(--md-sys-color-on-primary);
   white-space: normal;
   border-bottom-width: 2px;
-  background-color: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background-color: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='ths' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23ths)'/%3E%3C/svg%3E");
   background-size: 70px 70px;
   background-blend-mode: normal;
@@ -2087,7 +2092,7 @@ blockquote:not(.markdown-alert)::after {
 :root.light-style .article-content table th {
   background-color: var(--clr-primary-accent);
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='thl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23thl)'/%3E%3C/svg%3E");
-  color: #FFFFFF;
+  color: var(--on-accent);
 }
 :root.light-style .article-content td {
   color: var(--md-sys-color-on-surface-variant);
@@ -2147,6 +2152,10 @@ blockquote:not(.markdown-alert)::after {
 }
 .card > a.card-ribbon:visited,
 .card > a.card-ribbon:focus { color: #FFFFFF; }
+/* 亮色：橙条上白字 2.26:1 不达标 → 黑字（--on-accent 7.2:1） */
+:root.light-style .card > a.card-ribbon,
+:root.light-style .card > a.card-ribbon:visited,
+:root.light-style .card > a.card-ribbon:focus { color: var(--on-accent); }
 .card > a.card-ribbon:hover { padding-left: 44px; }
 .card-ribbon:hover > span { transform: translateX(-18px); transition: transform 0.2s ease; }
 .card-ribbon:hover + .card-ribbon-shadow { padding-left: 42px; }

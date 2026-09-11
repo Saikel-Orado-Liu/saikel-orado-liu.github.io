@@ -225,7 +225,7 @@
         transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
         box-shadow 0.4s ease,
         border-color 0.4s ease;
-    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+    background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     box-shadow:
@@ -344,7 +344,7 @@
 :root.light-style .doc-tree-link.doc-tree-link:hover,
 :root.light-style .doc-tree-link.doc-tree-link--active {
     background: var(--clr-primary-accent);
-    color: #F5F5F5;
+    color: var(--on-accent);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
     box-shadow:
@@ -377,7 +377,7 @@
 /* 亮色 — 文字抬起时变白（accent 滑块在背后，需保证对比度） */
 :root.light-style .doc-tab-btn.tab-lift,
 :root.light-style .doc-tab-btn.tab-hover-lift {
-    color: #F5F5F5;
+    color: var(--on-accent);
 }
 :root.light-style .doc-tab-btn.tab-dim {
     color: var(--md-sys-color-on-surface-variant);
@@ -641,7 +641,7 @@
 .doc-tree-link--active:visited {
     font-weight: var(--font-weight-medium);
     color: var(--clr-primary-text);
-    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+    background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     box-shadow:
@@ -787,6 +787,15 @@
     gap: var(--space-lg);
     margin-top: var(--space-3xl);
 }
+@media (max-width: 640px) {
+    .doc-pager {
+        grid-template-columns: 1fr;
+        gap: var(--space-md);
+    }
+    .doc-pager-card {
+        padding: var(--space-md) var(--space-lg);
+    }
+}
 .doc-pager-card {
     display: flex;
     align-items: center;
@@ -801,8 +810,8 @@
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-text) 5%, transparent);
     box-shadow:
         4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
-        9px 10px 2px 0 rgba(0, 0, 0, 0.30),
-        inset 4px 4px 2px 0 rgba(0, 0, 0, 0.15);
+        10px 8px 6px 1px rgba(0, 0, 0, 0.30),
+        inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
     transition: transform 0.2s cubic-bezier(0.34, 1.3, 0.64, 1),
                 border-color 0.2s ease,
                 background 0.2s ease,
@@ -842,7 +851,7 @@
     box-shadow:
         4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 25%, transparent),
         14px 16px 8px 0 rgba(0, 0, 0, 0.15),
-        inset 4px 4px 2px 0 rgba(0, 0, 0, 0.1);
+        inset 5px 5px 3px 0 rgba(0, 0, 0, 0.1);
 }
 .doc-pager-card:not(.doc-pager-card--empty):hover::after { opacity: 0.67; }
 .doc-pager-card:not(.doc-pager-card--empty):active {
@@ -850,7 +859,7 @@
     box-shadow:
         4px 4px 0 0 color-mix(in srgb, var(--clr-primary-text) 20%, transparent),
         6px 6px 2px 0 rgba(0, 0, 0, 0.8),
-        inset 4px 4px 2px 0 rgba(0, 0, 0, 0.15);
+        inset 5px 5px 3px 0 rgba(0, 0, 0, 0.15);
     transition: transform 0.06s ease, box-shadow 0.06s ease, border-color 0.06s ease;
 }
 .doc-pager-card:not(.doc-pager-card--empty):active::after {
@@ -900,43 +909,42 @@
 }
 
 /* ===== 前后篇导航 — 亮色覆盖 ===== */
+/* 明暗几何同构：L1 4px 切边 / L2 10px-8px-6px-1px 柔影 / L3 inset 5px 5px 3px 内嵌，
+   仅色谱与噪点路径不同（亮色：暖色 tint 噪点 normal 混合 + 纯白漫反射高光） */
 :root.light-style .doc-pager-card {
     background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
     box-shadow:
-        3px 3px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
+        4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
         10px 8px 6px 1px rgba(0, 0, 0, 0.10),
-        inset 0 0 0 1px color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+        inset 5px 5px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
 }
 :root.light-style .doc-pager-card::before {
-    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='dpnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.28' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.83 0.14 0 0 0 0.82 0.05 0 0 0 0.77 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dpnl)'/%3E%3C/svg%3E");
-    background-size: 120px 120px;
+    background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 256 256'%3E%3Cfilter id='dpnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.83 0.14 0 0 0 0.82 0.05 0 0 0 0.77 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23dpnl)'/%3E%3C/svg%3E");
+    background-size: 200px 200px;
     opacity: 1;
     filter: none;
     mix-blend-mode: normal;
     z-index: 2;
 }
 :root.light-style .doc-pager-card::after {
-    background: linear-gradient(155deg,
-        color-mix(in srgb, var(--clr-primary-bg) 98%, var(--clr-primary-accent) 2%) 0%,
-        color-mix(in srgb, var(--clr-primary-bg) 96%, var(--clr-primary-accent) 4%) 30%,
-        color-mix(in srgb, var(--clr-primary-bg) 88%, var(--clr-primary-accent) 12%) 55%,
-        color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%) 100%);
-    z-index: 0;
+    background: linear-gradient(160deg, rgba(255, 255, 255, 0.75) 0%, transparent 45%);
+    opacity: 0.5;
+    z-index: 1;
 }
 :root.light-style .doc-pager-card:not(.doc-pager-card--empty):hover {
     box-shadow:
         4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
         14px 16px 8px 0 rgba(0, 0, 0, 0.10),
-        inset 4px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+        inset 5px 5px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
 }
 :root.light-style .doc-pager-card:not(.doc-pager-card--empty):hover::after { opacity: 0.67; }
 :root.light-style .doc-pager-card:not(.doc-pager-card--empty):active {
     box-shadow:
         4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
         6px 6px 2px 0 rgba(0, 0, 0, 0.20),
-        inset 4px 4px 2px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+        inset 5px 5px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
 }
 :root.light-style .doc-pager-card:not(.doc-pager-card--empty):active::after { opacity: 0.05; }
 
@@ -1034,7 +1042,7 @@
     font-weight: var(--font-weight-medium);
     font-size: var(--font-size-sm);
     color: var(--clr-primary-text);
-    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+    background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     border-radius: 18px;
@@ -1077,7 +1085,7 @@
 :root.light-style .doc-toc-depth-2,
 :root.light-style .doc-toc-depth-2:visited {
     background: var(--clr-primary-accent);
-    color: #F5F5F5;
+    color: var(--on-accent);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
     box-shadow:
@@ -1140,7 +1148,7 @@
         transform 0.25s cubic-bezier(0.4, 0, 0.2, 1),
         box-shadow 0.4s ease,
         border-color 0.4s ease;
-    background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+    background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
     border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
     box-shadow:
@@ -1299,7 +1307,7 @@
 }
 :root.light-style .doc-toc-group.has-toc-slider .toc-lift,
 :root.light-style .doc-toc-group.has-toc-slider .toc-lift:visited {
-    color: #F5F5F5;
+    color: var(--on-accent);
 }
 
 

@@ -200,7 +200,7 @@
 /* 亮色版 */
 :root.light-style .tag {
   background: color-mix(in srgb, var(--clr-primary-bg) 97%, var(--clr-primary-accent) 3%);
-  color: var(--clr-primary-accent);
+  color: var(--link-color);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-bg) 80%, var(--clr-primary-accent) 20%);
   box-shadow:
@@ -376,7 +376,7 @@
     1px 2px 0 0 color-mix(in srgb, var(--clr-primary-accent) 70%, #FFFFFF 30%),
     2px 3px 4px 0 rgba(0, 0, 0, 0.67),
     inset 1px 2px 1px 0 color-mix(in srgb, var(--clr-primary-accent) 40%, #000000 60%);
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   transition: none;
 }
 
@@ -412,7 +412,7 @@
 /* 亮色版 */
 :root.light-style .tag-accent {
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -483,6 +483,13 @@
   margin: var(--space-lg) 0 var(--space-md);
   font-size: var(--font-size-2xl);
   font-weight: var(--font-weight-semibold);
+  color: var(--md-sys-color-on-surface);
+  scroll-margin-top: calc(var(--header-height) + var(--space-lg));
+}
+.article-content h4,
+.article-content h5,
+.article-content h6 {
+  margin: var(--space-md) 0 var(--space-sm);
   color: var(--md-sys-color-on-surface);
   scroll-margin-top: calc(var(--header-height) + var(--space-lg));
 }
@@ -564,7 +571,7 @@
   width: calc(var(--space-md) * 2);
   height: calc(var(--space-md) * 2);
   border-radius: 50%;
-  background-color: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background-color: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   background-image:
     linear-gradient(160deg, color-mix(in srgb, var(--clr-primary-text) 40%, transparent) 0%, transparent 55%),
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='scn' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.12 0 0 0 0.78 0.04 0 0 0 0.14 0.03 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23scn)'/%3E%3C/svg%3E");
@@ -591,7 +598,7 @@
     url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 128 128'%3E%3Cfilter id='scnl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.42' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.15 0 0 0 0.85 0.10 0 0 0 0.55 0.02 0 0 0 0.12 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23scnl)'/%3E%3C/svg%3E");
   border-top-color: color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left-color: color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
-  color: #F5F5F5;
+  color: var(--on-accent);
   box-shadow:
     1px 2px 0 0 color-mix(in srgb, var(--clr-primary-bg) 60%, var(--clr-primary-accent) 40%),
     2px 3px 4px 0 rgba(0, 0, 0, 0.33),
@@ -694,7 +701,7 @@ picture img {
 
 /* btn-primary — 强调行动按钮 */
 .btn-primary {
-  background: color-mix(in srgb, var(--clr-primary-accent) 90%, #000000 10%);
+  background: color-mix(in srgb, var(--clr-primary-accent) 87%, #000000 13%);
   color: var(--clr-primary-text);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 85%, #FFFFFF 15%);
@@ -803,7 +810,7 @@ picture img {
 /* 亮色 btn-primary */
 :root.light-style .btn-primary {
   background: var(--clr-primary-accent);
-  color: #F5F5F5;
+  color: var(--on-accent);
   border-top: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   border-left: 1px solid color-mix(in srgb, var(--clr-primary-accent) 60%, #FFFFFF 40%);
   box-shadow:
@@ -868,7 +875,7 @@ picture img {
 }
 
 /* ===== Section ===== */
-.section { padding: var(--space-4xl) 0; }
+.section { padding: var(--space-3xl) 0; }
 .section-title { margin-bottom: var(--space-lg); }
 .section-subtitle { margin-bottom: var(--space-lg); }
 

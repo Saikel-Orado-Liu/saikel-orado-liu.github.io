@@ -179,7 +179,7 @@ const socialLinks: SocialLink[] = [
 }
 
 .footer-desc {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   color: var(--md-sys-color-on-surface-variant);
   line-height: var(--line-height-normal);
   margin: 0;
@@ -192,7 +192,7 @@ const socialLinks: SocialLink[] = [
 }
 
 .footer-link {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--md-sys-color-on-surface-variant);
   text-decoration: none;
@@ -221,11 +221,20 @@ const socialLinks: SocialLink[] = [
   display: flex;
   align-items: center;
   gap: 0;
+  /* 移动端：两组图标 + 分隔线超出 342px 可用宽度 → 允许换行 */
+  flex-wrap: wrap;
+  row-gap: var(--space-md);
 }
 
 .footer-socials-group {
   display: flex;
   gap: var(--space-lg);
+}
+
+@media (max-width: 767px) {
+  .footer-socials-group {
+    gap: var(--space-md);
+  }
 }
 
 .footer-socials-divider {
@@ -259,7 +268,7 @@ const socialLinks: SocialLink[] = [
 }
 
 .footer-copyright {
-  font-size: var(--font-size-md);
+  font-size: var(--font-size-base);
   font-weight: var(--font-weight-bold);
   color: var(--md-sys-color-on-surface-variant);
   margin: 0;
@@ -273,7 +282,7 @@ const socialLinks: SocialLink[] = [
   box-shadow:
     4px 4px 0 0 color-mix(in srgb, var(--clr-primary-bg) 94%, var(--clr-primary-accent) 6%),
     10px 8px 6px 1px rgba(0, 0, 0, 0.10),
-    inset 5px 5px 4px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
+    inset 5px 5px 3px 0 color-mix(in srgb, var(--clr-primary-bg) 65%, var(--clr-primary-accent) 35%);
 }
 :global(:root.light-style) footer.footer::before {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 512 512'%3E%3Cfilter id='fvl' colorInterpolationFilters='sRGB'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.21' numOctaves='3' stitchTiles='stitch'/%3E%3CfeColorMatrix type='matrix' values='0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0.333 0.333 0.333 0 0 0 0 0 1 0'/%3E%3CfeColorMatrix type='matrix' values='0.30 0 0 0 0.70 0.30 0 0 0 0.70 0.04 0 0 0 0.65 0 0 0 1 0'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23fvl)'/%3E%3C/svg%3E");
