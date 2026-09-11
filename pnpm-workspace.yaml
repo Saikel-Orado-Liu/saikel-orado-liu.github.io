@@ -4,17 +4,18 @@ allowBuilds:
 minimumReleaseAgeExclude:
   - astro@6.4.7
 # 安全修复（Dependabot / pnpm audit）：把受影响的传递依赖抬到已修复版本。
-# 均为同一主版本内的补丁级提升，不改动 API 面；yaml / js-yaml 使用带主版本
-# 范围的键，避免误伤不受公告影响的 yaml@1.x / js-yaml@3.x。
+# 每条都同时给出「已修复下限」与「原始主版本上限」，只做同主版本内的补丁级提升，
+# 避免 >= 无上限导致跨主版本跳跃（曾把 mermaid 抬到 12.x、fast-uri 抬到 4.x）；
+# yaml / js-yaml 额外带主版本范围键，避免误伤不受公告影响的 yaml@1.x / js-yaml@3.x。
 overrides:
   esbuild: ">=0.28.1"
-  dompurify: ">=3.4.13"
-  fast-uri: ">=3.1.6"
-  fast-xml-parser: ">=5.10.1"
-  "js-yaml@4": ">=4.3.2"
-  smol-toml: ">=1.7.1"
-  "yaml@2": ">=2.8.3"
-  mermaid: ">=11.16.1"
-  decode-uri-component: ">=0.4.3"
-  colord: ">=2.9.4"
-  lodash-es: ">=4.17.24"
+  dompurify: ">=3.4.13 <4"
+  fast-uri: ">=3.1.6 <4"
+  fast-xml-parser: ">=5.10.1 <6"
+  "js-yaml@4": ">=4.3.2 <5"
+  smol-toml: ">=1.7.1 <2"
+  "yaml@2": ">=2.8.3 <3"
+  mermaid: ">=11.16.1 <12"
+  decode-uri-component: ">=0.4.3 <1"
+  colord: ">=2.9.4 <3"
+  lodash-es: ">=4.17.24 <5"
