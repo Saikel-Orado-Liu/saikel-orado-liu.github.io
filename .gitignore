@@ -30,4 +30,5 @@ build.log
 
 # 本地/AI 调试临时目录（截图、探针页、一次性脚本），禁止入库
 _vision-test/
+_ref/
 
