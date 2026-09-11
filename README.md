@@ -5,7 +5,12 @@
 <h1 align="center">GameGeek-Saikel · Personal Website</h1>
 
 <p align="center">
-  <img src="./.github/assets/badges.svg" alt="Astro 7.3 · Tailwind CSS 4.3 · 10 locales · RTL · Code MIT · Content All Rights Reserved" />
+  <a href="https://saikel-orado-liu.github.io"><img alt="Website: saikel-orado-liu.github.io" src="https://img.shields.io/badge/website-saikel--orado--liu.github.io-DE1300?style=plastic&labelColor=262626&logo=githubpages&logoColor=F5F5F5" /></a>
+  <a href="https://astro.build"><img alt="Astro 7.3" src="https://img.shields.io/badge/Astro-7.3-8250DF?style=plastic&labelColor=262626&logo=astro&logoColor=F5F5F5" /></a>
+  <a href="https://tailwindcss.com"><img alt="Tailwind CSS 4.3" src="https://img.shields.io/badge/Tailwind_CSS-4.3-0369A1?style=plastic&labelColor=262626&logo=tailwindcss&logoColor=F5F5F5" /></a>
+  <a href="./docs/响应式设计规范.md"><img alt="10 locales including RTL" src="https://img.shields.io/badge/locales-10_%C2%B7_RTL-00796B?style=plastic&labelColor=262626" /></a>
+  <a href="./LICENSE"><img alt="Code and styles: MIT" src="https://img.shields.io/badge/code-MIT-1F883D?style=plastic&labelColor=262626&logo=opensourceinitiative&logoColor=F5F5F5" /></a>
+  <a href="./LICENSE-CONTENT"><img alt="Content: All Rights Reserved" src="https://img.shields.io/badge/content-All_Rights_Reserved-B45309?style=plastic&labelColor=262626" /></a>
 </p>
 
 <p align="center">

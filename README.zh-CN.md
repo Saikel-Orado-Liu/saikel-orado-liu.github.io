@@ -5,7 +5,12 @@
 <h1 align="center">游戏极客-Saikel · 个人网站</h1>
 
 <p align="center">
-  <img src="./.github/assets/badges.svg" alt="Astro 7.3 · Tailwind CSS 4.3 · 10 种语言（含 RTL）· 代码 MIT · 内容保留所有权利" />
+  <a href="https://saikel-orado-liu.github.io"><img alt="网站：saikel-orado-liu.github.io" src="https://img.shields.io/badge/%E7%BD%91%E7%AB%99-saikel--orado--liu.github.io-DE1300?style=plastic&labelColor=262626&logo=githubpages&logoColor=F5F5F5" /></a>
+  <a href="https://astro.build"><img alt="Astro 7.3" src="https://img.shields.io/badge/Astro-7.3-8250DF?style=plastic&labelColor=262626&logo=astro&logoColor=F5F5F5" /></a>
+  <a href="https://tailwindcss.com"><img alt="Tailwind CSS 4.3" src="https://img.shields.io/badge/Tailwind_CSS-4.3-0369A1?style=plastic&labelColor=262626&logo=tailwindcss&logoColor=F5F5F5" /></a>
+  <a href="./docs/响应式设计规范.md"><img alt="10 种语言（含 RTL）" src="https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-10_%E7%A7%8D_%C2%B7_RTL-00796B?style=plastic&labelColor=262626" /></a>
+  <a href="./LICENSE"><img alt="代码与样式：MIT" src="https://img.shields.io/badge/%E4%BB%A3%E7%A0%81-MIT-1F883D?style=plastic&labelColor=262626&logo=opensourceinitiative&logoColor=F5F5F5" /></a>
+  <a href="./LICENSE-CONTENT"><img alt="内容：保留所有权利" src="https://img.shields.io/badge/%E5%86%85%E5%AE%B9-%E4%BF%9D%E7%95%99%E6%89%80%E6%9C%89%E6%9D%83%E5%88%A9-B45309?style=plastic&labelColor=262626" /></a>
 </p>
 
 <p align="center">
