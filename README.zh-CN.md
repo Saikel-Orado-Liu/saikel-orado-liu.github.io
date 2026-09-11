@@ -1,19 +1,11 @@
 <p align="center">
-  <img src="./.github/assets/cover.svg" alt="游戏极客-Saikel · GameGeek-Saikel — 个人网站、技术博客、UE5 插件文档与抽象拟物设计系统" width="100%" />
+  <img src="./.github/assets/readme-cover.svg" alt="游戏极客-Saikel · GameGeek-Saikel — 个人网站、技术博客、UE5 插件文档与抽象拟物设计系统" width="100%" />
 </p>
 
 <h1 align="center">游戏极客-Saikel · 个人网站</h1>
 
 <p align="center">
-  <a href="https://saikel-orado-liu.github.io"><img alt="Website" src="https://img.shields.io/badge/website-saikel--orado--liu.github.io-FF1500?style=for-the-badge&logo=githubpages&logoColor=white" /></a>
-  <img alt="Astro" src="https://img.shields.io/badge/Astro-7.3-BC52EE?style=for-the-badge&logo=astro&logoColor=white" />
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-4.3-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img alt="Locales" src="https://img.shields.io/badge/%E8%AF%AD%E8%A8%80-10%20%E7%A7%8D-FF1500?style=for-the-badge" />
-  <img alt="Last commit" src="https://img.shields.io/github/last-commit/Saikel-Orado-Liu/saikel-orado-liu.github.io?style=for-the-badge&color=ADADAD" />
-  <a href="./LICENSE"><img alt="代码与样式许可：MIT" src="https://img.shields.io/badge/%E4%BB%A3%E7%A0%81%E4%B8%8E%E6%A0%B7%E5%BC%8F-MIT-3DA639?style=for-the-badge" /></a>
-  <a href="./LICENSE-CONTENT"><img alt="内容许可：保留所有权利" src="https://img.shields.io/badge/%E5%86%85%E5%AE%B9-%E4%BF%9D%E7%95%99%E6%89%80%E6%9C%89%E6%9D%83%E5%88%A9-E89800?style=for-the-badge" /></a>
-  <a href="https://reuse.software/spec/"><img alt="符合 REUSE 规范" src="https://img.shields.io/badge/REUSE-compliant-3DA639?style=for-the-badge" /></a>
+  <img src="./.github/assets/badges.svg" alt="Astro 7.3 · Tailwind CSS 4.3 · 10 种语言（含 RTL）· 代码 MIT · 内容保留所有权利" />
 </p>
 
 <p align="center">
@@ -97,7 +89,7 @@ src/
   styles/       tokens · base · components · ui-spec · doc-shared · specbook
   utils/        内容与文档注册表工具
 docs/           设计与工程规范文档
-scripts/        构建期辅助：IndexNow 提交、公开产物守卫、README 封面生成
+scripts/        构建期辅助：IndexNow 提交、公开产物守卫、README 资产生成（封面 + 徽章）
 public/         静态资源（favicon、robots.txt）
 LICENSES/       REUSE.toml 引用的许可证文本（MIT + 内容条款）
 REUSE.toml      机器可读的按路径许可声明（REUSE 规范 3.3）

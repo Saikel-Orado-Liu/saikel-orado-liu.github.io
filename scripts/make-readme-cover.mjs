@@ -1,5 +1,5 @@
 /**
- * 生成 README 封面 SVG（.github/assets/cover.svg）
+ * 生成 README 封面 SVG（.github/assets/readme-cover.svg）
  * 严格按 docs/网页设计规范.md 的材质与几何：
  *   板级三层阴影 4px/10px 8px 6px 1px/inset 5px 5px 3px 0 · 噪点 256@0.19 tile120 contrast8 overlay .25
  *   胶囊 tag 小型控件 1px 2px 0 0/2px 3px 4px 0/inset 1px 2px 1px 0 · 噪点 256@0.28 tile70 contrast5 overlay .5
@@ -183,5 +183,5 @@ const svg = `<svg xmlns="http://www.w3.org/2000/svg" width="${W}" height="${H}" 
 `;
 
 mkdirSync('.github/assets', { recursive: true });
-writeFileSync('.github/assets/cover.svg', svg, 'utf8');
-console.log('.github/assets/cover.svg written, bytes =', svg.length);
+writeFileSync('.github/assets/readme-cover.svg', svg, 'utf8');
+console.log('.github/assets/readme-cover.svg written, bytes =', svg.length);

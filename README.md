@@ -1,19 +1,11 @@
 <p align="center">
-  <img src="./.github/assets/cover.svg" alt="游戏极客-Saikel · GameGeek-Saikel — personal website, blog, UE5 plugin documentation and an acrylic design system" width="100%" />
+  <img src="./.github/assets/readme-cover.svg" alt="游戏极客-Saikel · GameGeek-Saikel — personal website, blog, UE5 plugin documentation and an acrylic design system" width="100%" />
 </p>
 
 <h1 align="center">GameGeek-Saikel · Personal Website</h1>
 
 <p align="center">
-  <a href="https://saikel-orado-liu.github.io"><img alt="Website" src="https://img.shields.io/badge/website-saikel--orado--liu.github.io-FF1500?style=for-the-badge&logo=githubpages&logoColor=white" /></a>
-  <img alt="Astro" src="https://img.shields.io/badge/Astro-7.3-BC52EE?style=for-the-badge&logo=astro&logoColor=white" />
-  <img alt="Tailwind CSS" src="https://img.shields.io/badge/Tailwind-4.3-38BDF8?style=for-the-badge&logo=tailwindcss&logoColor=white" />
-  <img alt="TypeScript" src="https://img.shields.io/badge/TypeScript-5.9-3178C6?style=for-the-badge&logo=typescript&logoColor=white" />
-  <img alt="Locales" src="https://img.shields.io/badge/locales-10-FF1500?style=for-the-badge" />
-  <img alt="Last commit" src="https://img.shields.io/github/last-commit/Saikel-Orado-Liu/saikel-orado-liu.github.io?style=for-the-badge&color=ADADAD" />
-  <a href="./LICENSE"><img alt="Code license: MIT" src="https://img.shields.io/badge/code%20%26%20styles-MIT-3DA639?style=for-the-badge" /></a>
-  <a href="./LICENSE-CONTENT"><img alt="Content license: All Rights Reserved" src="https://img.shields.io/badge/content-All%20Rights%20Reserved-E89800?style=for-the-badge" /></a>
-  <a href="https://reuse.software/spec/"><img alt="REUSE compliant" src="https://img.shields.io/badge/REUSE-compliant-3DA639?style=for-the-badge" /></a>
+  <img src="./.github/assets/badges.svg" alt="Astro 7.3 · Tailwind CSS 4.3 · 10 locales · RTL · Code MIT · Content All Rights Reserved" />
 </p>
 
 <p align="center">
@@ -97,7 +89,7 @@ src/
   styles/       tokens · base · components · ui-spec · doc-shared · specbook
   utils/        Content and document-registry helpers
 docs/           Design and engineering specifications
-scripts/        Build-time helpers: the IndexNow submitter, the public-output guard, the README cover generator
+scripts/        Build-time helpers: the IndexNow submitter, the public-output guard, and the README asset generators (cover + badges)
 public/         Static assets (favicon, robots.txt)
 LICENSES/       License texts referenced by REUSE.toml (MIT + the content terms)
 REUSE.toml      Machine-readable per-path licensing (REUSE Specification 3.3)
