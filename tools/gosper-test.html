@@ -1,6 +1,11 @@
 <!DOCTYPE html>
 <html lang="zh-cn">
 <head>
+<!--
+  内部调试页：戈斯珀曲线无缝平铺验证台（自包含单文件，直接双击打开即可，无需服务器）。
+  ⚠️ 不要放回 public/ —— public/ 会被原样复制进 dist/ 并随 GitHub Pages 公开部署。
+  依据：docs/网页设计规范.md §0.1「样式规范参考页与分离约束」。
+-->
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <meta name="color-scheme" content="light dark">
@@ -134,7 +139,7 @@
          3. 缩放 & 路径数据
          =========================================================== */
       const SCALE = 15; // 曲线单位 → px
-      const EXTEND = 0; // 延伸长度 (px)
+      const EXTEND = 9; // 延伸长度 (px)
 
       const s = (p) => ({ x: (p.x - minX) * SCALE, y: (p.y - minY) * SCALE });
       const scaled = pts.map(s);

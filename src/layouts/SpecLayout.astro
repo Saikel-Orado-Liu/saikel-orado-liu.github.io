@@ -1,0 +1,143 @@
+---
+// 规范参考书 — 独立 Layout：不依赖主站 BaseLayout / 任何主站样式与组件。
+// 分离约束：仅 import src/styles/specbook.css；主站不得 import 本文件。
+import '../styles/specbook.css';
+
+interface Props {
+  title: string;
+  description: string;
+  active: 'tokens' | 'components';
+}
+const { title, description, active } = Astro.props;
+---
+
+<!doctype html>
+<html lang="zh-cn" dir="ltr" data-spec-theme="dark">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="color-scheme" content="light dark" />
+    <title>{title} · 样式规范参考</title>
+    <meta name="description" content={description} />
+
+    <!-- 字体（与主站相同的字体资源，仅资源复用，非样式耦合） -->
+    <link rel="preconnect" href="https://cdn-font.hyperos.mi.com" crossorigin />
+    <link rel="stylesheet" href="https://cdn-font.hyperos.mi.com/font/css?family=MiSans:100,200,300,400,450,500,600,650,700,900:Chinese_Simplify,Latin&display=swap" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@300;400;500;600;700&display=swap" />
+
+    <!-- 主题初始化：首帧前应用（防 FOUC），仅作用于本页 data-spec-theme -->
+    <script is:inline>
+      (function () {
+        try {
+          var t = localStorage.getItem('spec-theme');
+          if (t === 'light' || t === 'dark') document.documentElement.setAttribute('data-spec-theme', t);
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body>
+    <!-- 希尔伯特曲线背景层（算法与主站 hilbert.ts 一致，独立实现满足分离约束） -->
+    <div class="sb-bg" aria-hidden="true">
+      <svg xmlns="http://www.w3.org/2000/svg">
+        <defs>
+          <pattern id="sb-hilbert-pattern" width="280" height="280" patternUnits="userSpaceOnUse" patternTransform="rotate(45)">
+            <path id="sb-hilbert-path" d="" />
+          </pattern>
+        </defs>
+        <rect width="100%" height="100%" fill="url(#sb-hilbert-pattern)" />
+      </svg>
+    </div>
+
+    <header class="sb-header sb-plate">
+      <a class="sb-brand" href="/spec/" aria-label="样式规范参考首页">
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path fill="currentColor" d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z" />
+        </svg>
+        <span>样式规范参考</span>
+      </a>
+      <nav class="sb-nav" aria-label="规范参考导航">
+        <a href="/spec/" aria-current={active === 'tokens' ? 'page' : undefined}>设计令牌</a>
+        <a href="/spec/components/" aria-current={active === 'components' ? 'page' : undefined}>控件展示</a>
+      </nav>
+      <button class="sb-theme-toggle" type="button" aria-label="切换明暗主题" data-spec-theme-toggle>
+        <svg viewBox="0 0 24 24" aria-hidden="true">
+          <path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z" />
+        </svg>
+      </button>
+    </header>
+
+    <main class="sb-container" id="content">
+      <slot />
+    </main>
+
+    <footer style="max-width: 1200px; margin: 0 auto; padding: 0 16px 48px; width: calc(100% - 32px)">
+      <p class="sb-chip" style="padding: 8px 14px">
+        分离约束：本参考页为独立实现（specbook.css），与主站不共享任何样式/组件文件；两者仅共享数值标准。
+        样式与行为变更请先在本参考页实现并审查，通过后同步至主站。
+      </p>
+    </footer>
+
+    <script>
+      // 希尔伯特曲线（第 4 阶，256 段，280px tile / 45°——与主站参数一致；独立实现）
+      (function () {
+        function d2xy(n: number, d: number): [number, number] {
+          let x = 0, y = 0;
+          for (let s = 1; s < (1 << n); s <<= 1) {
+            const rx = (d >> 1) & 1;
+            const ry = (d ^ rx) & 1;
+            if (ry === 0) {
+              if (rx === 1) { x = s - 1 - x; y = s - 1 - y; }
+              const t = x; x = y; y = t;
+            }
+            x += s * rx;
+            y += s * ry;
+            d >>= 2;
+          }
+          return [x, y];
+        }
+        const N = 4, total = 1 << (2 * N), grid = 1 << N;
+        const tileSize = 280, cellSize = tileSize / grid, extend = 1.2 * cellSize;
+        const pts: [number, number][] = [];
+        for (let i = 0; i < total; i++) {
+          const xy = d2xy(N, i);
+          pts.push([(xy[1] + 0.5) * cellSize, (xy[0] + 0.5) * cellSize]);
+        }
+        const first = pts[0], second = pts[1];
+        const prev = pts[total - 2], last = pts[total - 1];
+        const startDx = second[0] - first[0], startDy = second[1] - first[1];
+        const endDx = last[0] - prev[0], endDy = last[1] - prev[1];
+        let d = `M${(first[0] - (startDx / cellSize) * extend).toFixed(3)},${(first[1] - (startDy / cellSize) * extend).toFixed(3)}`;
+        d += `L${first[0].toFixed(3)},${first[1].toFixed(3)}`;
+        for (let j = 1; j < pts.length; j++) d += `L${pts[j][0].toFixed(3)},${pts[j][1].toFixed(3)}`;
+        d += `L${(last[0] + (endDx / cellSize) * extend).toFixed(3)},${(last[1] + (endDy / cellSize) * extend).toFixed(3)}`;
+        const pathEl = document.getElementById('sb-hilbert-path');
+        if (pathEl) pathEl.setAttribute('d', d);
+      })();
+
+      const btn = document.querySelector('[data-spec-theme-toggle]') as HTMLButtonElement | null;
+      const root = document.documentElement;
+      const apply = (t: string) => root.setAttribute('data-spec-theme', t);
+      if (btn) {
+        btn.addEventListener('click', (ev: MouseEvent) => {
+          const next = root.getAttribute('data-spec-theme') === 'light' ? 'dark' : 'light';
+          const doSwitch = () => {
+            apply(next);
+            try { localStorage.setItem('spec-theme', next); } catch (e) {}
+          };
+          if (document.startViewTransition && ev) {
+            // 圆形辐射（与主站 theme.ts 同款）：从点击位置展开
+            root.style.setProperty('--vt-pos-x', `${ev.clientX}px`);
+            root.style.setProperty('--vt-pos-y', `${ev.clientY}px`);
+            root.style.setProperty('--vt-size', `${Math.max(window.innerWidth, window.innerHeight) * 2}px`);
+            document.startViewTransition(doSwitch);
+          } else {
+            doSwitch();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>

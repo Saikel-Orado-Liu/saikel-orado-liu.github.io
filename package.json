@@ -7,7 +7,7 @@
     "dev": "pnpm dev:link-pf && astro dev",
     "start": "astro dev",
     "dev:link-pf": "pagefind --site dist --output-path public/pagefind 2>nul",
-    "build": "astro check && astro build && pagefind --site dist 2>nul",
+    "build": "astro check && astro build && node scripts/verify-public-output.mjs && pagefind --site dist 2>nul",
     "preview": "astro preview"
   },
   "dependencies": {

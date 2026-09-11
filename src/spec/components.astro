@@ -1,0 +1,322 @@
+---
+import SpecLayout from '../layouts/SpecLayout.astro';
+---
+
+<SpecLayout
+  title="控件展示"
+  description="样式规范参考书 — 控件展示：按钮、标签、卡片、表单、导航、表格、提示块、代码块、排版样板与分页卡。全部真实可交互，供审查与纠错。"
+  active="components"
+>
+  <section class="sb-intro sb-plate">
+    <h1>控件展示</h1>
+    <p>
+      每个控件均为<strong>真实可交互</strong>实现（hover / active / focus / 键盘均可验证）；
+      明暗主题请用右上角切换。控件下方标注了应审查的状态矩阵。
+    </p>
+  </section>
+
+  <!-- 按钮 -->
+  <section class="sb-section" id="buttons" aria-label="按钮">
+    <h2 class="sb-section-title">按钮 <code>.btn-primary / .btn-outline · 全圆角 + 右下厚度补偿</code></h2>
+    <p class="sb-section-desc">
+      三状态矩阵：默认（0.5 高光）→ hover 左上抬 -4px（弹性 0.2s，高光 1）→ active 右下沉 +2px（0.06s，高光 0.4）。
+    </p>
+    <div class="sb-card sb-plate">
+      <div style="display: flex; gap: var(--s-md); flex-wrap: wrap; align-items: center">
+        <button class="sb-btn sb-btn-primary" type="button"><span>了解更多</span></button>
+        <button class="sb-btn sb-btn-outline" type="button"><span>查看项目</span></button>
+        <button class="sb-btn sb-btn-primary" type="button" disabled><span>禁用态</span></button>
+        <button class="sb-btn sb-btn-primary" type="button" aria-busy="true">
+          <span class="sb-btn-spinner" aria-hidden="true"></span><span>处理中</span>
+        </button>
+        <button class="sb-btn sb-btn-outline" type="button"><span>带图标</span><svg viewBox="0 0 24 24" width="18" height="18" fill="currentColor" aria-hidden="true"><path d="M13 3l3.3 3.3-7 7 1.4 1.4 7-7L21 11V3zM19 19H5V5h7l-2-2H5a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7l-2-2z"/></svg></button>
+      </div>
+      <p class="sb-note" style="margin-top: var(--s-md)">
+        注意：强调面文字使用 --on-accent（暗 白 / 亮 近黑），<strong>禁止</strong>白色文字直接落纯 #E89800；
+        禁用态 opacity 0.45 且 pointer-events: none；加载态使用同色 spinner（可访问性：aria-busy）。
+      </p>
+    </div>
+  </section>
+
+  <!-- 标签与徽章 -->
+  <section class="sb-section" id="tags" aria-label="标签与徽章">
+    <h2 class="sb-section-title">标签与徽章 <code>.tag / .tag-accent / .badge</code></h2>
+    <div class="sb-card sb-plate">
+      <div style="display: flex; gap: var(--s-md); flex-wrap: wrap; align-items: center">
+        <span class="sb-tag"><span>默认标签</span></span>
+        <span class="sb-tag sb-tag-accent"><span>强调标签（静态）</span></span>
+        <span class="sb-badge-warning">即将推出</span>
+        <span class="sb-chip">普通芯片 chip</span>
+        <span class="sb-chip" style="color: var(--c-error)">错误状态文字示例</span>
+      </div>
+      <p class="sb-note" style="margin-top: var(--s-md)">
+        .tag hover 左抬（-1px,-2px）并切 Primary Container；.tag-accent 全静态（无 transition，只用于状态标识）；
+        徽章为提醒色背景 + 深色文字（对比 9.7:1 ✓）。卡片内嵌标签为"下凹式"（见卡片区）。
+      </p>
+    </div>
+  </section>
+
+  <!-- 卡片 -->
+  <section class="sb-section" id="cards" aria-label="卡片">
+    <h2 class="sb-section-title">卡片 <code>板级材质 · 内容保护 z:3</code></h2>
+    <div class="sb-grid sb-card-demo">
+      <article class="sb-card sb-plate">
+        <div style="display: flex; align-items: center; gap: var(--s-sm)">
+          <svg viewBox="0 0 24 24" width="26" height="26" fill="var(--c-accent)" aria-hidden="true"><path d="M12 2l2.4 7.6L22 12l-7.6 2.4L12 22l-2.4-7.6L2 12l7.6-2.4z"/></svg>
+          <h4>标准卡片</h4>
+        </div>
+        <p>板级三层阴影：4px 切边 / 10px 8px 6px 柔影 / 内嵌 5px 5px 3px；噪点 120px tile（contrast 8 / overlay / 0.25）。</p>
+        <div class="sb-tag-row"><span class="sb-tag"><span>技术</span></span><span class="sb-tag"><span>设计</span></span></div>
+      </article>
+
+      <article class="sb-card sb-plate sb-ribbon-card">
+        <h4>带丝带卡片</h4>
+        <p>右下折叠丝带（clip-path 折角）；hover 左伸 +18px，active 再伸 +18px 并旋转 -4°；丝带文字使用 --on-accent；阴影元件同步位移（防叠影）。</p>
+        <a class="sb-ribbon" href="#"><span>阅读文章</span></a>
+        <span class="sb-ribbon-shadow" aria-hidden="true">阅读文章</span>
+      </article>
+
+      <article class="sb-card sb-plate">
+        <h4>卡片内嵌标签（下凹式）</h4>
+        <div style="display: flex; gap: var(--s-sm); flex-wrap: wrap">
+          <span class="sb-groove-tag">凹槽标签 A</span>
+          <span class="sb-groove-tag">凹槽标签 B</span>
+        </div>
+        <p class="sb-note" style="margin-top: var(--s-sm)">标签是"压进"卡面的凹槽（内嵌硬边 + 右下散射光），hover 时凸起为强调色 Container 背景。</p>
+      </article>
+    </div>
+  </section>
+
+  <!-- 表单 -->
+  <section class="sb-section" id="forms" aria-label="表单控件">
+    <h2 class="sb-section-title">表单控件 <code>输入 / 下拉 / 复选 / 开关 / 焦点态</code></h2>
+    <div class="sb-grid">
+      <div class="sb-card sb-plate sb-field">
+        <label class="sb-label" for="sb-input-a">文本框（Tab 聚焦看焦点态）</label>
+        <input class="sb-input" id="sb-input-a" type="text" placeholder="输入内容…" />
+        <label class="sb-label" for="sb-input-b">下拉选择</label>
+        <select class="sb-input sb-select" id="sb-input-b">
+          <option>选项一</option><option>选项二</option><option>选项三</option>
+        </select>
+      </div>
+      <div class="sb-card sb-plate sb-field">
+        <label class="sb-label">复选 / 开关</label>
+        <label class="sb-check"><input type="checkbox" checked /> 同意条款（原生控件，accent-color 强调色）</label>
+        <label class="sb-check"><input type="checkbox" /> 订阅更新</label>
+        <button class="sb-switch" type="button" role="switch" aria-checked="true" aria-label="示例开关" data-spec-switch style="margin-top: var(--s-sm)"></button>
+        <p class="sb-note">开关为 44×24 凹槽轨道 + 滑块位移 0.2s 零过冲；focus-visible 环 2px 次强调色（亮色主强调）。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 导航 -->
+  <section class="sb-section" id="nav" aria-label="导航">
+    <h2 class="sb-section-title">导航 <code>凹槽轨道 + 滑块原理 · 桌面/移动</code></h2>
+    <div class="sb-card sb-plate sb-groove-demo">
+      <p>凹槽滑块原理（<strong>实时交互</strong>）：滑块底面低于文字（z:2 低于 z:3），hover 任一标签滑块先滑到位（0.4s 零过冲），文字再弹性浮起（0.2s 弹簧）；离开后滑块回落到 active 项。</p>
+      <div class="sb-groove-track" data-live-groove aria-label="导航示例">
+        <span class="sb-groove-item is-active">主页</span>
+        <span class="sb-groove-item">文章</span>
+        <span class="sb-groove-item">插件和工具</span>
+        <span class="sb-groove-item">游戏与模组</span>
+        <span class="sb-groove-item">关于</span>
+      </div>
+    </div>
+    <div class="sb-card sb-plate" style="margin-top: var(--s-lg)">
+      <h3>语言下拉（展开动画 · Escape 关闭）</h3>
+      <p class="sb-note">展开：opacity 0→1 + translateY(-12px)→0（0.2s / 0.25s 零过冲）；收起先隐藏再收回；点击外部或 Escape 关闭。</p>
+      <div class="sb-dropdown-demo" data-dropdown>
+        <button class="sb-btn sb-btn-outline" type="button" style="font-size: var(--fs-sm); padding: 0.4rem 1rem"><span>语言: 简体中文 ▾</span></button>
+        <ul class="sb-dropdown" aria-label="语言选择">
+          <li><a href="#" class="is-active">简体中文（默认）</a></li>
+          <li><a href="#">English</a></li>
+          <li><a href="#">日本語</a></li>
+          <li><a href="#"> العربية (RTL)</a></li>
+        </ul>
+      </div>
+    </div>
+    <div class="sb-grid" style="margin-top: var(--s-lg); grid-template-columns: 1fr 1fr">
+      <div class="sb-card sb-plate">
+        <h3>桌面导航（参考）</h3>
+        <p class="sb-note">1280px 定宽亚克力板；Pad 断点隐藏标题文字；三栏对齐：品牌 / 凹槽选项卡 / 控件（主题 + 语言）。</p>
+      </div>
+      <div class="sb-card sb-plate">
+        <h3>移动端折叠（≤640）</h3>
+        <p class="sb-note">纵向全宽菜单；JS 滑块几何失效 → 隐藏滑块，由 active 链接自身强调板承担选中态；页头两行（品牌+控件 / 菜单）。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 表格 -->
+  <section class="sb-section" id="table" aria-label="表格">
+    <h2 class="sb-section-title">表格 <code>板级材质 · 表头强调板</code></h2>
+    <table class="sb-table">
+      <thead><tr><th>组件</th><th>板级</th><th>关键值</th></tr></thead>
+      <tbody>
+        <tr><td>Card</td><td>板</td><td>padding 32px · 切边 4px</td></tr>
+        <tr><td>Button</td><td>强调板</td><td>右下厚度补偿 0.15rem · 按压缩 0.06s</td></tr>
+        <tr><td>Tag</td><td>小型控件</td><td>L2 α 0.67（小体积接触阴影）</td></tr>
+      </tbody>
+    </table>
+  </section>
+
+  <!-- Alert -->
+  <section class="sb-section" id="alerts" aria-label="提示块">
+    <h2 class="sb-section-title">提示块 <code>Alert × 5 + 普通引用</code></h2>
+    <div style="display: flex; flex-direction: column; gap: var(--s-md)">
+      <div class="sb-alert" style="--alert-c: #2196F3">
+        <div class="sb-alert-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2a10 10 0 1 0 0 20 10 10 0 0 0 0-20zm1 15h-2v-6h2zm0-8h-2V7h2z"/></svg>NOTE</div>
+        <p>一般提示信息：左侧 8px 竖条为语义色 + 板级材质 + 图标。</p>
+      </div>
+      <div class="sb-alert" style="--alert-c: #4CAF50">
+        <div class="sb-alert-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9 21c0-.6.2-1.2.6-1.6L11 18h3l3.8 3.8a1 1 0 0 1 .7 1.2l-.3 1H9zm4-19a7 7 0 0 1 7 7c0 2.4-1.2 4.5-3 5.7V16l-1.6 1.6h-6.2L5 12.4a7 7 0 0 1-1-3.4A7 7 0 0 1 13 2z"/></svg>TIP</div>
+        <p>最佳实践建议，可以是简短的一句话或一组要点。</p>
+      </div>
+      <div class="sb-alert" style="--alert-c: #AB47BC">
+        <div class="sb-alert-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2h-6l-2 4-2-4H4a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2zm6 9h4v-2h-4zm0-4h4V7h-4z"/></svg>IMPORTANT</div>
+        <p>重要信息，值得特别注意。</p>
+      </div>
+      <div class="sb-alert" style="--alert-c: #FF9800">
+        <div class="sb-alert-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 2L1 21h22L12 2zm-1 7h2v5h-2zm0 7h2v2h-2z"/></svg>WARNING</div>
+        <p>警告信息：需要用户注意的风险或限制。</p>
+      </div>
+      <div class="sb-alert" style="--alert-c: var(--c-error)">
+        <div class="sb-alert-title"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1L3 5v6c0 5.6 3.8 10.7 9 12 5.2-1.3 9-6.4 9-12V5l-9-4z"/></svg>CAUTION</div>
+        <p>禁止性操作或高强度警示（使用错误色）。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 代码块 -->
+  <section class="sb-section" id="code" aria-label="代码块">
+    <h2 class="sb-section-title">代码块 <code>纸张质感 · Gosper 曲线装饰（主站）</code></h2>
+    <div class="sb-codeblock">
+      <pre><code><span class="sb-kw">import</span> &#123; defineConfig &#125; <span class="sb-kw">from</span> <span class="sb-cl">'astro/config'</span>;
+<span class="sb-kw">export default</span> defineConfig(&#123;
+  site: <span class="sb-cl">'https://example.com'</span>,
+  output: <span class="sb-cl">'static'</span>,        <span class="sb-cm">// 静态导出</span>
+  integrations: [],                <span class="sb-cm">// 你的集成</span>
+&#125;);</code></pre>
+    </div>
+    <p class="sb-note" style="margin-top: var(--s-md)">主站代码块叠加 Gosper 曲线晶格 + 纸张噪点 + 三层悬浮影；语法高亮走 Shiki 双主题变量（--shiki-light*）切换。</p>
+  </section>
+
+  <!-- 文章排版 -->
+  <section class="sb-section" id="prose" aria-label="文章排版">
+    <h2 class="sb-section-title">文章排版样板 <code>h1–h3 · 列表步骤圆圈 · 引用 · 分隔线</code></h2>
+    <div class="sb-card sb-plate" style="padding: var(--s-xl)">
+      <div class="sb-prose">
+        <h1>一级标题（h1 · 48px / 700）</h1>
+        <p>正文段落：行高 1.75，段距 16px。文本颜色 <code class="sb-inline-code">上表面 on-surface</code>，保证 4.5:1 对比。内联代码使用小型控件材质并向右下微偏 1px。</p>
+        <h2>二级标题（h2 · 32px / 700）</h2>
+        <p>无序列表：</p>
+        <ul>
+          <li>无序项目 A——disc 标记，行高 1.75，项目间距 8px</li>
+          <li>无序项目 B——内嵌<strong>加粗</strong>与<a href="#prose">链接（外链图标 ::after）</a></li>
+        </ul>
+        <h3>三级标题（h3 · 24px / 600 Semibold）</h3>
+        <p>步骤有序列表（数字圆圈 + 连接竖线，强调板材质）：</p>
+        <ol>
+          <li>第一步：写出步骤内容，圆圈由 counter 生成。</li>
+          <li>第二步：竖线从圆圈下方延伸至步骤底部，末项隐藏。</li>
+        </ol>
+        <blockquote>
+          <p>引用块：8px 主强调竖条 + 板级材质；引用文字使用次级文本色。末尾子元素取消下边距。</p>
+        </blockquote>
+        <hr />
+        <p style="margin-bottom: 0">分隔线：3px，80% 文本色透明度，上下 48px。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 分页卡 / 头像 -->
+  <section class="sb-section" id="misc" aria-label="分页卡与头像">
+    <h2 class="sb-section-title">分页卡与头像 <code>.doc-pager-card · .hero-avatar</code></h2>
+    <div class="sb-pager">
+      <a href="#misc" rel="prev">
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M20 11H7.8l5.6-5.6L12 4l-8 8 8 8 1.4-1.4L7.8 13H20z"/></svg>
+        <span>
+          <span class="sb-pager-label">上一页</span>
+          <span class="sb-pager-title">上一节文档标题</span>
+        </span>
+      </a>
+      <a href="#misc" rel="next" class="next">
+        <span>
+          <span class="sb-pager-label">下一页</span>
+          <span class="sb-pager-title">下一节文档标题</span>
+        </span>
+        <svg viewBox="0 0 24 24" width="24" height="24" fill="currentColor" aria-hidden="true"><path d="M4 11h12.2l-5.6-5.6L12 4l8 8-8 8-1.4-1.4 5.6-5.6H4z"/></svg>
+      </a>
+    </div>
+    <div class="sb-card sb-plate" style="margin-top: var(--s-lg); display: flex; align-items: center; gap: var(--s-lg); flex-wrap: wrap">
+      <img class="sb-avatar" src="https://avatars.githubusercontent.com/u/88531138" alt="示例头像" width="128" height="128" />
+      <div>
+        <h3 style="font-size: var(--fs-xl)">头像交互（hover 放大 1.05 + 光晕）</h3>
+        <p class="sb-note">128px 圆形 · 3px outline 边框 · shadow-far；触控目标标准见无障碍规范 §7；移动端允许 96px。</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 无障碍验收 -->
+  <section class="sb-section" id="a11y" aria-label="无障碍自检">
+    <h2 class="sb-section-title">无障碍自检区 <code>Focus 环 / 触控 / 减动效</code></h2>
+    <div class="sb-grid" style="grid-template-columns: 1fr 1fr">
+      <div class="sb-card sb-plate">
+        <h3>焦点环</h3>
+        <p class="sb-note">按 Tab 遍历本页：<a href="#a11y">链接</a>、<button class="sb-btn sb-btn-outline" type="button" style="font-size: var(--fs-sm); padding: 0.4rem 1rem">按钮</button> 均应出现 2px 焦点环（暗 = 次强调 #FF6B6B；亮 = 主强调 #E89800）。</p>
+      </div>
+      <div class="sb-card sb-plate">
+        <h3>减动效（有意例外）</h3>
+        <p class="sb-note">本参考页是<b>动效标本</b>：全部演示动画不受系统"减少动态效果"抑制，保证审查者能看到完整动效；生产页面（主站）严格遵循 prefers-reduced-motion 降级块（见动效规范 §5）。</p>
+      </div>
+    </div>
+  </section>
+
+  <script>
+    // 凹槽滑块（与主站 nav-slider 同体系：滑块先到、文字后浮）
+    const track = document.querySelector('[data-live-groove]') as HTMLElement | null;
+    if (track) {
+      const items = Array.from(track.querySelectorAll('.sb-groove-item')) as HTMLElement[];
+      const slider = document.createElement('div');
+      slider.className = 'sb-groove-slider';
+      track.appendChild(slider);
+      const place = (el: HTMLElement, animate = true) => {
+        if (!animate) { slider.style.transition = 'none'; }
+        slider.style.left = `${el.offsetLeft}px`;
+        slider.style.width = `${el.offsetWidth}px`;
+        if (!animate) { void slider.offsetHeight; slider.style.transition = ''; }
+      };
+      const active = items.find(i => i.classList.contains('is-active')) ?? items[0];
+      place(active, false);
+      items.forEach(item => {
+        item.addEventListener('mouseenter', () => {
+          place(item);
+          slider.classList.add('lifted');
+          items.forEach(o => o.classList.remove('is-hover'));
+          item.classList.add('is-hover');
+        });
+      });
+      track.addEventListener('mouseleave', () => {
+        place(active);
+        slider.classList.remove('lifted');
+        items.forEach(o => o.classList.remove('is-hover'));
+      });
+    }
+    // 语言下拉（展开/收起 + Escape）
+    const dd = document.querySelector('[data-dropdown]') as HTMLElement | null;
+    if (dd) {
+      const btn = dd.querySelector(':scope > button') as HTMLButtonElement | null;
+      btn?.addEventListener('click', (e: Event) => { e.stopPropagation(); dd.classList.toggle('open'); });
+      document.addEventListener('click', () => dd.classList.remove('open'));
+      dd.addEventListener('keydown', (e: KeyboardEvent) => { if (e.key === 'Escape') dd.classList.remove('open'); });
+    }
+    // 开关
+    const sw = document.querySelector('[data-spec-switch]') as HTMLButtonElement | null;
+    if (sw) {
+      sw.addEventListener('click', () => {
+        const on = sw.getAttribute('aria-checked') === 'true';
+        sw.setAttribute('aria-checked', on ? 'false' : 'true');
+      });
+    }
+  </script>
+</SpecLayout>

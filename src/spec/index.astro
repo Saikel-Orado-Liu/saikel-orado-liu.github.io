@@ -1,0 +1,273 @@
+---
+import SpecLayout from '../layouts/SpecLayout.astro';
+
+const palette = [
+  { var: '--c-base-bg', dark: '#141414', light: '#FAFAFA', use: '页面底层背景', role: '根' },
+  { var: '--c-aux-bg', dark: '#242424', light: '#EDE4D6', use: '次级表面 / 凹槽混合源', role: '根' },
+  { var: '--c-accent', dark: '#FF1500', light: '#E89800', use: '主强调色：链接、选中、focus（亮）', role: '根' },
+  { var: '--c-text', dark: '#F5F5F5', light: '#392D1A(暖褐)', use: '主文本色', role: '根' },
+  { var: '--c-primary-bg', dark: '#262626', light: '#FFFFFF', use: '卡片/组件板基底', role: '一次' },
+  { var: '--c-accent-2', dark: '#FF6B6B', light: '#FFD54F', use: '次强调色：hover、focus（暗）', role: '一次' },
+  { var: '--c-bg-2', dark: '#333333', light: '#E8E8E8', use: 'hover 背景', role: '二次' },
+  { var: '--c-text-2', dark: '#ADADAD', light: '#99680C(暖褐)', use: '副标题、说明文字', role: '二次' },
+  { var: '--c-error', dark: '#00BFA5', light: '#BA1A1A', use: '错误状态 / 链接 hover', role: '特殊' },
+  { var: '--c-warning', dark: '#FFC800', light: '#F28D00', use: '提醒 / 徽章', role: '特殊' },
+];
+
+const typeScale = [
+  { cls: '--fs-xs / 12px', clsName: '标签、徽章、时间戳', size: '12px' },
+  { cls: '--fs-sm / 14px', clsName: '辅助说明 .body-sm', size: '14px' },
+  { cls: '--fs-base / 16px · 正文', clsName: '正文 .body', size: '16px' },
+  { cls: '--fs-lg / 18px', clsName: '强调副标语', size: '18px' },
+  { cls: '--fs-xl / 20px · 卡片标题', clsName: '卡片/文章小标题 .heading-md', size: '20px' },
+  { cls: '--fs-2xl / 24px · h3', clsName: '小节标题', size: '24px' },
+  { cls: '--fs-3xl / 32px · h2', clsName: '章节标题 .heading-lg', size: '32px' },
+  { cls: '--fs-4xl / 40px', clsName: '移动端大标题上限', size: '40px' },
+  { cls: '--fs-5xl / 48px · h1', clsName: '大标题 .heading-xl', size: '48px' },
+];
+
+const spaces: Array<[string, number]> = [
+  ['--s-xs', 4], ['--s-sm', 8], ['--s-md', 16], ['--s-lg', 24],
+  ['--s-xl', 32], ['--s-2xl', 48], ['--s-3xl', 64], ['--s-4xl', 96],
+];
+
+const radii = [
+  ['--r-sm · 8px', '8px', '内联代码、下拉菜单项'],
+  ['--r-md · 12px（默认）', '12px', '卡片、代码块、按钮方角、图片、导航'],
+  ['--r-lg · 24px', '24px', '大型元素、语言滑块、章节凹槽'],
+  ['--r-full', '9999px', '胶囊标签、头像、按钮、徽章'],
+];
+
+const motions = [
+  ['--d-fast · 0.06s', '按下/瞬时反馈'],
+  ['--d-short · 0.15s', '颜色、高光、链接'],
+  ['--d-mid · 0.2s', 'hover 抬起、文字浮起'],
+  ['--d-long · 0.3s', '滑块 width/height'],
+  ['--d-slow · 0.4s', '滑块位移、阴影、View Transition'],
+];
+
+const breakpoints = [
+  ['≤640 移动', '手机竖屏；导航折叠、单列栅格、hero 标题 clamp'],
+  ['641–1007 平板', '导航隐藏标题；栅格 2 列'],
+  ['1008–1199 桌面', '三栏导航；文档页两栏（隐藏 TOC）'],
+  ['≥1200 宽屏', '文档页三栏完整'],
+];
+
+const ztable = [
+  ['--z-header · 100', '导航栏、页头'],
+  ['--z-overlay · 200', '浮层、下拉菜单'],
+  ['--z-modal · 300', '模态（Lightbox）'],
+];
+---
+
+<SpecLayout
+  title="设计令牌"
+  description="样式规范参考书 — 设计令牌总览：色彩、字体、间距、圆角、阴影、动效、断点。独立实现，供审查与纠错。"
+  active="tokens"
+>
+  <section class="sb-intro sb-plate">
+    <h1>样式规范参考</h1>
+    <p>
+      设计语言：Material Design 3 + 抽象拟物（不透明磨砂亚克力板）。
+      本页为<strong>独立参考实现</strong>：明暗切换与 hover/active 均为真实效果；与主站代码分离，仅共享数值标准。
+    </p>
+    <p style="margin-top: var(--s-md)">
+      <span class="sb-badge ok">设计令牌</span>
+      <span class="sb-tag"><span>明暗主题：右上角切换</span></span>
+      <span class="sb-tag"><span>审查入口：/spec/ 与 /spec/components/</span></span>
+    </p>
+  </section>
+
+  <!-- 色彩 -->
+  <section class="sb-section" id="color" aria-label="色彩系统">
+    <h2 class="sb-section-title">色彩系统 <code>10 色唯一定义 · 派生色均由 color-mix() 生成</code></h2>
+    <p class="sb-section-desc">
+      全站仅这 10 色可作设计决策；M3 Role（primary-container / outline 等）只服务于 CSS 工程。
+      明暗几何同构：只切换色谱与噪点路径。
+    </p>
+    <div class="sb-grid">
+      {palette.map(sw => (
+        <div class="sb-card sb-plate sb-swatch">
+          <div class="sb-swatch-color" style={`background: ${sw.dark}; border: 1px solid rgba(255,255,255,0.15)`}></div>
+          <div class="sb-swatch-meta">
+            <span class="sb-swatch-var">{sw.var}</span>
+            <span class="sb-badge">{sw.role}</span>
+          </div>
+          <div class="sb-swatch-val">暗色 {sw.dark} ｜ 亮色 {sw.light}</div>
+          <div class="sb-swatch-use">{sw.use}</div>
+        </div>
+      ))}
+    </div>
+    <div class="sb-card sb-plate" style="margin-top: var(--s-lg)">
+      <h3>对比度安全色（审查重点）</h3>
+      <div class="sb-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
+        <span class="sb-tag"><span>正文 暗 #F5F5F5 / #141414 = 16.9:1 ✓ AAA</span></span>
+        <span class="sb-tag"><span>正文 亮 ≈#392D1A / #FAFAFA = 12.9:1 ✓ AAA</span></span>
+        <span class="sb-tag"><span>链接 暗 #FF1500 / #141414 = 4.7:1 ✓</span></span>
+        <span class="sb-tag"><span>链接 亮 ≈#966200 / #FAFAFA = 5.0:1 ✓</span></span>
+        <span class="sb-tag"><span>强调面文字 暗 白 / 87-13深基 = 4.81:1 ✓</span></span>
+        <span class="sb-tag"><span>强调面文字 亮 #1F1F1F / #E89800 = 7.0:1 ✓</span></span>
+      </div>
+      <p class="sb-note" style="margin-top: var(--s-md)">
+        ⚠️ 禁止：#FFD54F 作正文/焦点（1.35:1）；白色文字直接放纯 #E89800（2.26:1）。
+        详情见《无障碍设计规范》§3 对比度核定表。
+      </p>
+    </div>
+  </section>
+
+  <!-- 字体 -->
+  <section class="sb-section" id="type" aria-label="字体与排版">
+    <h2 class="sb-section-title">字体与排版 <code>MiSans + JetBrains Mono，灰度抗锯齿</code></h2>
+    <p class="sb-section-desc">
+      字体栈：'MiSans', system-ui, …；字重与 CDN 精确对齐（300/400/500/600/700）。
+      标题统一 1px 文字阴影（暗白 0.3 / 亮黑 0.3），文章正文行高 1.75。
+    </p>
+    <div class="sb-grid">
+      <div class="sb-card sb-plate">
+        <h3>字重标本（实为 MiSans 渲染）</h3>
+        {['300 Light', '400 Regular', '500 Medium', '600 Semibold', '700 Bold'].map((w, i) => (
+          <div style="display: flex; align-items: baseline; gap: var(--s-md); padding: var(--s-xs) 0">
+            <span class="sb-type-tag" style="flex: 0 0 110px">{[300, 400, 500, 600, 700][i]}</span>
+            <span style={{ fontWeight: [300, 400, 500, 600, 700][i], fontSize: 'var(--fs-xl)' }}>游戏极客 Saikel {w}</span>
+          </div>
+        ))}
+      </div>
+      <div class="sb-card sb-plate">
+        <h3>字号标尺</h3>
+        {typeScale.map(t => (
+          <div class="sb-type-row">
+            <span class="sb-type-tag">{t.cls}</span>
+            <span class="sb-type-sample" style={`font-size: ${t.size}`}>设计规范参考 {t.clsName}</span>
+          </div>
+        ))}
+      </div>
+    </div>
+    <div class="sb-card sb-plate" style="margin-top: var(--s-lg)">
+      <h3>行高与内联代码</h3>
+      <p class="sb-note">
+        行高：<strong>1.25</strong>（标题）· <strong>1.6</strong>（标准正文）· <strong>1.75</strong>（文章正文）。
+        行内代码使用小型控件材质：<code class="sb-inline-code">独立实现示例</code>（本参考页与主站代码零共享）。
+      </p>
+    </div>
+  </section>
+
+  <!-- 间距 -->
+  <section class="sb-section" id="space" aria-label="间距体系">
+    <h2 class="sb-section-title">间距体系 <code>4px 基准 · 8 级</code></h2>
+    <div class="sb-card sb-plate">
+      {spaces.map(([name, val]) => (
+        <div class="sb-spacing-row">
+          <span class="sb-spacing-label">{name} = {val}px</span>
+          <span class="sb-spacing-bar" style={`width: ${val}px; flex: 0 0 ${val}px`}></span>
+          <span class="sb-note" style="font-size: var(--fs-xs)">{val >= 32 ? '区块/卡片' : val >= 16 ? '组件间' : '元素内'}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 圆角 -->
+  <section class="sb-section" id="shape" aria-label="形状与圆角">
+    <h2 class="sb-section-title">形状与圆角 <code>仅 4 级，禁止新增</code></h2>
+    <div class="sb-radius-grid">
+      {radii.map(([name, val, use]) => (
+        <div class="sb-radius-cell sb-plate">
+          <span class="sb-note">{use}</span>
+          <div class="sb-radius-figure" style={{ borderRadius: val }}></div>
+          <span class="sb-swatch-var" style="grid-column: 1 / -1">{name}</span>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- 阴影与厚度 -->
+  <section class="sb-section" id="shadow" aria-label="阴影与厚度">
+    <h2 class="sb-section-title">阴影与厚度体系 <code>三层阴影模型 · 明暗几何同构</code></h2>
+    <p class="sb-section-desc">
+      L1 切边厚度（硬边）→ L2 环境柔影（偏右下）→ L3 内嵌暗边（左上）。
+      板级几何固定：<code class="sb-inline-code">4px 4px 0 0 · 10px 8px 6px 1px · inset 5px 5px 3px 0</code>；
+      明暗只切换 α 与色谱，几何不变量——V4.0 起为硬性约束。
+    </p>
+    <div class="sb-grid">
+      <div class="sb-card sb-plate">
+        <h3>一级阴影</h3>
+        <div class="sb-shadow-demo sb-shadow-near">--shadow-near 近影</div>
+        <div class="sb-shadow-demo sb-shadow-far" style="margin-top: var(--s-md)">--shadow-far 远影/悬浮</div>
+        <div class="sb-shadow-demo sb-shadow-embed" style="margin-top: var(--s-md)">--shadow-embed 内嵌凹槽</div>
+      </div>
+      <div class="sb-card sb-plate">
+        <h3>板级材质（标准板 / 强调板 / 凹槽）</h3>
+        <div class="sb-plate" style="padding: var(--s-md)"><span class="sb-note">板 · Plate（卡片/导航/表格/引用块/分页卡）</span></div>
+        <div class="sb-plate" style="padding: var(--s-md); margin-top: var(--s-md); background: color-mix(in srgb, var(--c-accent) 87%, #000 13%); color: var(--on-accent)"><span>强调板 · Accent Plate（按钮/滑块/选中态，文字用 --on-accent）</span></div>
+        <div style="padding: var(--s-md); margin-top: var(--s-md); border-radius: var(--r-md); background: color-mix(in srgb, var(--c-primary-bg), var(--c-base-bg) 50%); border-top: 1px solid color-mix(in srgb, var(--c-text) 10%, transparent); border-left: 1px solid color-mix(in srgb, var(--c-text) 10%, transparent); border-right: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent); border-bottom: 1px solid color-mix(in srgb, var(--c-text) 15%, transparent); box-shadow: 2px 4px 3px 0 color-mix(in srgb, var(--c-text) 20%, transparent), inset 4px 6px 0 0 rgba(0,0,0,0.45), inset -2px -3px 8px color-mix(in srgb, var(--c-text) 10%, transparent)"><span class="sb-note">凹槽 · Groove（导航轨道/下拉栏/TOC 分组，滑块在其中滑动）</span></div>
+      </div>
+    </div>
+  </section>
+
+  <!-- 动效令牌 -->
+  <section class="sb-section" id="motion" aria-label="动效令牌">
+    <h2 class="sb-section-title">动效令牌 <code>时长 5 级 + 曲线 3 条（详见动效设计规范）</code></h2>
+    <div class="sb-grid">
+      <div class="sb-card sb-plate">
+        <h3>时长体系（实时演示）</h3>
+        {motions.map(([name, use], i) => (
+          <div class="sb-motion-row">
+            <span class="sb-motion-label">{name} — {use}</span>
+            <span class="sb-motion-track">
+              <span class="sb-motion-dot as-linear" style={{ animationDuration: `${0.15 + i * 0.06}s` }}></span>
+            </span>
+          </div>
+        ))}
+      </div>
+      <div class="sb-card sb-plate">
+        <h3>缓动曲线对比（同 1.6s 位移）</h3>
+        <div class="sb-motion-row">
+          <span class="sb-motion-label">--ease-standard · 零过冲（受约束）</span>
+          <span class="sb-motion-track"><span class="sb-motion-dot as-standard"></span></span>
+        </div>
+        <div class="sb-motion-row">
+          <span class="sb-motion-label">--ease-spring · 弹性过冲（浮起）</span>
+          <span class="sb-motion-track"><span class="sb-motion-dot as-spring"></span></span>
+        </div>
+        <div class="sb-motion-row">
+          <span class="sb-motion-label">linear · 对照（禁止用于交互）</span>
+          <span class="sb-motion-track"><span class="sb-motion-dot as-linear"></span></span>
+        </div>
+        <p class="sb-note" style="margin-top: var(--s-md)">
+          曲线语义：凹槽滑块/落回 = 零过冲；文字浮起/按钮 hover = 弹性（+3%）；按下 = ease 0.06s；
+          高光 opacity = ease。本参考页为动效标本（有意不应用减动效降级）；生产页面遵循 prefers-reduced-motion。
+        </p>
+      </div>
+    </div>
+  </section>
+
+  <!-- 断点 / 层级 -->
+  <section class="sb-section" id="layout" aria-label="布局与层级">
+    <h2 class="sb-section-title">断点与层级 <code>断点唯一清单 · 禁止边写边造</code></h2>
+    <div class="sb-grid">
+      <div class="sb-card sb-plate">
+        <h3>断点体系</h3>
+        <table class="sb-table">
+          <thead><tr><th>断点</th><th>行为要点</th></tr></thead>
+          <tbody>
+            {breakpoints.map(([name, desc]) => (
+              <tr><td><strong>{name}</strong></td><td>{desc}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="sb-note" style="margin-top: var(--s-md)">验收底线：页面无横向滚动（scrollWidth ≤ clientWidth）；超出视口的装饰必须允许换行/裁剪。</p>
+      </div>
+      <div class="sb-card sb-plate">
+        <h3>Z-index 层级</h3>
+        <table class="sb-table">
+          <thead><tr><th>层级</th><th>用途</th></tr></thead>
+          <tbody>
+            {ztable.map(([name, desc]) => (
+              <tr><td><strong>{name}</strong></td><td>{desc}</td></tr>
+            ))}
+          </tbody>
+        </table>
+        <p class="sb-note" style="margin-top: var(--s-md)">凹槽内部微观层级：噪点 1 → 滑块 2 → 文字 3 → active 20 → hover 22（滑块永远在文字之下）。</p>
+      </div>
+    </div>
+  </section>
+</SpecLayout>
