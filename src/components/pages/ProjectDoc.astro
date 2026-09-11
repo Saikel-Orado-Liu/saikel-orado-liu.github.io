@@ -1,5 +1,5 @@
 ---
-import { render } from "astro:content";
+import { getCollection, render } from "astro:content";
 import { useTranslations, type Locale } from "../../i18n";
 import { buildDocRegistry, getAdjacentDocs, getDocEntry, buildTocGroups, getProjectVersions, getDocCategoryTabs, filterRegistryByCategory } from "../../utils/docs";
 import DocShell from "./DocShell.astro";
@@ -38,8 +38,24 @@ const adj = getAdjacentDocs(registry.flatList, docId);
 const currentDoc = registry.flatList.find((d) => d.id === docId);
 const pageTitle = currentDoc?.title ?? docEntry.data.title;
 const pageDescription = docEntry.data.excerpt;
-const docTitle = projectSlug.charAt(0).toUpperCase() + projectSlug.slice(1);
-const docDescription = pageDescription || `${pageTitle} — Texturge Pro 文档页面`;
+
+// 项目展示名：取项目索引 frontmatter title 中 "—" 之前的部分
+// （如 "Texturge Pro" / "CLIF Localization Suite"），回退到 slug 首字母大写。
+// 站点承载多个插件文档，展示名必须随项目变化，不能硬编码某一个插件名。
+const allProjects = await getCollection("projects", ({ data }: any) => !data.draft);
+const indexBaseIds = new Set([
+    `${projectSlug}/${projectSlug}`,
+    `${projectSlug}/index`,
+    `${projectSlug}/${versionInfo?.currentVersion}/${projectSlug}`,
+    `${projectSlug}/${versionInfo?.currentVersion}/index`,
+]);
+const projectIndexEntry = allProjects.find((p) =>
+    indexBaseIds.has(p.id.replace(/\.(en-us|ja-jp|ko-kr|ar-sa|es-es|fr-fr|pt-pt|ru-ru|de-de)$/, "")),
+);
+const docTitle =
+    (projectIndexEntry?.data.title ?? projectSlug).split("—")[0].trim() ||
+    projectSlug.charAt(0).toUpperCase() + projectSlug.slice(1);
+const docDescription = pageDescription || `${pageTitle} — ${docTitle} 文档页面`;
 
 const pager = {
     prev: adj.prev ? { id: adj.prev.id, title: adj.prev.title } : null,
@@ -61,7 +77,7 @@ const filteredRegistry = allRegistries[activeTab] || registry;
     locale={locale}
     projectSlug={projectSlug}
     pageTitle={pageTitle}
-    pageSeoTitle={`${pageTitle} — Texturge Pro | ${t('site-title')}`}
+    pageSeoTitle={`${pageTitle} — ${docTitle} | ${t('site-title')}`}
     description={pageDescription}
     seoDescription={docDescription}
     ogImage={`/og-${projectSlug}.png`}
@@ -85,7 +101,13 @@ const filteredRegistry = allRegistries[activeTab] || registry;
                     <i class="bx bx-book-open" /> {t("projects-docs-overview")}
                 </a>
                 <span class="doc-breadcrumb-sep">/</span>
-                <span>{t(currentDoc.chapterSlug) || currentDoc.chapterSlug}</span>
+                {(() => {
+                    const chapterTitleKey = registry.chapters.find((c) => c.slug === currentDoc.chapterSlug)?.titleKey;
+                    const chapterLabel = chapterTitleKey && t(chapterTitleKey) !== chapterTitleKey
+                        ? t(chapterTitleKey)
+                        : currentDoc.chapterSlug.replace(/-/g, " ");
+                    return <span>{chapterLabel}</span>;
+                })()}
             </nav>
         )}
     </Fragment>
