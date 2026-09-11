@@ -1,0 +1,76 @@
+# Content License — All Rights Reserved
+
+**Copyright © 2026 Saikel-Orado-Liu aka GameGeek-Saikel. All rights reserved.**
+
+> Machine-readable counterpart: [`LICENSES/LicenseRef-All-Rights-Reserved.txt`](./LICENSES/LicenseRef-All-Rights-Reserved.txt),
+> referenced from [`REUSE.toml`](./REUSE.toml) as the SPDX identifier `LicenseRef-All-Rights-Reserved`.
+> **Both files carry the same terms — changes must be applied to both.**
+
+This license covers the **textual, editorial and brand content** of this repository and of the
+website published from it (<https://saikel-orado-liu.github.io>). The source code and the
+design-system implementation are licensed separately under the MIT License — see [`LICENSE`](./LICENSE).
+
+---
+
+## 1. Scope — what this license covers
+
+Covered **content**:
+
+| Path / asset | Examples |
+| --- | --- |
+| `src/content/**` | Blog articles, project documentation, tutorials, release notes, **and their translations** (including the images stored beside them) |
+| `docs/**` | Design and engineering specification documents |
+| `src/i18n/**` (long-form values only) | Long descriptive texts; short functional interface labels are treated as code |
+| Brand & media assets | The brand names **GameGeek-Saikel** and **Saikel-Orado-Liu** (and their localized renderings), the logo, avatar, Open Graph / social preview images, screenshots, illustrations, video and audio |
+
+Not covered here (MIT, see [`LICENSE`](./LICENSE)): source code, components, layouts, client
+scripts, stylesheets and design tokens, build configuration, utility modules and short interface
+string dictionaries.
+
+Third-party material is excluded from both licenses and remains under its own terms — see
+[`THIRD-PARTY.md`](./THIRD-PARTY.md).
+
+## 2. You may, without asking
+
+1. **Read** any page and **link** to it, including in articles, videos, courses or social posts.
+2. **Quote short excerpts** — a few sentences, or up to roughly one paragraph per work — provided
+   attribution is clear and complete:
+   - the author name **Saikel-Orado-Liu (GameGeek-Saikel)**;
+   - a **link to the original page** on <https://saikel-orado-liu.github.io>;
+   - no implication that the author endorses you, your product or your viewpoint.
+3. **Learn from** the design specifications and **implement your own independent version** of
+   similar patterns, layouts or techniques. Ideas, methods and design concepts are not restricted
+   by this license — reproducing the documents themselves is.
+4. **Fork and reuse the code** (MIT) for your own site, including commercially, while keeping the
+   copyright notice; the MIT terms apply to that code alone.
+
+## 3. You may not, without prior written permission
+
+1. **Copy, republish, mirror or redistribute** any article or document in whole or in substantial part
+   (including re-uploading it to another site, blog, wiki, forum, documentation host or app store listing).
+2. **Translate or adapt** content for publication elsewhere, including machine-translated reposts.
+3. **Use the content commercially** — in paid products, paid courses, paid newsletters, client work,
+   advertising material, or any monetised distribution.
+4. **Include the content in AI/ML training or dataset corpora**, or use it to train, fine-tune,
+   evaluate or otherwise develop machine-learning models, without explicit permission.
+5. **Use the brand assets** (names, logo, avatar, social images) in any way that suggests
+   affiliation, sponsorship or endorsement, or as the identity of another project.
+6. **Remove or alter** copyright notices, author attributions or license statements.
+
+## 4. Requests and permissions
+
+Permission is handled case by case and is usually granted for reasonable uses (e.g. translation
+with attribution, quoting in a book, educational material). Ask via GitHub, describing the intended
+use, medium and scope:
+
+- GitHub — <https://github.com/Saikel-Orado-Liu>
+- X (Twitter) — <https://x.com/GameGeek_Saikel>
+
+Attribution is required in every permitted use; permission only widens the *scope* of reuse.
+
+## 5. No warranty
+
+The content is provided “as is”, for informational purposes only, without warranty of any kind.
+Technical articles may describe software, hardware or services that change over time; verify before
+relying on them. The author is not liable for any loss or damage arising from the use of the content.
+

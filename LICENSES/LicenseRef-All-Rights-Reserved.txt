@@ -1,0 +1,56 @@
+LicenseRef-All-Rights-Reserved
+==============================
+
+Copyright (c) 2026 Saikel-Orado-Liu aka GameGeek-Saikel. All rights reserved.
+
+This identifier covers the textual, editorial and brand content of this
+repository and of the website published from it:
+
+  src/content/**      blog articles, project documentation, tutorials, their
+                      translations and the images stored beside them
+  docs/**             design and engineering specification documents
+  .github/assets/**   README cover artwork
+  public/favicon.svg  brand mark
+  README*.md          repository documentation
+  THIRD-PARTY.md      repository documentation
+  LICENSE*            this repository's own license texts
+
+1. You may, without asking
+   a. Read and link to any page, including from articles, videos, courses and
+      social posts.
+   b. Quote short excerpts (a few sentences, or up to roughly one paragraph per
+      work) with clear attribution: the author name "Saikel-Orado-Liu
+      (GameGeek-Saikel)" and a link to the original page.
+   c. Learn from the design specifications and implement your own independent
+      version of similar patterns, layouts or techniques.
+   d. Fork and reuse the source code under the MIT License (see MIT.txt); the
+      MIT terms apply to that code alone.
+
+2. You may not, without prior written permission
+   a. Copy, republish, mirror or redistribute any article or document in whole
+      or in substantial part.
+   b. Translate or adapt content for publication elsewhere, including
+      machine-translated reposts.
+   c. Use the content commercially.
+   d. Include the content in AI/ML training or dataset corpora, or use it to
+      train, fine-tune or evaluate machine-learning models.
+   e. Use the brand assets in any way that suggests affiliation, sponsorship or
+      endorsement.
+   f. Remove or alter copyright notices, author attributions or license
+      statements.
+
+3. Requests
+   GitHub  https://github.com/Saikel-Orado-Liu
+   X       https://x.com/GameGeek_Saikel
+
+   Attribution is required in every permitted use; permission only widens the
+   scope of reuse.
+
+4. No warranty
+   The content is provided "as is", for informational purposes only, without
+   warranty of any kind. The author is not liable for any loss or damage
+   arising from the use of the content.
+
+The human-readable counterpart of this text, with the same terms and a scope
+table, is LICENSE-CONTENT in the repository root. Changes must be applied to
+both files.

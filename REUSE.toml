@@ -1,0 +1,43 @@
+# REUSE.toml — machine-readable per-path licensing (REUSE Specification 3.3)
+# https://reuse.software/spec/
+#
+# Layering: the first annotation covers every file as MIT; the annotations after
+# it use `precedence = "override"` so authorial content and third-party assets
+# replace — rather than merge with — the default.
+#
+# Human-readable counterparts:
+#   LICENSE           canonical MIT text (root, for GitHub license detection)
+#   LICENSE-CONTENT   the content terms with the full scope table
+#   THIRD-PARTY.md    third-party assets and their own licenses
+#
+# Verify with:  pipx run reuse lint   (or: uvx reuse lint)
+
+version = 1
+
+# ── Default: source code, styles, components, scripts, config, CI ─────────────
+[[annotations]]
+path = "**"
+SPDX-FileCopyrightText = "2026 Saikel-Orado-Liu aka GameGeek-Saikel"
+SPDX-License-Identifier = "MIT"
+
+# ── Authorial content: articles, documentation, artwork, brand assets ─────────
+[[annotations]]
+path = [
+  "src/content/**",
+  "docs/**",
+  "README.md",
+  "README.zh-CN.md",
+  "THIRD-PARTY.md",
+  ".github/assets/**",
+  "public/favicon.svg",
+]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Saikel-Orado-Liu aka GameGeek-Saikel"
+SPDX-License-Identifier = "LicenseRef-All-Rights-Reserved"
+
+# ── License texts themselves (kept with the repository, not licensed) ─────────
+[[annotations]]
+path = ["LICENSE", "LICENSE-CONTENT", "LICENSES/**"]
+precedence = "override"
+SPDX-FileCopyrightText = "2026 Saikel-Orado-Liu aka GameGeek-Saikel"
+SPDX-License-Identifier = "LicenseRef-All-Rights-Reserved"
