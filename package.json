@@ -2,6 +2,14 @@
   "name": "saikel-orado-liu.github.io",
   "type": "module",
   "version": "0.1.0",
+  "private": true,
+  "license": "MIT",
+  "author": "Saikel-Orado-Liu (GameGeek-Saikel)",
+  "homepage": "https://saikel-orado-liu.github.io",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Saikel-Orado-Liu/saikel-orado-liu.github.io.git"
+  },
   "packageManager": "pnpm@11.21.0",
   "scripts": {
     "dev": "pnpm dev:link-pf && astro dev",
