@@ -46,12 +46,11 @@ import SpecLayout from '../layouts/SpecLayout.astro';
         <span class="sb-tag"><span>默认标签</span></span>
         <span class="sb-tag sb-tag-accent"><span>强调标签（静态）</span></span>
         <span class="sb-badge-warning">即将推出</span>
-        <span class="sb-chip">普通芯片 chip</span>
-        <span class="sb-chip" style="color: var(--c-error)">错误状态文字示例</span>
       </div>
       <p class="sb-note" style="margin-top: var(--s-md)">
-        .tag hover 左抬（-1px,-2px）并切 Primary Container；.tag-accent 全静态（无 transition，只用于状态标识）；
-        徽章为提醒色背景 + 深色文字（对比 9.7:1 ✓）。卡片内嵌标签为"下凹式"（见卡片区）。
+        全部为**胶囊 + 亚克力板**（--shape-full；1px 2px 切边 / 2px 3px 4px 柔影 / inset 1px 2px 内嵌 / 70px tile 噪点），
+        与卡片同材质体系，无扁平变体。.tag hover 左抬（-1px,-2px）并切 Primary Container；.tag-accent 全静态（无 transition，
+        只用于状态标识，hover 请改用 .tag）；徽章为提醒色背景 + 深色文字（对比 9.7:1 ✓）。卡片内嵌标签为"下凹式"（见卡片区）。
       </p>
     </div>
   </section>

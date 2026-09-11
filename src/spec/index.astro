@@ -73,8 +73,7 @@ const ztable = [
     </p>
     <p style="margin-top: var(--s-md)">
       <span class="sb-badge ok">设计令牌</span>
-      <span class="sb-tag"><span>明暗主题：右上角切换</span></span>
-      <span class="sb-tag"><span>审查入口：/spec/ 与 /spec/components/</span></span>
+      <span class="sb-tag"><span>审查入口 /spec/ 与 /spec/components/</span></span>
     </p>
   </section>
 
@@ -91,23 +90,27 @@ const ztable = [
           <div class="sb-swatch-color" style={`background: ${sw.dark}; border: 1px solid rgba(255,255,255,0.15)`}></div>
           <div class="sb-swatch-meta">
             <span class="sb-swatch-var">{sw.var}</span>
-            <span class="sb-badge">{sw.role}</span>
           </div>
           <div class="sb-swatch-val">暗色 {sw.dark} ｜ 亮色 {sw.light}</div>
-          <div class="sb-swatch-use">{sw.use}</div>
+          <div class="sb-swatch-use">{sw.role} · {sw.use}</div>
         </div>
       ))}
     </div>
     <div class="sb-card sb-plate" style="margin-top: var(--s-lg)">
-      <h3>对比度安全色（审查重点）</h3>
-      <div class="sb-grid" style="grid-template-columns: repeat(auto-fit, minmax(240px, 1fr))">
-        <span class="sb-tag"><span>正文 暗 #F5F5F5 / #141414 = 16.9:1 ✓ AAA</span></span>
-        <span class="sb-tag"><span>正文 亮 ≈#392D1A / #FAFAFA = 12.9:1 ✓ AAA</span></span>
-        <span class="sb-tag"><span>链接 暗 #FF1500 / #141414 = 4.7:1 ✓</span></span>
-        <span class="sb-tag"><span>链接 亮 ≈#966200 / #FAFAFA = 5.0:1 ✓</span></span>
-        <span class="sb-tag"><span>强调面文字 暗 白 / 87-13深基 = 4.81:1 ✓</span></span>
-        <span class="sb-tag"><span>强调面文字 亮 #1F1F1F / #E89800 = 7.0:1 ✓</span></span>
-      </div>
+      <h3>对比度核定表（审查重点）</h3>
+      <table class="sb-table" style="margin-top: var(--s-md)">
+        <thead>
+          <tr><th>用途</th><th>前景 / 背景</th><th>比值</th><th>结论</th></tr>
+        </thead>
+        <tbody>
+          <tr><td>正文（暗）</td><td><code>#F5F5F5</code> / <code>#141414</code></td><td>16.9:1</td><td>AAA</td></tr>
+          <tr><td>正文（亮）</td><td><code>≈#392D1A</code> / <code>#FAFAFA</code></td><td>12.9:1</td><td>AAA</td></tr>
+          <tr><td>链接（暗）</td><td><code>#FF1500</code> / <code>#141414</code></td><td>4.7:1</td><td>AA</td></tr>
+          <tr><td>链接（亮）</td><td><code>≈#966200</code> / <code>#FAFAFA</code></td><td>5.0:1</td><td>AA</td></tr>
+          <tr><td>强调面文字（暗）</td><td><code>#F5F5F5</code> / accent 87%+黑13%</td><td>4.81:1</td><td>AA</td></tr>
+          <tr><td>强调面文字（亮）</td><td><code>#1F1F1F</code> / <code>#E89800</code></td><td>7.0:1</td><td>AAA</td></tr>
+        </tbody>
+      </table>
       <p class="sb-note" style="margin-top: var(--s-md)">
         ⚠️ 禁止：#FFD54F 作正文/焦点（1.35:1）；白色文字直接放纯 #E89800（2.26:1）。
         详情见《无障碍设计规范》§3 对比度核定表。

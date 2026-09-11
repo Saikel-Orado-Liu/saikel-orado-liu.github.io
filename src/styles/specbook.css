@@ -181,8 +181,10 @@ html[data-spec-theme='light'] .sb-intro h1 { text-shadow: 1px 1px 0 rgba(0,0,0,0
 .sb-card h3 { font-size: var(--fs-xl); margin-bottom: var(--s-md); font-weight: var(--fw-bold); }
 .sb-card > .sb-note { color: var(--c-text-2); font-size: var(--fs-sm); }
 
-.sb-badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: var(--r-full); font-size: var(--fs-xs); font-weight: var(--fw-medium); background: color-mix(in srgb, var(--c-text) 12%, transparent); color: var(--c-text-2); }
-.sb-badge.ok { background: var(--c-warning); color: #141414; }
+/* 徽章：同为胶囊拟物（小型控件板级 1px 2px 切边 / 2px 3px 4px 柔影 / inset 1px 2px 内嵌），
+   宏观上无扁平变体；.ok 为提醒色变体（深色文字，对比 9.7:1） */
+.sb-badge { display: inline-flex; align-items: center; padding: 2px 10px; border-radius: var(--r-full); font-size: var(--fs-xs); font-weight: var(--fw-medium); line-height: 1.6; background: var(--c-primary-bg); color: var(--c-text-2); border-top: 1px solid color-mix(in srgb, var(--c-text) 6%, transparent); border-left: 1px solid color-mix(in srgb, var(--c-text) 6%, transparent); box-shadow: 1px 2px 0 0 color-mix(in srgb, var(--c-text) 20%, transparent), 2px 3px 4px 0 rgba(0,0,0,0.67), inset 1px 2px 1px 0 rgba(0,0,0,0.15); }
+.sb-badge.ok { background: var(--c-warning); color: #141414; border-top-color: rgba(255,255,255,0.35); border-left-color: rgba(255,255,255,0.35); box-shadow: 1px 2px 0 0 color-mix(in srgb, var(--c-warning) 70%, #fff 30%), 2px 3px 4px 0 rgba(0,0,0,0.67), inset 1px 2px 1px 0 color-mix(in srgb, var(--c-warning) 55%, #000 45%); }
 html[data-spec-theme='light'] .sb-badge.ok { color: #1f1f1f; }
 
 /* ===== 4. 令牌展示组件 ===== */
@@ -267,7 +269,8 @@ html[data-spec-theme='light'] .sb-btn-outline { background: color-mix(in srgb, v
 html[data-spec-theme='light'] .sb-tag-accent { background: var(--c-accent); }
 .sb-badge-warning { display: inline-flex; padding: 2px 10px; border-radius: var(--r-full); background: var(--c-warning); color: #141414; font-size: var(--fs-xs); font-weight: var(--fw-medium); }
 html[data-spec-theme='light'] .sb-badge-warning { color: #1f1f1f; }
-.sb-chip { display: inline-flex; padding: 2px 10px; border-radius: var(--r-full); font-size: var(--fs-xs); color: var(--c-text-2); background: color-mix(in srgb, var(--c-text) 10%, transparent); }
+/* 说明：参考页不设"扁平 chip"变体——所有小尺寸标签统一走 .sb-tag / .sb-tag-accent / .sb-groove-tag
+   （胶囊 + 亚克力板三层阴影 + 噪点），以保证任何标签都符合拟物规范。 */
 
 /* 表单 */
 .sb-field { display: flex; flex-direction: column; gap: var(--s-sm); }

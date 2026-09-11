@@ -74,10 +74,12 @@ const { title, description, active } = Astro.props;
     </main>
 
     <footer style="max-width: 1200px; margin: 0 auto; padding: 0 16px 48px; width: calc(100% - 32px)">
-      <p class="sb-chip" style="padding: 8px 14px">
-        分离约束：本参考页为独立实现（specbook.css），与主站不共享任何样式/组件文件；两者仅共享数值标准。
-        样式与行为变更请先在本参考页实现并审查，通过后同步至主站。
-      </p>
+      <div class="sb-card sb-plate" style="padding: var(--s-md) var(--s-lg)">
+        <p class="sb-note" style="margin: 0">
+          分离约束：本参考页为独立实现（specbook.css），与主站不共享任何样式/组件文件；两者仅共享数值标准。
+          样式与行为变更请先在本参考页实现并审查，通过后同步至主站。
+        </p>
+      </div>
     </footer>
 
     <script>
