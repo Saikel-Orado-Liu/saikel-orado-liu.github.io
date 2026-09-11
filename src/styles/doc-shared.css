@@ -32,11 +32,9 @@
 }
 @media (max-width: 1200px) {
     .doc-layout { grid-template-columns: minmax(0, 250px) 1fr; }
-    .doc-sidebar-right { display: none; }
 }
 @media (max-width: 860px) {
     .doc-layout { grid-template-columns: 1fr; }
-    .doc-sidebar-left { display: none; }
 }
 
 /* ===== 侧边栏 — flex 列布局，上层固定 + 下层滚动 ===== */
@@ -58,6 +56,18 @@
 /* 侧边栏容器 — 文档卡片禁用内部滚动 */
 .doc-sidebar-inner.card {
     padding: var(--space-md);
+}
+
+/* 断点隐藏侧栏 —— 必须位于 .doc-sidebar 基样式（display: flex）之后。
+   同为单类选择器、权重相同，写在其之前会被后置的 display: flex 覆盖：
+   历史缺陷导致 ≤860 时左栏未隐藏，整栏铺满视口、把正文挤到下方，
+   并因其内部 .doc-scroll-wrapper 的负外边距出血撑出 8px 横向滚动。
+   依据《响应式设计规范》§2.5（<860 单栏、两侧隐藏）与《组件设计规范》§9.1。 */
+@media (max-width: 1200px) {
+    .doc-sidebar-right { display: none; }
+}
+@media (max-width: 860px) {
+    .doc-sidebar-left { display: none; }
 }
 
 /* ===== 文档卡片滚动容器 — flex:1 填充剩余空间，自身滚动 + 透明渐变遮罩 ===== */

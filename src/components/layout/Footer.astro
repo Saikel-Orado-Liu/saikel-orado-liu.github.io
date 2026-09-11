@@ -144,9 +144,14 @@ const socialLinks: SocialLink[] = [
 @media (min-width: 768px) {
   .footer-inner {
     flex-direction: row;
+    /* 两栏放不下时换行：.footer-left 为 flex-shrink: 0（保持品牌/导航自然宽度），
+       英文 locale 文本更长时 左栏 + 右栏 > 可用宽度，原先不可换行会撑出横向滚动
+       （实测 /en-us/ 在 768px 溢出 42px）。见《响应式设计规范》§4 溢出治理清单。 */
+    flex-wrap: wrap;
+    /* 列间距仍为 0（保持桌面两栏贴边的既有观感）；换行后两行之间留出间距 */
+    gap: var(--space-lg) 0;
     justify-content: space-between;
     align-items: stretch;
-    gap: 0;
   }
 }
 
@@ -214,6 +219,8 @@ const socialLinks: SocialLink[] = [
 @media (min-width: 768px) {
   .footer-right {
     align-items: flex-end;
+    /* 允许收缩，配合 .footer-socials 的 flex-wrap 在窄断点内自行换行 */
+    min-width: 0;
   }
 }
 
