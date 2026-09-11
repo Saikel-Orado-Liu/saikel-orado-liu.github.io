@@ -8,7 +8,7 @@ const blog = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/blog' }),
   schema: z.object({
     title: z.string(),
-    date: z.date(),
+    date: z.coerce.date(),
     locale: localeEnum,
     categories: z.array(z.string()).optional(),
     tags: z.array(z.string()).optional(),
@@ -22,7 +22,7 @@ const projects = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/projects' }),
   schema: z.object({
     title: z.string(),
-    date: z.date().optional(),
+    date: z.coerce.date().optional(),
     locale: localeEnum.optional().default('zh-cn'),
     tags: z.array(z.string()).optional(),
     excerpt: z.string().optional(),
@@ -39,7 +39,7 @@ const ue5Plugins = defineCollection({
   loader: glob({ pattern: '**/*.{md,mdx}', base: './src/content/ue5-plugins' }),
   schema: z.object({
     title: z.string(),
-    date: z.date(),
+    date: z.coerce.date(),
     locale: localeEnum,
     version: z.string().optional(),
     excerpt: z.string().optional(),

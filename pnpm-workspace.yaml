@@ -3,6 +3,18 @@ allowBuilds:
   sharp: true
 minimumReleaseAgeExclude:
   - astro@6.4.7
+# 安全修复（Dependabot / pnpm audit）：把受影响的传递依赖抬到已修复版本。
+# 均为同一主版本内的补丁级提升，不改动 API 面；yaml / js-yaml 使用带主版本
+# 范围的键，避免误伤不受公告影响的 yaml@1.x / js-yaml@3.x。
 overrides:
   esbuild: ">=0.28.1"
-  dompurify: ">=3.4.11"
+  dompurify: ">=3.4.13"
+  fast-uri: ">=3.1.6"
+  fast-xml-parser: ">=5.10.1"
+  "js-yaml@4": ">=4.3.2"
+  smol-toml: ">=1.7.1"
+  "yaml@2": ">=2.8.3"
+  mermaid: ">=11.16.1"
+  decode-uri-component: ">=0.4.3"
+  colord: ">=2.9.4"
+  lodash-es: ">=4.17.24"
