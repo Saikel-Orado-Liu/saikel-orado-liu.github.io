@@ -12,7 +12,6 @@
   },
   "dependencies": {
     "@astrojs/markdown-remark": "^7.3.1",
-    "@lobehub/icons": "^5.18.0",
     "astro": "^7.3.2"
   },
   "devDependencies": {

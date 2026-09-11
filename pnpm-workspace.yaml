@@ -7,18 +7,15 @@ minimumReleaseAgeExclude:
 # 每条都同时给出「已修复下限」与「原始主版本上限」，只做同主版本内的补丁级提升，
 # 避免 >= 无上限导致跨主版本跳跃（曾把 mermaid 抬到 12.x、fast-uri 抬到 4.x）；
 # yaml / js-yaml 额外带主版本范围键，避免误伤不受公告影响的 yaml@1.x / js-yaml@3.x。
+# 注：dompurify / mermaid / lodash-es / colord / decode-uri-component 的覆盖已随
+# 未使用的 @lobehub/icons 一并移除而失效，故删除，保持配置与依赖树一致。
 overrides:
   esbuild: ">=0.28.1"
-  dompurify: ">=3.4.13 <4"
   fast-uri: ">=3.1.6 <4"
   fast-xml-parser: ">=5.10.1 <6"
   "js-yaml@4": ">=4.3.2 <5"
   smol-toml: ">=1.7.1 <2"
   "yaml@2": ">=2.8.3 <3"
-  mermaid: ">=11.16.1 <12"
-  decode-uri-component: ">=0.4.3 <1"
-  colord: ">=2.9.4 <3"
-  lodash-es: ">=4.17.24 <5"
   # TypeScript 7.0+ 改用原生编译器（tsgo），不再提供 programmatic API，
   # 而 `astro check`（@astrojs/check → @astrojs/language-server）依赖该 API；
   # 官方指定的兼容线是 6.x，但 registry 上 6.x 仅有 6.0.0-beta（无稳定版）。
