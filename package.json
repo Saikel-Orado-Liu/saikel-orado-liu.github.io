@@ -10,7 +10,7 @@
     "type": "git",
     "url": "git+https://github.com/Saikel-Orado-Liu/saikel-orado-liu.github.io.git"
   },
-  "packageManager": "pnpm@11.21.0",
+  "packageManager": "pnpm@12.4.1",
   "scripts": {
     "dev": "pnpm dev:link-pf && astro dev",
     "start": "astro dev",
