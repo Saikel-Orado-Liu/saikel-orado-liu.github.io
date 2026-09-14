@@ -40,7 +40,7 @@ const pageTitle = currentDoc?.title ?? docEntry.data.title;
 const pageDescription = docEntry.data.excerpt;
 
 // 项目展示名：取项目索引 frontmatter title 中 "—" 之前的部分
-// （如 "Texturge Pro" / "CLIF Localization Suite"），回退到 slug 首字母大写。
+// （如 "Texturge Pro" / "CLIFF Localization Suite"），回退到 slug 首字母大写。
 // 站点承载多个插件文档，展示名必须随项目变化，不能硬编码某一个插件名。
 const allProjects = await getCollection("projects", ({ data }: any) => !data.draft);
 const indexBaseIds = new Set([
