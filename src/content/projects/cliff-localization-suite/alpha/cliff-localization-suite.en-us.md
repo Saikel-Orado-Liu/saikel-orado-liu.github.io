@@ -7,7 +7,7 @@ featured: true
 
 # CLIFF Localization Suite
 
-<figure class="img-placeholder"><figcaption>images/cliff-localization-suite-overview.png — 本地化 Dashboard 上的 CLIFF 工具栏（CLIFF 导入 / CLIFF 导出 / AI 翻译）与官方同款进度窗口 — Localization Dashboard with the CLIFF toolbar (CLIFF Import / CLIFF Export / AI Translate) and the official commandlet progress window</figcaption></figure>
+![CLIFF Localization Suite showcase page](images/CLIFF%20Localization%20Suite%20Page.avif)
 
 **CLIFF Localization Suite Alpha** is the first public release of the plugin (`0.1.0-alpha.1`). It turns CLIFF 1.0 into a **readable, reviewable, AI-ready** intermediate format for UE localization data: import and export both run as steps of the official `GatherText` pipeline, and every write still goes through the engine's manifest, archive and `.locres` generators.
 

@@ -7,7 +7,7 @@ featured: true
 
 # CLIFF Localization Suite
 
-<figure class="img-placeholder"><figcaption>images/cliff-localization-suite-overview.png — 本地化 Dashboard 上的 CLIFF 工具栏（CLIFF 导入 / CLIFF 导出 / AI 翻译）与官方同款进度窗口 — Localization Dashboard with the CLIFF toolbar (CLIFF Import / CLIFF Export / AI Translate) and the official commandlet progress window</figcaption></figure>
+![CLIFF Localization Suite 展示页面](images/CLIFF%20Localization%20Suite%20Page.avif)
 
 **CLIFF Localization Suite Alpha** 是插件的首个公开版本（`0.1.0-alpha.1`）。它把 CLIFF 1.0 变成 UE 本地化数据的**可读、可评审、可交给 AI 的中间格式**：导入与导出都作为官方 `GatherText` 管线的一个步骤执行，写入仍然由引擎的 manifest / archive / `.locres` 生成器完成。
 
