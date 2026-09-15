@@ -13,7 +13,7 @@ featured: true
 
 ## Alpha 核心能力
 
-- **CLIFF 1.0 解析与校验** — `FCliffDocument` / `FCliffValidator` 覆盖 header、group、entry 全部字段与词表检查，通过 10 个有效夹具 + 32 个无效夹具的双向验证
+- **CLIFF 1.0 解析与校验** — `FCliffDocument::ParseAndValidate` / `Validate` 覆盖 header、group、entry 全部字段与词表检查，通过 10 个有效夹具 + 32 个无效夹具的双向验证
 - **官方管线导入** — `.cliff` → `FLocTextHelper` 写 manifest / archive → `GenerateTextLocalizationResource` 编译 `.locmeta` / `.locres` → `FTextLocalizationManager` 热刷新
 - **官方管线导出** — manifest + 全部 culture archive（或直接读 `.locres`）→ 每个 culture 一个 `<target-language>/<clan>.cliff` + `.cliffmap.json` 原键侧车
 - **语义映射表** — clan ↔ UE Namespace、Namespace → `type` / `emotion`，全部可在 Project Settings 中配置；无信息时落到 `sentence` 并告警

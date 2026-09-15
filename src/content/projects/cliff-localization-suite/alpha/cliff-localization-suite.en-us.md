@@ -13,7 +13,7 @@ featured: true
 
 ## Alpha highlights
 
-- **CLIFF 1.0 parsing and validation** — `FCliffDocument` / `FCliffValidator` cover every header, group and entry field plus the closed vocabularies, verified against 10 valid and 32 invalid fixtures
+- **CLIFF 1.0 parsing and validation** — `FCliffDocument::ParseAndValidate` / `Validate` cover every header, group and entry field plus the closed vocabularies, verified against 10 valid and 32 invalid fixtures
 - **Official pipeline import** — `.cliff` → `FLocTextHelper` writes manifest / archive → `GenerateTextLocalizationResource` compiles `.locmeta` / `.locres` → `FTextLocalizationManager` live refresh
 - **Official pipeline export** — manifest plus every culture archive (or a compiled `.locres`) → one `<target-language>/<clan>.cliff` per culture plus a `.cliffmap.json` key sidecar
 - **Semantic mapping tables** — clan ↔ UE Namespace and Namespace → `type` / `emotion` are configurable in Project Settings; missing information degrades to `sentence` with a warning
